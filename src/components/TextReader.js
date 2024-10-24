@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import './TextReader.css';
 
-const TextReader = ({init, question}) => {
+const TextReader = ({init, question, isWaiting, setIsWaiting}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentWord, setCurrentWord] = useState('');
   const [synth, setSynth] = useState(null);
@@ -77,6 +77,7 @@ useEffect(() => {
     utterance.onend = () => {
       console.log('Speech ended');
       setIsPlaying(false);
+      setIsWaiting(false);
       setCurrentWord('');
     };
 
@@ -103,7 +104,6 @@ useEffect(() => {
 
   return (
     <div className="response">
-      <h3>Response:</h3>
         <p>{text}</p>
     </div>
   );

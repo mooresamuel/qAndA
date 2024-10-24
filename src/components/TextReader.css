@@ -4,14 +4,10 @@
     justify-content: center;
     margin-top: 20px;
 }
-.active-word {
-    color: #f00;
-    transition: all 0.5s;
-    transform: scale(2);
-}
 
 .response {
-    /* width: 100%; */
-    font-size: 1.6em;
+    font-size: 1.3em;
     text-align: center;
+    color: #ddd;
+    margin: 5%;
 }
