@@ -2,7 +2,7 @@
   "name": "tp_react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://git@github.com:mooresamuel/qAndA.git",
+  "homepage": "https://mooresamuel.github.io/qAndA",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -46,5 +46,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.2.0"
   }
 }

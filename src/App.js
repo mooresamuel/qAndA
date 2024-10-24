@@ -9,6 +9,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import TextReader from './components/TextReader';
 import SimpleAudioTranscription from './components/SimpleAudioTranscription';
 import { useEffect, useState } from 'react';
+import { HashRouter as Router } from 'react-router-dom';
 
 function MainScreen() {
   const [question, setQuestion] = useState('');
@@ -28,6 +29,7 @@ function MainScreen() {
 function App() {
   return (
     <div className="bground">
+      <Router>
       <Container>
       <Navbar bg="primary" className="navbar-top">
           <Navbar.Brand href="#home">Navbar</Navbar.Brand>
@@ -46,6 +48,7 @@ function App() {
         <Col sm={1} md={2}></Col>
         </Row>
       </Container>
+      </Router>
     </div>
   );
 }
