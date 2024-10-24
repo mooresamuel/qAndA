@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/git@github.com:mooresamuel/qAndA.git/static/css/main.50280c85.css",
-    "main.js": "/git@github.com:mooresamuel/qAndA.git/static/js/main.d568e5d7.js",
-    "static/media/logo.svg": "/git@github.com:mooresamuel/qAndA.git/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
-    "index.html": "/git@github.com:mooresamuel/qAndA.git/index.html",
-    "main.50280c85.css.map": "/git@github.com:mooresamuel/qAndA.git/static/css/main.50280c85.css.map",
-    "main.d568e5d7.js.map": "/git@github.com:mooresamuel/qAndA.git/static/js/main.d568e5d7.js.map"
+    "main.css": "/qAndA/static/css/main.50280c85.css",
+    "main.js": "/qAndA/static/js/main.8b8e0263.js",
+    "static/media/logo.svg": "/qAndA/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/qAndA/index.html",
+    "main.50280c85.css.map": "/qAndA/static/css/main.50280c85.css.map",
+    "main.8b8e0263.js.map": "/qAndA/static/js/main.8b8e0263.js.map"
   },
   "entrypoints": [
     "static/css/main.50280c85.css",
-    "static/js/main.d568e5d7.js"
+    "static/js/main.8b8e0263.js"
   ]
 }
