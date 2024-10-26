@@ -11,23 +11,91 @@ import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen'
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars'
+import { List, ListEnd } from 'lucide-react';
 
 function MainScreen() {
   const [question, setQuestion] = useState('');
   const [init, setInit] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
+  const [chat, setChat] = useState([]);
+  const [userQuestion, setUserQuestion] = useState('');
+  const [shouldContinue, setShouldContinue] = useState(true);
+  const [synth] = useState(window.speechSynthesis);
+  const [selectedVoice, setSelectedVoice] = useState(null);
+  const [voices, setVoices] = useState([]);
 
+  // Handle voice loading
   useEffect(() => {
-    setInit(true);
+    const loadVoices = () => {
+      const availableVoices = synth.getVoices();
+      setVoices(availableVoices);
+      
+      // Only set the default voice if we haven't already
+      if (!selectedVoice && availableVoices.length > 0) {
+        const defaultVoice = availableVoices.find(
+          voice => voice.voiceURI === 'Google UK English Female'
+        ) || availableVoices[0];
+        
+        setSelectedVoice(defaultVoice);
+        console.log('Default voice set to:', defaultVoice.name);
+      }
+    };
+
+    // Load voices immediately if available
+    loadVoices();
+
+    // Add event listener for voiceschanged
+    synth.addEventListener('voiceschanged', loadVoices);
+    synth.cancel();
+    // Cleanup
+    return () => {
+      synth.removeEventListener('voiceschanged', loadVoices);
+    };
   }, []);
+
+  // Debug effect to monitor selectedVoice changes
+  useEffect(() => {
+    if (selectedVoice) {
+      console.log('Selected voice updated:', selectedVoice.name);
+    }
+  }, [question]);
+
+  // const closeEverything = () => {
+  //   if (synth) {
+  //     synth.cancel();
+  //     console.log('Speech synthesis canceled');
+  //   }
+  //   // setIsPlaying(false);
+  //   // setIsWaiting(false);
+  //   // setIsInitialized(false);
+  //   // setIsButtonVisible(true);
+  //   // setUserQuestion('');
+  //   // setChat([]);
+  // };
+
   return (
     <div className="main-screen">
+
+      <TextReader               question={question} 
+                                isWaiting={isWaiting}
+                                setIsWaiting={setIsWaiting}
+                                chat={chat}
+                                setChat={setChat}
+                                userQuestion={userQuestion}
+                                setUserQuestion={setUserQuestion}
+                                synth={synth}
+                                selectedVoice={selectedVoice}
+                                setQuestion={setQuestion}
+                                />
       <AudioTranscription setQuestion={setQuestion} 
                                 isWaiting={isWaiting}
-                                setIsWaiting={setIsWaiting}/>
-      <TextReader init={init} question={question} 
-                                isWaiting={isWaiting}
-                                setIsWaiting={setIsWaiting}/>
+                                setIsWaiting={setIsWaiting}
+                                chat={chat}
+                                setChat={setChat}
+                                setUserQuestion={setUserQuestion}
+                                synth={synth}/>
+      {/* <button onClick={closeEverything}>Close Everything</button> */}
+
     </div>
   );
 }

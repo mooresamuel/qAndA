@@ -1,110 +1,91 @@
 import { useState, useEffect, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay'
 import './TextReader.css';
 
-const TextReader = ({init, question, isWaiting, setIsWaiting}) => {
+const TextReader = ({ init, isWaiting, setIsWaiting, chat, setChat, userQuestion, setUserQuestion, question, synth, selectedVoice, setQuestion }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentWord, setCurrentWord] = useState('');
-  const [synth, setSynth] = useState(null);
-  const [voices, setVoices] = useState([]);
-  const [selectedVoice, setSelectedVoice] = useState(null);
-  const text = question;
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isButtonVisible, setIsButtonVisible] = useState(true); 
+  let firstQuestion = null;
+
 
   useEffect(() => {
-    // Initialize speech synthesis
-    const speechSynth = window.speechSynthesis;
-    setSynth(speechSynth);
+    console.log('TextReader useEffect synth', synth);
+    if (synth) {
+      speakText();
+    }
+  }, [question]);
 
-    // Cleanup
-    return () => {
-      if (speechSynth.speaking) {
-        speechSynth.cancel();
+  const speakText = useCallback(() => {
+    if (synth.speaking) {
+      synth.cancel();
       }
-    };
-  }, [init]);
-
-  useEffect(() => {
-    // Function to load voices
-    const loadVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
-      console.log('Voices loaded:', availableVoices.length);
-      setVoices(availableVoices);
-      
-      // Set default voice
-      const defaultVoice = availableVoices.find(voice => 
-        voice.voiceURI === 'Google UK English Female'
-      ) || availableVoices[0];
-      
-      setSelectedVoice(defaultVoice);
-    };
-
-    // Load voices initially
-    loadVoices();
-
-    // Add event listener for when voices are ready
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-
-    // Cleanup
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null;
-    };
-  }, [init]);
-
-
-useEffect(() => {
-  if (question) {
-    speak();  // Automatically call speak when question changes
-  }
-}, [question]);
-
-  const speak = useCallback(() => {
-    if (!synth || !selectedVoice) return;
-
-    // Cancel any ongoing speech
-    synth.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = selectedVoice;
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    utterance.lang = selectedVoice.lang;
-    // Important: These event listeners must be added before calling speak()
-    utterance.onstart = () => {
-      console.log('Speech started');
-      setIsPlaying(true);
-    };
-
-    utterance.onend = () => {
-      console.log('Speech ended');
-      setIsPlaying(false);
-      setIsWaiting(false);
-      setCurrentWord('');
-    };
-
-    utterance.onboundary = (event) => {
-      console.log('Boundary event:', event);
-      
-      // Only handle word boundaries
-      if (event.name === 'word') {
-        // Get the word at the current position
-        const wordStart = event.charIndex;
-        let wordEnd = text.indexOf(' ', wordStart);
-        if (wordEnd === -1) wordEnd = text.length;
-        
-        const word = text.slice(wordStart, wordEnd);
-        console.log('Current word:', word);
-        setCurrentWord(word);
+      if (!question)
+      {
+        console.log('no question');
+        setIsPlaying(false);
+        setIsWaiting(false);
+        return;
       }
+      console.log('question:', question);
+    synth.pitch = 1;
+    synth.rate = 1;
+    synth.volume = 1;
+    console.log('speakText');
+    console.log('firstQuestion:', firstQuestion);
+
+    console.log('synth:', synth);
+    const currQuestion = firstQuestion ? firstQuestion : question;
+    console.log('selectedVoice:', selectedVoice);
+    if (!synth || !selectedVoice) {
+      console.error('Synth or selectedVoice not initialized');
+      return;
+    }
+    chat.push({'role': "assistant", 'message': currQuestion});
+    console.log('currQuestion: ', currQuestion);
+    const chunks = currQuestion.match(/[^.!?]+[.!?]+/g) || [currQuestion];
+    console.log('speaking');
+    const speakChunk = (chunkIndex) => {
+      if (chunkIndex >= chunks.length) {
+        setIsPlaying(false);
+        setIsWaiting(false);
+        console.log('\n\n\n::CHAT onend :::', chat, '\n\n\n');
+        return;
+      }
+      console.log('speaking chunk', chunkIndex);
+      const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
+      utterance.voice = selectedVoice;
+      utterance.onend = () => speakChunk(chunkIndex + 1);
+      utterance.onerror = (e) => {
+        console.error('Speech synthesis error:', e);
+        setIsPlaying(false);
+        setIsWaiting(false);
+      };
+      console.log('inside ::::  synth ', synth, '  \nselectedvoice', selectedVoice);
+      console.log('speak utterance.');
+      synth.speak(utterance);
     };
 
-    // Debug logs
-    console.log('Starting speech...');
-    synth.speak(utterance);
-  }, [synth, text, question]);
+    setIsPlaying(true);
+    setIsWaiting(true);
+    speakChunk(0);
+  }, [synth, selectedVoice, question]);
+
+
 
   return (
     <div className="response">
-        <p>{text}</p>
+      {isButtonVisible && (
+        <button className="start-button" onClick={() => {
+          setIsButtonVisible(false); // Hide the button after it's clicked
+          setQuestion('Hello, welcome to Turning Pages Digital! Use the green microphone button near the bottom of the screen when you\'re ready to talk.\n\n If my questions are too easy or too hard, just let me know. Should we start by talking about at words or sentences?');
+          setIsWaiting(true);
+        }}>
+          <FontAwesomeIcon className="big" color="#6f7" icon={faPlay} />
+        </button>
+      )}
+      <p>{question}</p>
     </div>
   );
 };

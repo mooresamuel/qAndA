@@ -3,12 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone'
 import './AudioTranscription.css';
 
-const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting}) => {
+const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat, setUserQuestion}) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
   const [recognition, setRecognition] = useState(null);
+  
 
+// const source = 'https://samalmoore1.eu.pythonanywhere.com/';
+  const source = 'http://127.0.0.1:8001/'
+  
   useEffect(() => {
     if (window.SpeechRecognition || window.webkitSpeechRecognition) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -24,30 +28,38 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting}) => {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
             finalTranscript += transcript + ' ';
-            console.log('transcript: ', finalTranscript);
             recognitionInstance.stop();
-            setIsListening(false);
-            setIsWaiting(true);
-            fetch(`https://samalmoore1.eu.pythonanywhere.com/answer_question`, {
-              method: 'POST',
-              headers: {
+            setChat(chat => {
+              const newChat = [...chat];
+              newChat.push({'role': "user", 'message': finalTranscript});
+              console.log('Updated chat:', newChat);
+              // Perform the fetch call inside the setState function to ensure it uses the updated state
+              fetch(`${source}answer_question`, {
+                method: 'POST',
+                headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                  question: finalTranscript,
+                },
+                body: JSON.stringify({
+                  'question': finalTranscript,
+                  'chat': newChat
+                })
               })
-            })
-            .then(response => {
-                const responseText = response.text();
-                // return response.json();
-                return responseText;
-            })
-            .then(data => {
-                console.log('Response:', data);
-                setQuestion(q => data);
+              .then(response => response.json())
+              .then(data => {
+                recognitionInstance.stop();
+                console.log('Response data:', data);
+                setQuestion(data['message']);
+                setIsListening(false);
+                setIsWaiting(true);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+              return newChat;
             });
-            return;
+            console.log('transcript: ', finalTranscript);
+
           } else {
             interimTranscript += transcript;
           }
@@ -63,13 +75,10 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting}) => {
         }
         setIsListening(false);
       };
-
       setRecognition(recognitionInstance);
-
     } else {
       setError('Speech recognition is not supported in this browser.');
     }
-
     return () => {
       if (recognition) {
         recognition.stop();
@@ -99,16 +108,14 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting}) => {
       {error && (<div className="error-div">{error}</div>)}
       {!error && (<div className="speech-box">
         <p style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-          {transcript || 'Ask the assistant a question...'}
+          {transcript || ''}
         </p>
       </div>)}
     <button onClick={toggleListening} disabled={isWaiting}  color={isListening ? '#4CAF50' : '#4CAF50'} className="microphone">
-      {!isListening && !isWaiting && (<FontAwesomeIcon color={isListening ? '#222' : '#3A9F50'} icon={faMicrophone} height="100%" />)}
-      {isListening && (<div class="spinner-border spinner-border-sm text-success" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>)}
+      {!isListening && !isWaiting && (<FontAwesomeIcon color='#3A9F50' icon={faMicrophone} height="100%" />)}
+      {isListening && (<FontAwesomeIcon className="pulsing" color='#3A9F50' icon={faMicrophone} height="100%" />)}
       {isWaiting && (<div className="spinner-border spinner-border-sm text-secondary" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <span className="visually-hidden">Loading...</span>
       </div>)}
     </button>
     </div>
