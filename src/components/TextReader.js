@@ -44,7 +44,8 @@ const TextReader = ({ init, isWaiting, setIsWaiting, chat, setChat, userQuestion
     }
     chat.push({'role': "assistant", 'message': currQuestion});
     console.log('currQuestion: ', currQuestion);
-    const chunks = currQuestion.match(/[^.!?]+[.!?]+/g) || [currQuestion];
+    let chunks = currQuestion.match(/[^.!?]+[.!?]+/g) || [currQuestion];
+    chunks = chunks.filter(chunk => !chunk.match(/".*?"/g)); // Filter out anything between double quotes
     console.log('speaking');
     const speakChunk = (chunkIndex) => {
       if (chunkIndex >= chunks.length) {
@@ -79,7 +80,7 @@ const TextReader = ({ init, isWaiting, setIsWaiting, chat, setChat, userQuestion
       {isButtonVisible && (
         <button className="start-button" onClick={() => {
           setIsButtonVisible(false); // Hide the button after it's clicked
-          setQuestion('Hello, welcome to Turning Pages Digital! Use the green microphone button near the bottom of the screen when you\'re ready to talk.\n\n If my questions are too easy or too hard, just let me know. Should we start by talking about at words or sentences?');
+          setQuestion('Hello, welcome to Turning Pages Digital! Use the green microphone button near the bottom of the screen when you\'re ready to talk.\n\n If my questions are too easy or too difficult, just let me know. Should we start by talking about words or sentences?');
           setIsWaiting(true);
         }}>
           <FontAwesomeIcon className="big" color="#6f7" icon={faPlay} />
