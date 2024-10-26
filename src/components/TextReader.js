@@ -45,7 +45,8 @@ const TextReader = ({ init, isWaiting, setIsWaiting, chat, setChat, userQuestion
     chat.push({'role': "assistant", 'message': currQuestion});
     console.log('currQuestion: ', currQuestion);
     let chunks = currQuestion.match(/[^.!?]+[.!?]+/g) || [currQuestion];
-    chunks = chunks.filter(chunk => !chunk.match(/".*?"/g)); // Filter out anything between double quotes
+    chunks = chunks.map(chunk => chunk.replace(/"([^"]*)"/g, ''));
+    chunks = chunks.map(chunk => chunk.split(':')[0]);
     console.log('speaking');
     const speakChunk = (chunkIndex) => {
       if (chunkIndex >= chunks.length) {
