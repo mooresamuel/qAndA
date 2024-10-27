@@ -6,31 +6,27 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import TextReader from './components/TextReader';
 import AudioTranscription from './components/AudioTranscription';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen'
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars'
-import { List, ListEnd } from 'lucide-react';
 
 function MainScreen() {
   const [question, setQuestion] = useState('');
-  const [init, setInit] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
-  const [chat, setChat] = useState([]);
+  const [chat, setChatState] = useState([]);
   const [userQuestion, setUserQuestion] = useState('');
-  const [shouldContinue, setShouldContinue] = useState(true);
   const [synth] = useState(window.speechSynthesis);
   const [selectedVoice, setSelectedVoice] = useState(null);
-  const [voices, setVoices] = useState([]);
 
-  // Handle voice loading
+  const setChat = useCallback((newChat) => {
+    setChatState(newChat);
+  }, []);
+
   useEffect(() => {
     const loadVoices = () => {
-      const availableVoices = synth.getVoices();
-      setVoices(availableVoices);
-      
-      // Only set the default voice if we haven't already
+      const availableVoices = synth.getVoices();      
       if (!selectedVoice && availableVoices.length > 0) {
         const defaultVoice = availableVoices.find(
           voice => voice.voiceURI === 'Google UK English Female'
@@ -41,37 +37,21 @@ function MainScreen() {
       }
     };
 
-    // Load voices immediately if available
     loadVoices();
 
-    // Add event listener for voiceschanged
     synth.addEventListener('voiceschanged', loadVoices);
     synth.cancel();
-    // Cleanup
+
     return () => {
       synth.removeEventListener('voiceschanged', loadVoices);
     };
-  }, []);
+  }, [selectedVoice, synth]);
 
-  // Debug effect to monitor selectedVoice changes
   useEffect(() => {
     if (selectedVoice) {
       console.log('Selected voice updated:', selectedVoice.name);
     }
-  }, [question]);
-
-  // const closeEverything = () => {
-  //   if (synth) {
-  //     synth.cancel();
-  //     console.log('Speech synthesis canceled');
-  //   }
-  //   // setIsPlaying(false);
-  //   // setIsWaiting(false);
-  //   // setIsInitialized(false);
-  //   // setIsButtonVisible(true);
-  //   // setUserQuestion('');
-  //   // setChat([]);
-  // };
+  }, [question, selectedVoice]);
 
   return (
     <div className="main-screen">
@@ -94,7 +74,6 @@ function MainScreen() {
                                 setChat={setChat}
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>
-      {/* <button onClick={closeEverything}>Close Everything</button> */}
 
     </div>
   );

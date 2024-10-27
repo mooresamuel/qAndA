@@ -84,7 +84,7 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat
         recognition.stop();
       }
     };
-  }, []);
+  }, [recognition, setChat, setQuestion, setIsWaiting]);
 
   const toggleListening = useCallback(() => {
     if (!recognition) return;
