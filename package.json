@@ -1,8 +1,8 @@
 {
-  "name": "tp_react",
+  "name": "tpd",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mooresamuel.github.io/qAndA",
+  "homepage": "https://mooresamuel.github.io/tpd",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
