@@ -58,7 +58,7 @@ const TextReader = ({ isWaiting, setIsWaiting, chat, setChat, userQuestion, setU
 
     setIsWaiting(true);
     speakChunk(0);
-  }, [synth, selectedVoice, question, chat, firstQuestion, setIsWaiting]);
+  }, [synth, selectedVoice, question, setIsWaiting]);
 
 
   useEffect(() => {
@@ -73,8 +73,8 @@ const TextReader = ({ isWaiting, setIsWaiting, chat, setChat, userQuestion, setU
       {isButtonVisible && (
         <button className="start-button" onClick={() => {
           setIsButtonVisible(false); // Hide the button after it's clicked
-          setQuestion('Hello, welcome to Turning Pages Digital! Use the green microphone button near the bottom of the screen when you\'re ready to talk.\n\n If my questions are too easy or too difficult, just let me know. Please don\'t use one word answers as they are difficult for me to hear. For example, if I ask you to read a word like "cat", say something like, "The word is cat" instead of just saying "cat". Do you want to start talking about words or sentences?');
-          // setQuestion('Please don\'t use one word answers as they are difficult for me to hear. For example, if I ask you to read a word like "cat", say something like, "The word is cat" instead of just saying "cat". Do you want to start talking about words or sentences?');
+          // setQuestion('Hello, welcome to Turning Pages Digital! Use the green microphone button near the bottom of the screen when you\'re ready to talk.\n\n If my questions are too easy or too difficult, just let me know. Please don\'t use one word answers as they are difficult for me to hear. For example, if I ask you to read a word like "cat", say something like, "The word is cat" instead of just saying "cat". Do you want to start talking about words or sentences?');
+          setQuestion('Please don\'t use one word answers as they are difficult for me to hear. For example, if I ask you to read a word like "cat", say something like, "The word is cat" instead of just saying "cat". Do you want to start talking about words or sentences?');
           setIsWaiting(true);
         }}>
           <FontAwesomeIcon className="big" color="#6f7" icon={faPlay} />
