@@ -6,8 +6,8 @@ import './TextReader.css';
 const TextReader = ({ init, isWaiting, setIsWaiting, chat, setChat, userQuestion, setUserQuestion, question, synth, selectedVoice, setQuestion }) => {
   const [isButtonVisible, setIsButtonVisible] = useState(true); 
 
-  const source = 'https://samalmoore1.eu.pythonanywhere.com/';
-// const source = 'http://127.0.0.1:8001/'
+  // const source = 'https://samalmoore1.eu.pythonanywhere.com/';
+const source = 'http://127.0.0.1:8001/'
 
 function askQuestion(message) {
   setChat(chat => {

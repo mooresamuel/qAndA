@@ -11,8 +11,8 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat
   const [transcript, setTranscript] = useState('');
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [recognition] = useState(new (window.webkitSpeechRecognition || window.SpeechRecognition)());
-  const source = 'https://samalmoore1.eu.pythonanywhere.com/';
-  // const source = 'http://127.0.0.1:8001/'
+  // const source = 'https://samalmoore1.eu.pythonanywhere.com/';
+  const source = 'http://127.0.0.1:8001/'
 
   useEffect(() => {
     if (window.SpeechRecognition || window.webkitSpeechRecognition) {

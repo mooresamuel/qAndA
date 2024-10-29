@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import TextReader from './components/TextReader';
 import AudioTranscription from './components/AudioTranscription';
+import SpeechToText from './components/SpeechToText';
 import { useEffect, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -64,7 +65,7 @@ function MainScreen() {
   return (
     <div className="main-screen">
 
-      <TextReader               question={question} 
+      {/* <TextReader               question={question} 
                                 isWaiting={isWaiting}
                                 setIsWaiting={setIsWaiting}
                                 chat={chat}
@@ -81,7 +82,9 @@ function MainScreen() {
                                 chat={chat}
                                 setChat={setChat}
                                 setUserQuestion={setUserQuestion}
-                                synth={synth}/>
+                                synth={synth}/> */}
+      <SpeechToText setQuestion={setQuestion}/>
+      
       {/* <button onClick={closeEverything}>Close Everything</button> */}
 
     </div>
