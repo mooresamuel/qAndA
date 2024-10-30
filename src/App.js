@@ -26,12 +26,12 @@ function MainScreen() {
     // const source = 'wss://34.173.135.229:5000/';
     // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
   // const source = 'http://127.0.0.1:5000/'
-  const source = '://35.214.34.183:443/'
+  const source = '://35.214.34.183:5000/'
 
 
   const speakText = useCallback((message) => {
     console.log('Speaking text:', message);
-    fetch(`https${source}speak_text`, {
+    fetch(`http${source}speak_text`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
