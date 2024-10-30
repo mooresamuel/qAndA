@@ -5,8 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import TextReader from './components/TextReader';
-import AudioTranscription from './components/AudioTranscription';
-import { useEffect, useState, useCallback } from 'react';
+import VoiceRecorder from './components/VoiceRecorder';
+import WordHelper from './components/WordHelper';
+import { useCallback, useEffect, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen'
@@ -15,65 +16,74 @@ import { faBars } from '@fortawesome/free-solid-svg-icons/faBars'
 function MainScreen() {
   const [question, setQuestion] = useState('');
   const [isWaiting, setIsWaiting] = useState(false);
-  const [chat, setChatState] = useState([]);
-  const [userQuestion, setUserQuestion] = useState('');
-  const [synth] = useState(window.speechSynthesis);
-  const [selectedVoice, setSelectedVoice] = useState(null);
+  const [chat, setChat] = useState([]);
+  
+    // const source = 'http://35.214.34.183:5000/';
+    //   const source = 'http://35.214.34.183:5000/';
+      // const source = 'http://34.147.246.152:5000/';
+      // const source = 'http://34.147.246.152:5000/';
 
-  const setChat = useCallback((newChat) => {
-    setChatState(newChat);
-  }, []);
+    // const source = 'wss://34.173.135.229:5000/';
+    // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
+  // const source = 'http://127.0.0.1:5000/'
+  const source = 'http://35.214.34.183:5000/'
 
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = synth.getVoices();      
-      if (!selectedVoice && availableVoices.length > 0) {
-        const defaultVoice = availableVoices.find(
-          voice => voice.voiceURI === 'Google UK English Female'
-        ) || availableVoices[0];
-        
-        setSelectedVoice(defaultVoice);
-        console.log('Default voice set to:', defaultVoice.name);
-      }
-    };
 
-    loadVoices();
-
-    synth.addEventListener('voiceschanged', loadVoices);
-    synth.cancel();
-
-    return () => {
-      synth.removeEventListener('voiceschanged', loadVoices);
-    };
-  }, [selectedVoice, synth]);
-
-  useEffect(() => {
-    if (selectedVoice) {
-      console.log('Selected voice updated:', selectedVoice.name);
+  const speakText = useCallback((message) => {
+    console.log('Speaking text:', message);
+    fetch(`${source}speak_text`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'message': message
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Response data:', data);
+          const audioData = data.audio;
+          const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = new Audio(audioUrl);
+          audio.play();
+          audio.onended = () => {
+          setIsWaiting(false);
+          }
+    })
+    .catch(error => {
+      console.error('Error:', error);
     }
-  }, [question, selectedVoice]);
+    );
+  }, [setIsWaiting]);
 
   return (
     <div className="main-screen">
 
-      <TextReader               question={question} 
-                                isWaiting={isWaiting}
-                                setIsWaiting={setIsWaiting}
+      {/* <WordHelper source={source}/> */}
+       <TextReader               setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
-                                userQuestion={userQuestion}
-                                setUserQuestion={setUserQuestion}
-                                synth={synth}
-                                selectedVoice={selectedVoice}
+                                question={question}
                                 setQuestion={setQuestion}
+                                speakText={speakText}
                                 />
-      <AudioTranscription setQuestion={setQuestion} 
+       {/* <AudioTranscription setQuestion={setQuestion} 
                                 isWaiting={isWaiting}
                                 setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
                                 setUserQuestion={setUserQuestion}
-                                synth={synth}/>
+                                synth={synth}/>  */}
+      {/* <SpeechToText setQuestion={setQuestion}/> */}
+      <VoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
+                      source={source}
+                      question={question}
+                      setQuestion={setQuestion}/> 
+       
+       {/* <button onClick={closeEverything}>Close Everything</button> */}
 
     </div>
   );
