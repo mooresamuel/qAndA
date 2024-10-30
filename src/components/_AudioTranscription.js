@@ -4,7 +4,7 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone'
 import './AudioTranscription.css';
 import { findByDisplayValue } from '@testing-library/react';
 
-const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat, setUserQuestion}) => {
+const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat, setUserQuestion, speakText}) => {
 
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState('');
@@ -14,30 +14,30 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat
   // const source = 'https://samalmoore1.eu.pythonanywhere.com/';
   const source = 'http://127.0.0.1:8001/'
 
-  useEffect(() => {
-    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-UK';
-    } else {
-      setError('Speech recognition is not supported in this browser.');
-    }
+  // useEffect(() => {
+  //   if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+  //     recognition.continuous = true;
+  //     recognition.interimResults = true;
+  //     recognition.lang = 'en-UK';
+  //   } else {
+  //     setError('Speech recognition is not supported in this browser.');
+  //   }
 
-    return () => {
-      if (recognition) {
-        recognition.stop();
-      }
-    };
-  }, [recognition]);
+  //   return () => {
+  //     if (recognition) {
+  //       recognition.stop();
+  //     }
+  //   };
+  // }, [recognition]);
 
-  recognition.onerror = (event) => {
-    if (event.error === 'not-allowed') {
-      setError('Please enable microphone access in your browser settings and refresh the page.');
-    } else {
-      setError(`Error: ${event.error}`);
-    }
-    setIsListening(false);
-  };
+  // recognition.onerror = (event) => {
+  //   if (event.error === 'not-allowed') {
+  //     setError('Please enable microphone access in your browser settings and refresh the page.');
+  //   } else {
+  //     setError(`Error: ${event.error}`);
+  //   }
+  //   setIsListening(false);
+  // };
 
   const fetchResponse = useCallback((newChat, finalTranscript) => {
     fetch(`${source}answer_question`, {
@@ -85,41 +85,41 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat
     });
   });
 
-  recognition.onresult = (event) => {
-    if (!isListening) return;
-    let finalTranscript = '';
-    let interimTranscript = '';
+  // recognition.onresult = (event) => {
+  //   if (!isListening) return;
+  //   let finalTranscript = '';
+  //   let interimTranscript = '';
 
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript += transcript + ' ';
-        if (finalTranscript === "")  {
-          return;
-        }
-        if (debounceTimeout) {
-          clearTimeout(debounceTimeout);
-        }
-        // Set a new debounce timeout
-        const timeout = setTimeout(() => {
-          setChat(chat => {
-            const newChat = [...chat];
-            newChat.push({ 'role': "user", 'message': finalTranscript });
-            console.log('Updated chat:', newChat);
-            fetchResponse(newChat, finalTranscript);
-            return newChat;
-          });
-          console.log('transcript: ', finalTranscript);
-          setIsWaiting(true);
-          setIsListening(false);
-        }, 1500); // Adjust the debounce delay as needed (500ms in this example)
-        setDebounceTimeout(timeout);
-      } else {
-        interimTranscript += transcript;
-      }
-    }
-    setTranscript((prev) => finalTranscript + interimTranscript);
-  };
+  //   for (let i = event.resultIndex; i < event.results.length; i++) {
+  //     const transcript = event.results[i][0].transcript;
+  //     if (event.results[i].isFinal) {
+  //       finalTranscript += transcript + ' ';
+  //       if (finalTranscript === "")  {
+  //         return;
+  //       }
+  //       if (debounceTimeout) {
+  //         clearTimeout(debounceTimeout);
+  //       }
+  //       // Set a new debounce timeout
+  //       const timeout = setTimeout(() => {
+  //         setChat(chat => {
+  //           const newChat = [...chat];
+  //           newChat.push({ 'role': "user", 'message': finalTranscript });
+  //           console.log('Updated chat:', newChat);
+  //           fetchResponse(newChat, finalTranscript);
+  //           return newChat;
+  //         });
+  //         console.log('transcript: ', finalTranscript);
+  //         setIsWaiting(true);
+  //         setIsListening(false);
+  //       }, 1500); // Adjust the debounce delay as needed (500ms in this example)
+  //       setDebounceTimeout(timeout);
+  //     } else {
+  //       interimTranscript += transcript;
+  //     }
+  //   }
+  //   setTranscript((prev) => finalTranscript + interimTranscript);
+  // };
 
   // useEffect(() => {
   //   if (window.SpeechRecognition || window.webkitSpeechRecognition) {
@@ -134,22 +134,23 @@ const AudioTranscription = ({setQuestion, isWaiting, setIsWaiting, chat, setChat
   //   };
   // }, []);
 
-  const toggleListening = useCallback(() => {
-    if (!recognition) return;
+  // const toggleListening = useCallback(() => {
+  //   if (!recognition) return;
 
-    if (isListening) {
-      recognition.stop();
-      setIsListening(false);
-    } else {
-      setError('');
-      try {
-        recognition.start();
-        setIsListening(true);
-      } catch (err) {
-        setError('Failed to start recording. Please refresh and try again.');
-      }
-    }
-  }, [isListening, recognition, setIsListening]);
+  //   if (isListening) {
+  //     recognition.stop();
+  //     setIsListening(false);
+  //     setIsWaiting(true);
+  //   } else {
+  //     setError('');
+  //     try {
+  //       recognition.start();
+  //       setIsListening(true);
+  //     } catch (err) {
+  //       setError('Failed to start recording. Please refresh and try again.');
+  //     }
+  //   }
+  // }, [isListening, recognition, setIsListening]);
 
   return (
     <div className="voice-input">

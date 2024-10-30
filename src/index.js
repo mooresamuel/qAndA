@@ -7,9 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+
+    <App />
+
+);
+
+  // <React.StrictMode>
     {/* <Navbar bg="success-bg-subtle" className="navbar-back">
     </Navbar> */}
-    <App />
-  </React.StrictMode>
-);
+
+      {/* </React.StrictMode> */}
