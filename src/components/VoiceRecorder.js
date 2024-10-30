@@ -46,7 +46,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, source, question, setQuestion})
 
   useEffect(() => {
     // Connect to WebSocket server
-    socketRef.current = io(source);
+    socketRef.current = io(`wss${source}`);
 
     socketRef.current.on('connect', () => {
       setIsConnected(true);
@@ -105,7 +105,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, source, question, setQuestion})
   const fetchResponse = useCallback((newChat, finalTranscript) => {
     console.log('final transcript:', finalTranscript);
     console.log('newChat:', newChat);
-    fetch(`${source}answer_question`, {
+    fetch(`https${source}answer_question`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
