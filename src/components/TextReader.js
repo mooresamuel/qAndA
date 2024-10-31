@@ -56,16 +56,16 @@ const TextReader = ({ setIsWaiting, chat, setChat, question, setQuestion, speakT
       {isButtonVisible && (
         <button className="start-button" onClick={() => {
           setIsButtonVisible(false); // Hide the button after it's clicked
-          speakText('');
-          // speakText('Hello, welcome to Turning Pages Digital! Press the green microphone button when you\'re ready to talk and just let me know if the questions I\'m asking ar too easy or too difficult. So, let\'s get started! Do you want to start off talking about words? Or should we jump straight into sentences?');
-          setQuestion('Hello, welcome to Turning Pages Digital! Press the green microphone button when you\'re ready to talk and just let me know if the questions I\'m asking ar too easy or too difficult. So, let\'s get started! Do you want to start off talking about words? Or should we jump straight into sentences?');
+          // speakText('hi, push the micro button to start');
+          speakText('Hello! Press the green microphone button when you\'re ready to talk and just let me know if the questions I\'m asking ar too easy or too difficult. So, let\'s get started! Do you want to talk about words? Or should we jump straight into sentences?');
+          setQuestion('Hello! Press the green microphone button when you\'re ready to talk and just let me know if the questions I\'m asking ar too easy or too difficult. So, let\'s get started! Do you want to talk about words? Or should we jump straight into sentences?');
           setChat(prev => {
             const newChat = [...prev];
-            newChat.push({ user: 'assistant', message: 'Hello, welcome to Turning Pages Digital! Press the green microphone button when you\'re ready to talk and just let me know if the questions I\'m asking ar too easy or too difficult. So, let\'s get started! Do you want to start off talking about words? Or should we jump straight into sentences?' });
+            newChat.push({ user: 'assistant', message: 'Hello! Press the green microphone button when you\'re ready to talk and just let me know if the questions I\'m asking ar too easy or too difficult. So, let\'s get started! Do you want to talk about words? Or should we jump straight into sentences?' });
             return newChat;
           });
           setIsWaiting(true);
-          <p>This message has been shortened for debugging</p>
+
         }}>
           <FontAwesomeIcon className="big" color="#6f7" icon={faPlay} />
         </button>

@@ -163,7 +163,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
         'audio/wav',
         'audio/mp4'
       ];
-      consople.log('mimeTypes:', mimeTypes);
+
       let selectedMimeType = '';
       for (const mimeType of mimeTypes) {
         if (MediaRecorder.isTypeSupported(mimeType)) {
@@ -171,6 +171,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
           break;
         }
       }
+      console.log('mimeType:', selectedMimeType);
       // Set up MediaRecorder with specific MIME type
       // mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: selectedMimeType });
       mediaRecorderRef.current = new MediaRecorder(stream, {
