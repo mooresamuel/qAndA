@@ -14,6 +14,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
   const [error, setError] = useState('');
   const [chat, setChat] = useState([]);
   const socketRef = useRef(null);
+  const streamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -61,6 +62,18 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
         return;
       }
       ignore = true;
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+        }
+      
+      }
+      socketRef.current.emit('end_audio_stream');
       setIsRecording(e => false);
       setIsWaiting(e => true);
       sendData();
@@ -143,28 +156,71 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
   });
 
   const startRecording = async () => {
-    setIsRecording(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
-      // Set up audio analysis
+  setIsRecording(true);
+  try {
+    // Ensure cross-browser compatibility for getUserMedia
+    const constraints = { 
+      audio: {
+        echoCancellation: { ideal: true },
+        noiseSuppression: { ideal: true },
+        autoGainControl: { ideal: true }
+      }
+    };
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    
+    // Fallback for AudioContext creation for different browser prefixes
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    
+    // Create audio context safely
+    if (!audioContextRef.current) {
       audioContextRef.current = new AudioContext();
-      analyserRef.current = audioContextRef.current.createAnalyser();
-      const source = audioContextRef.current.createMediaStreamSource(stream);
-      source.connect(analyserRef.current);
-      
-      // Configure analyzer
-      analyserRef.current.fftSize = 256;
-      const bufferLength = analyserRef.current.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-      
-      // Set up MediaRecorder with specific MIME type
-      mediaRecorderRef.current = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
-      
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        if (event.data.size > 0 && socketRef.current) {
+    }
+
+    // Ensure audio context is resumed on user interaction
+    if (audioContextRef.current.state === 'suspended') {
+      await audioContextRef.current.resume();
+    }
+    
+    // Set up audio analysis with fallbacks
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    const source = audioContextRef.current.createMediaStreamSource(stream);
+    source.connect(analyserRef.current);
+    
+    // Configure analyzer
+    analyserRef.current.fftSize = 256;
+    const bufferLength = analyserRef.current.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    
+    // Determine best MIME type with fallbacks
+    const mimeTypes = [
+      'audio/webm;codecs=opus',
+      'audio/ogg',
+      'audio/wav',
+      'audio/mp4'
+    ];
+    
+    let selectedMimeType = '';
+    for (const mimeType of mimeTypes) {
+      if (MediaRecorder.isTypeSupported(mimeType)) {
+        selectedMimeType = mimeType;
+        break;
+      }
+    }
+
+    // Fallback to default if no MIME type is supported
+    mediaRecorderRef.current = new MediaRecorder(stream, {
+      mimeType: selectedMimeType || ''
+    });
+    
+    // Chunks array to collect recorded data
+    const chunks = [];
+    
+    mediaRecorderRef.current.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+        
+        if (socketRef.current) {
           // Convert blob to base64 and send to server
           const reader = new FileReader();
           reader.onloadend = () => {
@@ -173,31 +229,50 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
           };
           reader.readAsDataURL(event.data);
         }
-      };
+      }
+    };
 
-      // Start recording with small time slices 
-      mediaRecorderRef.current.start(100); // Send data every 100ms
+    // Add error handling for MediaRecorder
+    mediaRecorderRef.current.onerror = (event) => {
+      console.error('MediaRecorder error:', event);
+      setIsRecording(false);
+      setIsWaiting(false);
+    };
 
-      // setTranscript(''); // Clear previous transcript
-      // Notify server to start stream
-      socketRef.current.emit('start_audio_stream');
+    // Start recording with small time slices 
+    mediaRecorderRef.current.start(100); // Send data every 100ms
 
-      // Start audio level monitoring
-      const checkAudioLevel = () => {
+    // Notify server to start stream
+    socketRef.current.emit('start_audio_stream');
+
+    // Start audio level monitoring with requestAnimationFrame fallback
+    const checkAudioLevel = () => {
+      if (analyserRef.current) {
         analyserRef.current.getByteFrequencyData(dataArray);
         const average = dataArray.reduce((a, b) => a + b) / bufferLength;
         setAudioLevel(average);
-        animationFrameRef.current = requestAnimationFrame(checkAudioLevel);
-      };
-      
-      checkAudioLevel();
+      }
+      animationFrameRef.current = requestAnimationFrame(checkAudioLevel);
+    };
+    
+    checkAudioLevel();
 
-    } catch (err) {
-      console.error('Error accessing microphone:', err);
-      setIsRecording(false);
-      setIsWaiting(false);
+    // Store stream reference to stop later
+    streamRef.current = stream;
+
+  } catch (err) {
+    console.error('Error accessing microphone:', err);
+    setIsRecording(false);
+    setIsWaiting(false);
+
+    // Provide more detailed error handling
+    if (err.name === 'NotAllowedError') {
+      alert('Microphone access was denied. Please enable microphone permissions.');
+    } else if (err.name === 'NotFoundError') {
+      alert('No microphone was found. Please connect a microphone and try again.');
     }
-  };
+  }
+};
 
 
 const stopRecording = (transcript) => {
@@ -242,7 +317,8 @@ const stopRecording = (transcript) => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
-    
+    socketRef.current.emit('stop_audio_stream');
+
     setAudioLevel(0);
     // console.log('transcript:', transcript);
     if (transcript && transcript.length > 0) {
@@ -275,7 +351,6 @@ const stopRecording = (transcript) => {
     }
     setIsWaiting(false);
 
-    socketRef.current.emit('stop_audio_stream');
   } finally {
     // Reset the flags after a short delay
     // setTimeout(() => {
