@@ -6,7 +6,7 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone'
 import './AudioTranscription.css'; 
 
 
-const VoiceRecorder = ({isWaiting, setIsWaiting, source, question, setQuestion}) => {
+const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question, setQuestion}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
@@ -46,7 +46,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, source, question, setQuestion})
 
   useEffect(() => {
     // Connect to WebSocket server
-    socketRef.current = io(`ws${source}`);
+    socketRef.current = io(`${wsSource}`);
 
     socketRef.current.on('connect', () => {
       setIsConnected(true);
@@ -105,7 +105,7 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, source, question, setQuestion})
   const fetchResponse = useCallback((newChat, finalTranscript) => {
     console.log('final transcript:', finalTranscript);
     console.log('newChat:', newChat);
-    fetch(`http${source}answer_question`, {
+    fetch(`${httpSource}answer_question`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

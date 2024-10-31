@@ -26,12 +26,13 @@ function MainScreen() {
     // const source = 'wss://34.173.135.229:5000/';
     // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
   // const source = 'http://127.0.0.1:5000/'
-  const source = '://35.214.34.183:5000/'
+  const httpSource = 'https://samuelmoore.cc/'
+  const wsSource = 'wss://samuelmoore.cc/'
 
 
   const speakText = useCallback((message) => {
     console.log('Speaking text:', message);
-    fetch(`http${source}speak_text`, {
+    fetch(`${httpSource}speak_text`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -79,7 +80,8 @@ function MainScreen() {
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
       <VoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
-                      source={source}
+                      httpSource={httpSource}
+                      wsSource={wsSource}
                       question={question}
                       setQuestion={setQuestion}/> 
        
