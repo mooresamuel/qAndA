@@ -157,12 +157,26 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
       analyserRef.current.fftSize = 256;
       const bufferLength = analyserRef.current.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
-      
+      const mimeTypes = [
+        'audio/webm;codecs=opus',
+        'audio/ogg',
+        'audio/wav',
+        'audio/mp4'
+      ];
+      consople.log('mimeTypes:', mimeTypes);
+      let selectedMimeType = '';
+      for (const mimeType of mimeTypes) {
+        if (MediaRecorder.isTypeSupported(mimeType)) {
+          selectedMimeType = mimeType;
+          break;
+        }
+      }
       // Set up MediaRecorder with specific MIME type
+      // mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: selectedMimeType });
       mediaRecorderRef.current = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
+        mimeType: selectedMimeType || ''
       });
-      
+
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0 && socketRef.current) {
           // Convert blob to base64 and send to server

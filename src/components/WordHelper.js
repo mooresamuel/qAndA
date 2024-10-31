@@ -11,7 +11,7 @@ function WordHelper({source}) {
     const submitWord = useCallback((e) => {
         console.log('Word:', word);
         e.preventDefault();
-        fetch(`http${source}word_helper`, {
+        fetch(`${source}word_helper`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

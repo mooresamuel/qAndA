@@ -26,10 +26,10 @@ function MainScreen() {
     // const source = 'wss://34.173.135.229:5000/';
     // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
   // const source = 'http://127.0.0.1:5000/'
-  // const httpSource = 'https://samuelmoore.cc/'
-  // const wsSource = 'wss://samuelmoore.cc/'
-    const httpSource = 'https://samuelmoore.cc/'
+  const httpSource = 'https://samuelmoore.cc/'
   const wsSource = 'wss://samuelmoore.cc/'
+  //   const httpSource = 'http://127.0.0.1:5000/'
+  // const wsSource = 'http://127.0.0.1:5000/'
 
 
   const speakText = useCallback((message) => {
@@ -65,7 +65,7 @@ function MainScreen() {
   return (
     <div className="main-screen">
 
-      {/* <WordHelper source={source}/> */}
+       {/* <WordHelper source={httpSource}/>  */}
        <TextReader               setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
