@@ -19,10 +19,7 @@ function MainScreen() {
   const [chat, setChat] = useState([]);
   
     // const source = 'http://35.214.34.183:5000/';
-    //   const source = 'http://35.214.34.183:5000/';
       // const source = 'http://34.147.246.152:5000/';
-      // const source = 'http://34.147.246.152:5000/';
-
     // const source = 'wss://34.173.135.229:5000/';
     // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
   // const source = 'http://127.0.0.1:5000/'
@@ -51,10 +48,11 @@ function MainScreen() {
           const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
           const audioUrl = URL.createObjectURL(audioBlob);
           const audio = new Audio(audioUrl);
-          audio.play();
           audio.onended = () => {
-          setIsWaiting(false);
-          }
+            setIsWaiting(false);
+            }
+          audio.play();
+
     })
     .catch(error => {
       console.error('Error:', error);
