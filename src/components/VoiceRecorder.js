@@ -131,11 +131,12 @@ const VoiceRecorder = ({isWaiting, setIsWaiting, httpSource, wsSource, question,
     const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
-    audio.play();
     audio.onended = () => {
       setIsWaiting(false);
     //   setIsListening(false);
     }
+    // audio.preload = 'auto';
+    audio.play();
   })
     .catch(error => {
       console.error('Error:', error);
