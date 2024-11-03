@@ -5,8 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import TextReader from './components/TextReader';
-import VoiceRecorder from './components/VoiceRecorder';
+import NewVoiceRecorder from './components/NewVoiceRecorder';
 import WordHelper from './components/WordHelper';
+import AudioRecorder from './components/AudioRecorder';
 import { useCallback, useEffect, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -64,13 +65,13 @@ function MainScreen() {
     <div className="main-screen">
 
        {/* <WordHelper source={httpSource}/>  */}
-       <TextReader               setIsWaiting={setIsWaiting}
+       {/* <TextReader               setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
                                 question={question}
                                 setQuestion={setQuestion}
                                 speakText={speakText}
-                                />
+                                /> */}
        {/* <AudioTranscription setQuestion={setQuestion} 
                                 isWaiting={isWaiting}
                                 setIsWaiting={setIsWaiting}
@@ -79,11 +80,12 @@ function MainScreen() {
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
-      <VoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
+      <AudioRecorder source={httpSource}/>
+      {/* <NewVoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
                       httpSource={httpSource}
                       wsSource={wsSource}
                       question={question}
-                      setQuestion={setQuestion}/> 
+                      setQuestion={setQuestion}/>  */}
        
        {/* <button onClick={closeEverything}>Close Everything</button> */}
 
