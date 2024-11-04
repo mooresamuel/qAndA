@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Send } from 'lucide-react';
+import WordResults from './WordResults';
 
-const AudioRecorder = ({httpSource}) => {
+const WordScores = ({httpSource}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
-  const [phrase, setPhrase] = useState('');
+  // const [phrase, setPhrase] = useState('');
   const [result, setResult] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isStreamReady, setIsStreamReady] = useState(false);
@@ -147,7 +148,8 @@ const AudioRecorder = ({httpSource}) => {
   };
 
   const sendRecording = async () => {
-    if (!audioUrl || !phrase) {
+    if (!audioUrl) // || !phrase) {
+    {
       setError('Please record audio and enter a phrase first');
       return;
     }
@@ -160,9 +162,9 @@ const AudioRecorder = ({httpSource}) => {
 
       const formData = new FormData();
       formData.append('audio', audioBlob, 'recording.webm');
-      formData.append('phrase', phrase);
+      // formData.append('phrase', phrase);
 
-      const apiResponse = await fetch(`${httpSource}get_word`, {
+      const apiResponse = await fetch(`${httpSource}get_word_scores`, {
         method: 'POST',
         body: formData
       });
@@ -173,6 +175,7 @@ const AudioRecorder = ({httpSource}) => {
 
       const data = await apiResponse.json();
       setResult(data);
+      console.log('Result:', data);
       setError(null);
     } catch (error) {
       console.error('Error sending recording:', error);
@@ -183,78 +186,58 @@ const AudioRecorder = ({httpSource}) => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <div className="mb-4">
-        <label htmlFor="phrase" className="block text-sm font-medium mb-2">
-          Enter Word Hint
-        </label>
-        <input
-          id="phrase"
-          type="text"
-          value={phrase}
-          onChange={(e) => setPhrase(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="Enter the word to record..."
-        />
-      </div>
-
-      <div className="flex gap-4 mb-4">
+    <div className="audio-recorder">
+      <div className="button-group">
         {!isRecording ? (
           <button
             onClick={startRecording}
-            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className={`record-button ${isLoading ? 'disabled' : ''}`}
             disabled={isLoading}
           >
             <Mic size={20} />
-            {isStreamReady ? 'Start Recording' : 'Initializing...'}
+            <span>{isStreamReady ? 'Start Recording' : 'Initializing...'}</span>
           </button>
         ) : (
           <button
             onClick={stopRecording}
-            className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="stop-button"
           >
             <Square size={20} />
-            Stop Recording
+            <span>Stop Recording</span>
           </button>
         )}
 
         <button
           onClick={sendRecording}
-          className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          className={`send-button ${(!audioUrl || isLoading) ? 'disabled' : ''}`}
           disabled={!audioUrl || isLoading}
         >
           <Send size={20} />
-          {isLoading ? 'Sending...' : 'Send Recording'}
+          <span>{isLoading ? 'Sending...' : 'Send Recording'}</span>
         </button>
       </div>
 
       {audioUrl && (
-        <div className="mb-4">
+        <div className="audio-player">
           <audio 
             ref={audioElementRef}
             controls 
             src={audioUrl} 
-            className="w-full"
             preload="metadata"
           />
         </div>
       )}
 
       {error && (
-        <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
+        <div className="error-message">
           {error}
         </div>
       )}
 
-      {result && (
-        <div className="mt-4 p-4 bg-gray-100 rounded">
-          <h3 className="font-medium mb-2">Result:</h3>
-          <pre className="whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>
-        </div>
-      )}
+      {result && <WordResults result={result} />}
 
       {!isStreamReady && !error && (
-        <div className="text-yellow-600 mt-2">
+        <div className="stream-status">
           Initializing audio stream...
         </div>
       )}
@@ -262,4 +245,4 @@ const AudioRecorder = ({httpSource}) => {
   );
 };
 
-export default AudioRecorder;
+export default WordScores;

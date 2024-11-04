@@ -8,6 +8,7 @@ import TextReader from './components/TextReader';
 import NewVoiceRecorder from './components/NewVoiceRecorder';
 import WordHelper from './components/WordHelper';
 import AudioRecorder from './components/AudioRecorder';
+import WordScores from './components/WordScores';
 import { useCallback, useEffect, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,10 +25,10 @@ function MainScreen() {
     // const source = 'wss://34.173.135.229:5000/';
     // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
   // const source = 'http://127.0.0.1:5000/'
-  const httpSource = 'https://samuelmoore.cc/'
-  const wsSource = 'wss://samuelmoore.cc/'
-  //   const httpSource = 'http://127.0.0.1:5000/'
-  // const wsSource = 'http://127.0.0.1:5000/'
+  // const httpSource = 'https://samuelmoore.cc/'
+  // const wsSource = 'wss://samuelmoore.cc/'
+    const httpSource = 'http://127.0.0.1:5000/'
+  const wsSource = 'http://127.0.0.1:5000/'
 
 
   const speakText = useCallback((message) => {
@@ -80,7 +81,8 @@ function MainScreen() {
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
-      <AudioRecorder source={httpSource}/>
+      <AudioRecorder httpSource={httpSource}/>
+      <WordScores httpSource={httpSource}/>
       {/* <NewVoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
                       httpSource={httpSource}
                       wsSource={wsSource}
