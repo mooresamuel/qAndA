@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Send } from 'lucide-react';
 
-const AudioRecorder = ({httpSource}) => {
+const WordHint = ({httpSource}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [phrase, setPhrase] = useState('');
@@ -262,4 +262,4 @@ const AudioRecorder = ({httpSource}) => {
   );
 };
 
-export default AudioRecorder;
+export default WordHint;

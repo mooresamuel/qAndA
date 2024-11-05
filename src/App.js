@@ -7,8 +7,9 @@ import Navbar from 'react-bootstrap/Navbar';
 import TextReader from './components/TextReader';
 import NewVoiceRecorder from './components/NewVoiceRecorder';
 import WordHelper from './components/WordHelper';
-import AudioRecorder from './components/AudioRecorder';
+import WordHint from './components/WordHint';
 import WordScores from './components/WordScores';
+import SentenceHint from './test/SentenceHint';
 import { useCallback, useEffect, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -81,7 +82,7 @@ function MainScreen() {
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
-      <AudioRecorder httpSource={httpSource}/>
+      <SentenceHint httpSource={httpSource}/>
       <WordScores httpSource={httpSource}/>
       {/* <NewVoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
                       httpSource={httpSource}
