@@ -44,8 +44,9 @@
       "react-app/jest"
     ],
     "rules": {
-      "no-unused-vars": "off",
-      "react-hooks/exhaustive-deps": "off"
+      "no-lone-blocks": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "no-unused-vars": "off"
     }
   },
   "browserslist": {
