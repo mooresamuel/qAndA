@@ -66,7 +66,7 @@ function MainScreen() {
   return (
     <div className="main-screen">
 
-        <WordHelper source={source}/>
+        {/* <WordHelper source={source}/> */}
        {/* <TextReader               setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
@@ -82,7 +82,7 @@ function MainScreen() {
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
-     {/* <SentenceHint source={source}/> */}
+     <SentenceHint source={source}/>
      {/* <WordScores source={source}/> */}
       {/* <NewVoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
                       source={source}
@@ -95,6 +95,7 @@ function MainScreen() {
     </div>
   );
 }
+
 
 function App() {
   return (
