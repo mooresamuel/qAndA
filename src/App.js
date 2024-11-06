@@ -91,7 +91,6 @@ function MainScreen() {
                       setQuestion={setQuestion}/>  */}
        
        {/* <button onClick={closeEverything}>Close Everything</button> */}
-
     </div>
   );
 }
