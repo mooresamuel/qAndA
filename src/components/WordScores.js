@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Send } from 'lucide-react';
 import WordResults from './WordResults';
 
-const WordScores = ({httpSource}) => {
+const WordScores = ({source}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   // const [phrase, setPhrase] = useState('');
@@ -164,7 +164,7 @@ const WordScores = ({httpSource}) => {
       formData.append('audio', audioBlob, 'recording.webm');
       // formData.append('phrase', phrase);
 
-      const apiResponse = await fetch(`${httpSource}get_word_scores`, {
+      const apiResponse = await fetch(`${source}get_word_scores`, {
         method: 'POST',
         body: formData
       });

@@ -4,69 +4,69 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import TextReader from './components/TextReader';
-import NewVoiceRecorder from './components/NewVoiceRecorder';
+// import TextReader from './components/TextReader';
+// import NewVoiceRecorder from './components/NewVoiceRecorder';
 import WordHelper from './components/WordHelper';
-import WordHint from './components/WordHint';
+// import WordHint from './components/WordHint';
 import WordScores from './components/WordScores';
 import SentenceHint from './test/SentenceHint';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen'
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars'
 
 function MainScreen() {
-  const [question, setQuestion] = useState('');
+//   const [question, setQuestion] = useState('');
   const [isWaiting, setIsWaiting] = useState(false);
-  const [chat, setChat] = useState([]);
+//   const [chat, setChat] = useState([]);
   
     // const source = 'http://35.214.34.183:5000/';
       // const source = 'http://34.147.246.152:5000/';
     // const source = 'wss://34.173.135.229:5000/';
     // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
   // const source = 'http://127.0.0.1:5000/'
-  const httpSource = 'https://samuelmoore.cc/'
-  const wsSource = 'wss://samuelmoore.cc/'
-    // const httpSource = 'http://127.0.0.1:5000/'
-  // const wsSource = 'http://127.0.0.1:5000/'
+  const source = 'https://samuelmoore.cc/'
+    // const source = 'http://127.0.0.1:5000/'
+  // const source = 'http://127.0.0.1:5000/'
 
   
-  const speakText = useCallback((message) => {
-    console.log('Speaking text:', message);
-    fetch(`${httpSource}speak_text`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'message': message
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Response data:', data);
-          const audioData = data.audio;
-          const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
-          const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          audio.onended = () => {
-            setIsWaiting(false);
-            }
-          audio.play();
+//   const speakText = useCallback((message) => {
+//     console.log('Speaking text:', message);
+//     fetch(`${source}speak_text`, {
+//       method: 'POST',
+//       headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({
+//         'message': message
+//       })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log('Response data:', data);
+//           const audioData = data.audio;
+//           const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
+//           const audioUrl = URL.createObjectURL(audioBlob);
+//           const audio = new Audio(audioUrl);
+//           audio.onended = () => {
+// 			console.log('isWaiting:', isWaiting);
+//             setIsWaiting(false);
+//             }
+//           audio.play();
 
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    }
-    );
-  }, [setIsWaiting]);
+//     })
+//     .catch(error => {
+//       console.error('Error:', error);
+//     }
+//     );
+//   }, [setIsWaiting]);
 
   return (
     <div className="main-screen">
 
-        <WordHelper source={httpSource}/>
+        <WordHelper source={source}/>
        {/* <TextReader               setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
@@ -82,11 +82,11 @@ function MainScreen() {
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
-     //<SentenceHint httpSource={httpSource}/>
-     // <WordScores httpSource={httpSource}/>
+     {/* <SentenceHint source={source}/> */}
+     {/* <WordScores source={source}/> */}
       {/* <NewVoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
-                      httpSource={httpSource}
-                      wsSource={wsSource}
+                      source={source}
+                      source={source}
                       question={question}
                       setQuestion={setQuestion}/>  */}
        
