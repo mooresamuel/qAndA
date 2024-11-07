@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Send } from 'lucide-react';
 import WordResults from '../components/WordResults';
-const WordHint = ({httpSource}) => {
+import '../components/WordScores.css'
+const WordHint = ({source}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [phrase, setPhrase] = useState('');
@@ -162,7 +163,7 @@ const WordHint = ({httpSource}) => {
       formData.append('audio', audioBlob, 'recording.webm');
       formData.append('phrase', phrase);
 
-      const apiResponse = await fetch(`${httpSource}get_sentence`, {
+      const apiResponse = await fetch(`${source}get_sentence`, {
         method: 'POST',
         body: formData
       });
@@ -190,7 +191,6 @@ const WordHint = ({httpSource}) => {
         </label>
         <textArea
           id="phrase"
-          type="textarea"
           value={phrase}
           onChange={(e) => setPhrase(e.target.value)}
           className="w-full p-2 border rounded"
@@ -229,7 +229,7 @@ const WordHint = ({httpSource}) => {
         </button>
       </div>
 
-      {audioUrl && (
+      {/* {audioUrl && (
         <div className="audio-player">
           <audio 
             ref={audioElementRef}
@@ -238,7 +238,7 @@ const WordHint = ({httpSource}) => {
             preload="metadata"
           />
         </div>
-      )}
+      )} */}
 
       {error && (
         <div className="error-message">

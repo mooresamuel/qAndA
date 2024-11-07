@@ -21,20 +21,13 @@ function MainScreen() {
   const [isWaiting, setIsWaiting] = useState(false);
   const [chat, setChat] = useState([]);
   
-    // const source = 'http://35.214.34.183:5000/';
-      // const source = 'http://34.147.246.152:5000/';
-    // const source = 'wss://34.173.135.229:5000/';
-    // const source = 'https://samalmoore1.eu.pythonanywhere.com:5000/';
-  // const source = 'http://127.0.0.1:5000/'
-  const httpSource = 'https://samuelmoore.cc/'
-  const wsSource = 'wss://samuelmoore.cc/'
-  //   const httpSource = 'http://127.0.0.1:5000/'
-  // const wsSource = 'http://127.0.0.1:5000/'
+  // const source = 'https://samuelmoore.cc/'
+    const source = 'http://127.0.0.1:5000/'
 
 
   const speakText = useCallback((message) => {
     console.log('Speaking text:', message);
-    fetch(`${httpSource}speak_text`, {
+    fetch(`${source}speak_text`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -66,7 +59,7 @@ function MainScreen() {
   return (
     <div className="main-screen">
 
-       {/* <WordHelper source={httpSource}/>  */}
+       {/* <WordHelper source={source}/>  */}
        {/* <TextReader               setIsWaiting={setIsWaiting}
                                 chat={chat}
                                 setChat={setChat}
@@ -82,11 +75,10 @@ function MainScreen() {
                                 setUserQuestion={setUserQuestion}
                                 synth={synth}/>  */}
       {/* <SpeechToText setQuestion={setQuestion}/> */}
-      <SentenceHint httpSource={httpSource}/>
-      <WordScores httpSource={httpSource}/>
+      <SentenceHint source={source}/>
+      {/* <WordScores source={source}/> */}
       {/* <NewVoiceRecorder isWaiting={isWaiting} setIsWaiting={setIsWaiting}
-                      httpSource={httpSource}
-                      wsSource={wsSource}
+                      source={source}
                       question={question}
                       setQuestion={setQuestion}/>  */}
        
