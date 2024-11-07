@@ -25,29 +25,29 @@ function MainScreen() {
     const source = 'http://127.0.0.1:5000/'
 
 
-  const speakText = useCallback((message) => {
-    console.log('Speaking text:', message);
-    fetch(`${source}speak_text`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'message': message
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Response data:', data);
-          const audioData = data.audio;
-          const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
-          const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          audio.onended = () => {
-            setIsWaiting(false);
-            }
-          audio.play();
+  // const speakText = useCallback((message) => {
+  //   console.log('Speaking text:', message);
+  //   fetch(`${source}speak_text`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       'message': message
+  //     })
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log('Response data:', data);
+  //         const audioData = data.audio;
+  //         const audioBlob = new Blob([Uint8Array.from(atob(audioData), c => c.charCodeAt(0))], { type: 'audio/mp3' });
+  //         const audioUrl = URL.createObjectURL(audioBlob);
+  //         const audio = new Audio(audioUrl);
+  //         audio.onended = () => {
+  //           setIsWaiting(false);
+  //           }
+  //         audio.play();
 
 //     })
 //     .catch(error => {
