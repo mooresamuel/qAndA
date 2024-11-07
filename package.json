@@ -51,7 +51,7 @@
     "no-unused-vars": "off", 
     "react-hooks/exhaustive-deps": "off",
     "no-lone-blocks": "off"
- ,
+  },
   "browserslist": {
     "production": [
       ">0.2%",
