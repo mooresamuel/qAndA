@@ -48,12 +48,10 @@
     ]
   },
   "rules": {
-    "no-console": "off",
     "no-unused-vars": "off", 
-    "react/prop-types": "off", 
-    "no-empty": "off",
-    "no-extra-semi": "off"
-  },
+    "react-hooks/exhaustive-deps": "off",
+    "no-lone-blocks": "off"
+ ,
   "browserslist": {
     "production": [
       ">0.2%",
