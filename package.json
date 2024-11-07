@@ -53,7 +53,7 @@
     "react/prop-types": "off", 
     "no-empty": "off",
     "no-extra-semi": "off"
-  }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
