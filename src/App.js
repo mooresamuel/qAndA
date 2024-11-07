@@ -4,22 +4,22 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import TextReader from './components/TextReader';
-import NewVoiceRecorder from './components/NewVoiceRecorder';
+// import TextReader from './components/TextReader';
+// import NewVoiceRecorder from './components/NewVoiceRecorder';
 import WordHelper from './components/WordHelper';
-import WordHint from './components/WordHint';
+// import WordHint from './components/WordHint';
 import WordScores from './components/WordScores';
 import SentenceHint from './test/SentenceHint';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen'
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars'
 
 function MainScreen() {
-  const [question, setQuestion] = useState('');
+//   const [question, setQuestion] = useState('');
   const [isWaiting, setIsWaiting] = useState(false);
-  const [chat, setChat] = useState([]);
+//   const [chat, setChat] = useState([]);
   
   // const source = 'https://samuelmoore.cc/'
     const source = 'http://127.0.0.1:5000/'
@@ -49,12 +49,12 @@ function MainScreen() {
             }
           audio.play();
 
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    }
-    );
-  }, [setIsWaiting]);
+//     })
+//     .catch(error => {
+//       console.error('Error:', error);
+//     }
+//     );
+//   }, [setIsWaiting]);
 
   return (
     <div className="main-screen">
@@ -83,10 +83,10 @@ function MainScreen() {
                       setQuestion={setQuestion}/>  */}
        
        {/* <button onClick={closeEverything}>Close Everything</button> */}
-
     </div>
   );
 }
+
 
 function App() {
   return (
