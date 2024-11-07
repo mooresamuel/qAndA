@@ -184,17 +184,17 @@ const WordHint = ({source}) => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <div className="mb-4">
-        <label htmlFor="phrase" className="block text-sm font-medium mb-2">
+    <div className="p-2 max-w-full w-full">
+      <div className="w-full p-3">
+        {/* <label htmlFor="phrase" className="block text-sm font-medium mb-2">
           Enter Word Hint
-        </label>
-        <textArea
+        </label> */}
+        <textarea
           id="phrase"
           value={phrase}
           onChange={(e) => setPhrase(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="Enter the word to record..."
+          className="w-full p-0 border rounded w-100"
+          placeholder="Enter the sentence to record. You will then be able to see the cofidence in the pronounciation of each word after sending the recording"
         />
       </div>
 
