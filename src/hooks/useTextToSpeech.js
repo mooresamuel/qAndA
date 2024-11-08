@@ -13,7 +13,7 @@ export default function useTextToSpeech() {
       setAudioCached(audioData);
       playAudio(audioData);
     } else {
-      playAudio(audioCached);
+      audioCached.play();
     }
 
     setIsLoading(false);
@@ -26,6 +26,7 @@ export default function useTextToSpeech() {
     );
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
+    if (!audioCached) setAudioCached(audio);
     audio.play();
   }
 
