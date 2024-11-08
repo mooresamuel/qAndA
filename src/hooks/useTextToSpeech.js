@@ -3,11 +3,23 @@ import { textToSpeechAPI } from "../services/text2SpeechAPI";
 
 export default function useTextToSpeech() {
   const [isLoading, setIsLoading] = useState(false);
+  const [audioCached, setAudioCached] = useState("");
 
   async function speak(text) {
     setIsLoading(true);
-    const audioData = await textToSpeechAPI(text);
-    console.log(audioData);
+
+    if (!audioCached) {
+      const audioData = await textToSpeechAPI(text);
+      setAudioCached(audioData);
+      playAudio(audioData);
+    } else {
+      playAudio(audioCached);
+    }
+
+    setIsLoading(false);
+  }
+
+  function playAudio(audioData) {
     const audioBlob = new Blob(
       [Uint8Array.from(atob(audioData), (c) => c.charCodeAt(0))],
       { type: "audio/mp3" }
@@ -15,7 +27,6 @@ export default function useTextToSpeech() {
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
     audio.play();
-    setIsLoading(false);
   }
 
   return { isLoading, speak };
