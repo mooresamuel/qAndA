@@ -4,7 +4,12 @@ function HomePage() {
   return (
     <div>
       HomePage
-      <LectureBlock />
+      <LectureBlock
+        exercise={{
+          exercise_number: 1,
+          exercise_name: "Reading sentences with more ul sounds",
+        }}
+      />
     </div>
   );
 }

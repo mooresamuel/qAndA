@@ -5,7 +5,7 @@ function Layout() {
   return (
     <div>
       <NavigationBar />
-      <div>
+      <div className="max-w-screen-md m-auto">
         <Outlet />
       </div>
     </div>
