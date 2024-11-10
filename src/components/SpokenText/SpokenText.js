@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 
-function SpokenWord({ text, className }) {
+function SpokenText({ text, className }) {
   return (
     <div className="flex gap-3 items-center">
       <TextToSpeech sentence={text} />
       <p
-        className={`capitalize text-center text-slate-700 font-semibold mb-0 ${className}`}
+        className={`capitalize text-slate-700 font-semibold mb-0 ${className}`}
       >
         {text}
       </p>
@@ -14,4 +14,4 @@ function SpokenWord({ text, className }) {
   );
 }
 
-export default SpokenWord;
+export default SpokenText;

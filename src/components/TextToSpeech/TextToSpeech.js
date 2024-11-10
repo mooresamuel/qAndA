@@ -6,7 +6,8 @@ import SpeakerIcon from "../SpeakerIcon/SpeakerIcon";
 
 const TextToSpeech = ({ sentence }) => {
   const { speak, isLoading } = useTextToSpeech();
-  const handlePlay = () => {
+  const handlePlay = (e) => {
+    e.preventDefault();
     speak(sentence);
   };
 
