@@ -1,5 +1,16 @@
+import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatWord";
+
+const mockQuestion = {
+  question_number: 1,
+  question_type: "repeat-word",
+  prompts: ["ai, ay"],
+  data: ["pay", "train", "wait", "tray", "gay", "chain", "tail"],
+  answers: ["pay", "train", "wait", "tray", "gay", "chain", "tail"],
+};
+
 function ExerciseEntryPoint() {
-  return <div>EXERCISE Page</div>;
+  if (mockQuestion.question_type === "repeat-word")
+    return <QuestionRepeatWord question={mockQuestion} />;
 }
 
 export default ExerciseEntryPoint;
