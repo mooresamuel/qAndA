@@ -3,9 +3,9 @@ import NavigationBar from "../components/NavigationBar/NavigationBar";
 
 function Layout() {
   return (
-    <div className="h-screen overflow-y-">
+    <div className="overflow-y-auto flex flex-col h-screen">
       <NavigationBar />
-      <div className="max-w-screen-md m-auto">
+      <div className="max-w-screen-md m-auto flex-grow w-full my-5">
         <Outlet />
       </div>
     </div>

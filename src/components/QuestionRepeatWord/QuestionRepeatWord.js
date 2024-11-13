@@ -1,20 +1,15 @@
-import RepeatText from "../RepeatText/RepeatText";
+import NextButton from "../NextButton/NextButton";
+import TextToSpeech from "../TextToSpeech/TextToSpeech";
 
 function QuestionRepeatWord({ question }) {
-  console.log(question);
   return (
-    <div className="mt-4 space-y-8 px-8">
-      <h2 className="text-center text-4xl font-semibold">
-        {question.prompts[0]}
-      </h2>
-      <div className="flex flex-wrap gap-3 justify-center">
-        {question.data.map((el) => (
-          <RepeatText key={el} text={el} />
-        ))}
+    <div className="h-full flex flex-col justify-between items-center gap-3">
+      <h2 className="text-center">{question.prompts[0]}</h2>
+
+      <div className="flex flex-col gap-3 w-full items-center">
+        <TextToSpeech sentence={question.data[0]} label={"play sound"} />
+        <NextButton />
       </div>
-      <button className="bg-hightlight text-white w-full font-semibold text-center py-2 rounded-md">
-        Next
-      </button>
     </div>
   );
 }
