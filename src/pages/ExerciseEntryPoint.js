@@ -11,6 +11,10 @@ const mockQuestion = {
 function ExerciseEntryPoint() {
   if (mockQuestion.question_type === "repeat-word")
     return <QuestionRepeatWord question={mockQuestion} />;
+
+  if (mockQuestion.question_type === "read-sentence") {
+    // return QuestionReadSentence question={mockQuestion} />;
+  }
 }
 
 export default ExerciseEntryPoint;

@@ -1,8 +1,47 @@
 import { useExerciseData } from "../Contexts/ExerciseContext";
+import SpokenText from "../components/SpokenText/SpokenText";
+import RightArrowSVG from "../components/RightArrowSVG/RightArrowSVG";
+
+const mockExercise = {
+  question_type: "read-sentence",
+  description: [`You've learnt already how different letter combinations can be used to represent each of the 
+    five long vowel sounds a, e, i, o and u. The next thing you'll learn is how a silent e at the 
+    end of a word can change a short vowel sound into a long one. For example, tub has a short 
+    vowel sound (u), but when you add the letter e at the end it becomes tube, which has a long vowel 
+    sound - the long u. Hop has a short vowel sound (o), but when you add the letter e at the end it 
+    becomes hope, which has a long vowel sound - the long o. The letter e is sil ent in all the words 
+    you'll see in this activity, so it's never pronounced; its job in each word is to control the 
+    vowel and change it from a short sound into a l ong one. Read each word as you see it appear on 
+    the screen; there will be five words for each of the long vowel sounds.`,
+    `It's vital the letter e at the end of these words is always silent and is not pronounced. 
+    The l ong ē spelt in this way is less common than the others.`]
+}
+
+
 
 function Explain() {
   const { withCoach } = useExerciseData();
-  return <div>explain Page</div>;
+  
+  return (
+    <div className="flex flex-col" style={{ backgroundColor: "#8CB036" }}>
+      <div className="p-4 flex-1  overflow-y-auto">
+      
+        {
+          mockExercise.description.map((d, i) => {
+            return (
+              <SpokenText  className={`font-extrabold p-3 text-lg flex-col rounded-lg ${i === 1 && "bg-white"}`} key={i} text={d}  />
+            )
+          })
+        }
+          <button className="font-bold mt-5 flex items-center justify-center w-full py-3 bg-hightlight text-white rounded">
+            <RightArrowSVG strokeWidth={3} color="#fff" className="w-5 h-5 mr-2" />
+            Next
+          </button>
+        
+        </div>
+    </div>
+  )
+
 }
 
 export default Explain;
