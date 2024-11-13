@@ -18,7 +18,9 @@ const TextToSpeech = ({ sentence, label = null }) => {
       disabled={isLoading}
     >
       {isLoading ? <Spinner /> : <SpeakerIcon />}
-      <p className="font-semibold text-hightlight m-0 capitalize">{label}</p>
+      {label && (
+        <p className="font-semibold text-hightlight m-0 capitalize">{label}</p>
+      )}
     </SpeakerButton>
   );
 };

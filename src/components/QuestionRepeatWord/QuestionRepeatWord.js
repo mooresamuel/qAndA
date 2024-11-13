@@ -1,5 +1,4 @@
 import NextButton from "../NextButton/NextButton";
-import SpeakerButton from "../SpeakerButton/SpeakerButton";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 
 function QuestionRepeatWord({ question }) {
