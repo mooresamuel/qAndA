@@ -17,14 +17,8 @@ function ExerciseEntryPoint() {
   if (mockQuestion.question_type === "repeat-word")
     return <QuestionRepeatWord question={mockQuestion} />;
 
-<<<<<<< HEAD
-  if (mockQuestion.question_type === "read-sentence") {
-    // return QuestionReadSentence question={mockQuestion} />;
-  }
-=======
   if (mockQuestion.question_type === "read-sentence")
     return <QuestionReadSentence question={mockQuestion} />;
->>>>>>> dev
 }
 
 export default ExerciseEntryPoint;
