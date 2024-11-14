@@ -8,6 +8,7 @@ const TextToSpeech = ({ sentence, label = null }) => {
   const { speak, isLoading } = useTextToSpeech();
   const handlePlay = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     speak(sentence);
   };
 
