@@ -1,3 +1,4 @@
+import QuestionCompleteSentence from "../components/QuestionCompleteSentence/QuestionCompleteSentence";
 import QuestionReadSentence from "../components/QuestionReadSentence/QuestionReadSentence";
 import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatWord";
 import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepeatWords";
@@ -5,23 +6,10 @@ import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingW
 
 const mockQuestion = {
   question_number: 1,
-  question_type: "find-matching-words",
-  prompts: ["er"],
-  data: [
-    "fitter",
-    "turn",
-    "herb",
-    "first",
-    "fur",
-    "better",
-    "burst",
-    "term",
-    "bird",
-    "Thursday",
-    "shirt",
-    "birthday",
-  ],
-  answers: ["fitter", "herb", "better", "term"],
+  question_type: "complete-sentence",
+  prompts: ["I had a new %//shirt//% for my %//birthday//%"],
+  data: ["birthday", "shirt"],
+  answers: ["shirt", "birthday"],
 };
 
 function ExerciseEntryPoint() {
@@ -33,6 +21,9 @@ function ExerciseEntryPoint() {
 
   if (mockQuestion.question_type === "read-sentence")
     return <QuestionReadSentence question={mockQuestion} />;
+
+  if (mockQuestion.question_type === "complete-sentence")
+    return <QuestionCompleteSentence question={mockQuestion} />;
 
   if (mockQuestion.question_type === "find-matching-words")
     return (
