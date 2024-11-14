@@ -23,23 +23,20 @@ function Explain() {
   const { withCoach } = useExerciseData();
   
   return (
-    <div className="flex flex-col" style={{ backgroundColor: "#8CB036" }}>
-      <div className="p-4 flex-1  overflow-y-auto">
+      <div className="p-4" style={{ backgroundColor: "#8CB036" }}>
       
         {
           mockExercise.description.map((d, i) => {
             return (
-              <SpokenText  className={`font-extrabold p-3 text-lg flex-col rounded-lg ${i === 1 && "bg-white"}`} key={i} text={d}  />
+              <SpokenText className={`font-black mb-5 p-3 text-lg flex-col rounded-lg ${i === 1 && "bg-white"}`} key={i} text={d}  />
             )
           })
         }
-          <button className="font-bold mt-5 flex items-center justify-center w-full py-3 bg-hightlight text-white rounded">
-            <RightArrowSVG strokeWidth={3} color="#fff" className="w-5 h-5 mr-2" />
+          <button className="font-black text-lg mt-5 flex items-center justify-center w-full py-3 bg-hightlight text-white rounded">
+            <RightArrowSVG strokeWidth={4} color="#fff" className="w-5 h-5 mr-2" />
             Next
           </button>
-        
-        </div>
-    </div>
+      </div>
   )
 
 }
