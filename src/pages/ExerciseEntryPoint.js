@@ -5,10 +5,23 @@ import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingW
 
 const mockQuestion = {
   question_number: 1,
-  question_type: "read-sentence",
-  prompts: ["Read the following sentence"],
-  data: ["Does it help if I transfer some cash to your bank?"],
-  answers: ["Does it help if I transfer some cash to your bank?"],
+  question_type: "find-matching-words",
+  prompts: ["er"],
+  data: [
+    "fitter",
+    "turn",
+    "herb",
+    "first",
+    "fur",
+    "better",
+    "burst",
+    "term",
+    "bird",
+    "Thursday",
+    "shirt",
+    "birthday",
+  ],
+  answers: ["fitter", "herb", "better", "term"],
 };
 
 function ExerciseEntryPoint() {
@@ -22,7 +35,13 @@ function ExerciseEntryPoint() {
     return <QuestionReadSentence question={mockQuestion} />;
 
   if (mockQuestion.question_type === "find-matching-words")
-    return <QuestionFindingMatchingWords question={mockQuestion} currentLevel={0} totalLevel={5} />;
+    return (
+      <QuestionFindingMatchingWords
+        question={mockQuestion}
+        currentLevel={0}
+        totalLevel={5}
+      />
+    );
   // currentLevel={0} totalLevel={5} should come from the "API question" to work with the ProgressBar component
   // you can name currentLevel totalLevel accordingly to the "API question"
   // Ideally currentLevel should be 0 and totalLevel the max amount stages the level contains
