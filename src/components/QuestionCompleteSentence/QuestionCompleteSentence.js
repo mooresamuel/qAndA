@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import NextButton from "../NextButton/NextButton";
 
@@ -6,6 +6,7 @@ function QuestionCompleteSentence({ question }) {
   const [answers, setAnswers] = useState(
     Array.from(question.answers, () => false)
   );
+  const [correct, setCorrect] = useState(false);
   const splitSentence = question.prompts[0].split("%");
   const correctSentence = question.prompts[0]
     .replaceAll("%//", "")
@@ -33,6 +34,19 @@ function QuestionCompleteSentence({ question }) {
       [...current].map((el, i) => (i === index ? false : el))
     );
   }
+
+  useEffect(() => {
+    if (answers.length > 0) {
+      if (
+        [...question.answers].sort().toString() ===
+        [...answers].sort().toString()
+      ) {
+        setCorrect(true);
+      } else {
+        setCorrect(false);
+      }
+    }
+  }, [answers]);
 
   return (
     <div className="flex flex-col h-full justify-between items-center">
@@ -78,7 +92,7 @@ function QuestionCompleteSentence({ question }) {
           ))}
         </div>
       </div>
-      <NextButton disabled={true} />
+      <NextButton onClick={() => console.log("enabled")} disabled={!correct} />
     </div>
   );
 }
