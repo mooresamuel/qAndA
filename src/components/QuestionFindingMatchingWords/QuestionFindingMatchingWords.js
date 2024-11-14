@@ -10,15 +10,17 @@ const mockData = {
   data: [["fitter", "turn", "herb", "first"], ["fur", "better", "burst", "term"], ["bird", "Thursday", "shirt", "birthday"]],
 };
 
-function QuestionFindingMatchingWords({ currentLevel=3, totalLevel=5}) {
+// question should replace mockData the data and sound will be whatever key the data has
+
+function QuestionFindingMatchingWords({ question, currentLevel=0, totalLevel=5 }) {
   const [picks, setPicks] = useState([]);
   const [data, setData] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [correct, setCorrect] = useState(false);
-  const [clickedWords, setClickedWords] = useState([]);
+  const [clickedIndexes, setClickedIndexes] = useState([]);
+  const [level, setLevel] = useState(currentLevel);
 
   const handleClick = (index, word) => {
-    console.log("what happened ", word)
     setPicks((prevPicks) => {
       if (prevPicks.includes(word)) {
         return prevPicks.filter((w) => w !== word);
@@ -26,14 +28,22 @@ function QuestionFindingMatchingWords({ currentLevel=3, totalLevel=5}) {
         return [...prevPicks, word];
       }
     });
-    setClickedWords((prevWords) => {
-      if (prevWords.includes(index)) {
-        return prevWords.filter((i) => i !== index);
+    setClickedIndexes((prevIndex) => {
+      if (prevIndex.includes(index)) {
+        return prevIndex.filter((i) => i !== index);
       } else {
-        return [...prevWords, index];
+        return [...prevIndex, index];
       }
     });
   };
+
+  const handleNext = () => {
+    if (level < totalLevel) {
+      setLevel((prevLevel) => prevLevel + 1);
+    } else {
+      console.log("Max level reached");
+    }
+  }
 
   useEffect(() => {
     if (answers.length === 0) {
@@ -43,17 +53,19 @@ function QuestionFindingMatchingWords({ currentLevel=3, totalLevel=5}) {
   }, []);
 
   useEffect(() => {
-    if (answers.every(word => picks.includes(word))) {
-      setCorrect(true);
-    } else {
-      setCorrect(false);
+    if (picks.length > 0) {
+      if (answers.every(word => picks.includes(word))) {
+        setCorrect(true);
+      } else {
+        setCorrect(false);
+      }
     }
   }, [picks]);
 
   return (
     <div style={{ backgroundColor: "#8CB036" }} className="h-full p-5 flex flex-col gap-14 items-center">
       <div className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-4">
-        <ProgressBar currentStep={currentLevel} totalSteps={totalLevel} />
+        <ProgressBar currentStep={level} totalSteps={totalLevel} />
         <QuestionMarkSVG />
       </div>
 
@@ -67,7 +79,7 @@ function QuestionFindingMatchingWords({ currentLevel=3, totalLevel=5}) {
                 key={i + word} 
                 word={word}
                 sound={mockData.sound}
-                clicked={clickedWords.includes(i)}
+                clicked={clickedIndexes.includes(i)}
                 onClick={() => handleClick(i, word)}
               />
             ))
@@ -77,7 +89,8 @@ function QuestionFindingMatchingWords({ currentLevel=3, totalLevel=5}) {
           type="button" 
           disabled={correct === false ? true : false} 
           style={{ cursor: correct === false ? "not-allowed" : "pointer", opacity: correct ? 1 : 0.5 }} 
-          className={`mt-28 font-black text-lg flex items-center justify-center w-full py-3 bg-hightlight text-white rounded`}>
+          className={`mt-28 font-black text-lg flex items-center justify-center w-full py-3 bg-hightlight text-white rounded`}
+          onClick={handleNext}>
             <RightArrowSVG strokeWidth={4} color="#fff" className="w-5 h-5 mr-2" />
             Next
         </button>
