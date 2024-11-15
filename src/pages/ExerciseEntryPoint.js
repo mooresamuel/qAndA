@@ -1,3 +1,4 @@
+import { useAPIData } from "../Contexts/APIContext";
 import QuestionCompleteSentence from "../components/QuestionCompleteSentence/QuestionCompleteSentence";
 import QuestionReadSentence from "../components/QuestionReadSentence/QuestionReadSentence";
 import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatWord";
@@ -5,45 +6,49 @@ import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepea
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
 
-const mockQuestion = {
-  question_number: 1,
-  question_type: "complete-sentence",
-  prompts: ["I had a new %//shirt//% for my %//birthday//%"],
-  data: ["birthday", "shirt"],
-  answers: ["shirt", "birthday"],
-};
+// const questions = {
+//   question_number: 1,
+//   question_type: "complete-sentence",
+//   prompts: ["I had a new %//shirt//% for my %//birthday//%"],
+//   data: ["birthday", "shirt"],
+//   answers: ["shirt", "birthday"],
+// };
 
 function ExerciseEntryPoint() {
-  if (mockQuestion.question_type === "repeat-words")
-    return <QuestionRepeatWords question={mockQuestion} />;
+  const { questions, currentLevel, maxLevel } = useAPIData();
 
-  if (mockQuestion.question_type === "repeat-word")
-    return <QuestionRepeatWord question={mockQuestion} />;
+  console.log("entry piint currentlevle :", currentLevel, " now we look at maxLevel ", maxLevel);
 
-  if (mockQuestion.question_type === "read-sentence")
-    return <QuestionReadSentence question={mockQuestion} />;
+  if (questions[currentLevel].question_type === "repeat_words")
+    return <QuestionRepeatWords question={questions[currentLevel]} />;
 
-  if (mockQuestion.question_type === "complete-sentence")
-    return <QuestionCompleteSentence question={mockQuestion} />;
+  if (questions[currentLevel].question_type === "repeat_word")
+    return <QuestionRepeatWord question={questions[currentLevel]} />;
 
-  if (mockQuestion.question_type === "find-matching-words")
+  if (questions[currentLevel].question_type === "read_sentence")
+    return <QuestionReadSentence question={questions[currentLevel]} />;
+
+  if (questions[currentLevel].question_type === "complete_sentence")
+    return <QuestionCompleteSentence question={questions[currentLevel]} />;
+
+  if (questions[currentLevel].question_type === "find_matching_words")
     return (
       <QuestionFindingMatchingWords
-        question={mockQuestion}
-        currentLevel={0}
-        totalLevel={5}
+        question={questions[currentLevel]}
+        currentLevel={currentLevel}
+        totalLevel={maxLevel}
       />
     );
-  // currentLevel={0} totalLevel={5} should come from the "API question" to work with the ProgressBar component
+  // currentLevel={currentLevel} totalLevel={maxLevel} should come from the "API question" to work with the ProgressBar component
   // you can name currentLevel totalLevel accordingly to the "API question"
-  // Ideally currentLevel should be 0 and totalLevel the max amount stages the level contains
+  // Ideally currentLevel should be currentLevel and totalLevel the max amount stages the level contains
 
-  if (mockQuestion.question_type === "vowel-length")
+  if (questions[currentLevel].question_type === "vowel_length")
     return (
       <QuestionVowelLength 
-        question={mockQuestion}
-        currentLevel={0}
-        totalLevel={5}
+        question={questions[currentLevel]}
+        currentLevel={currentLevel}
+        totalLevel={maxLevel}
       />
     );
 }

@@ -1,6 +1,9 @@
+import { useEffect, useRef } from "react";
+import { useAPIData } from "../Contexts/APIContext";
 import { useExerciseData } from "../Contexts/ExerciseContext";
 import SpokenText from "../components/SpokenText/SpokenText";
 import NextButtonRight from "../components/NextButtonRight/NextButtonRight";
+import { useNavigate } from "react-router-dom";
 
 const mockExercise = {
   question_type: "read-sentence",
@@ -20,22 +23,36 @@ const mockExercise = {
 
 
 function Explain() {
+  const navigate = useNavigate();
   const { withCoach } = useExerciseData();
+  const { questions, currentLevel } = useAPIData();
+  // const isInitialized = useRef(false);
 
+  console.log(`Explained dd `, questions);
   const handleClick = () => {
-    console.log("clicked for now!");
+    if (questions.length > 0) {
+      navigate(`../steps/${questions[currentLevel].question_number}`);
+    }
   }
-  
+
   return (
       <div className="p-4" style={{ backgroundColor: "#8CB036" }}>
-      
+
         {
-          mockExercise.description.map((d, i) => {
-            return (
-              <SpokenText className={`font-black mb-5 p-3 text-lg flex-col rounded-lg ${i === 1 && "bg-white"}`} key={i} text={d}  />
-            )
-          })
+          questions.length > 0 &&
+    <SpokenText className={`font-black mb-5 p-3 text-lg flex-col rounded-lg`} text={questions[0].description.description}  />
+
+          
         }
+      
+        {/* { // must use this when backend is ready
+          questions.length > 0 &&
+            questions.description.map((d, i) => {
+              return (
+                <SpokenText className={`font-black mb-5 p-3 text-lg flex-col rounded-lg ${i === 1 && "bg-white"}`} key={i} text={d}  />
+              )
+            })
+        } */}
           <NextButtonRight
             correct={true}
             className={`mt-5`}

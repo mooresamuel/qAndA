@@ -1,16 +1,25 @@
+import { useEffect } from "react";
 import SpokenText from "../components/SpokenText/SpokenText";
 import PersonSVG from "../components/PersonSVG/PersonSVG";
 import { useExerciseData } from "../Contexts/ExerciseContext";
+import { useAPIData } from "../Contexts/APIContext";
 import { useNavigate } from "react-router-dom";
 
 function SelectCoachOrNot() {
   const navigate = useNavigate();
   const { setWithCoach } = useExerciseData();
+  const { updateModuleId, updateExerciseId } = useAPIData();
 
   function handleClick(bool) {
     setWithCoach(bool);
     navigate("../explain");
   }
+
+  useEffect(() => {
+    updateModuleId(8);
+    updateExerciseId(1);
+  }, []);
+
   return (
     <div className="space-y-3 py-4 mx-4">
       <SpokenText

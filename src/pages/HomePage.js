@@ -4,7 +4,7 @@ import MilestoneBanner from "../components/MilestoneBanner/MilestoneBanner";
 function HomePage() {
   return (
     <div>
-      HomePage
+      {/* Array of Arrays */}
       <MilestoneBanner module={5} />
       <LectureBlock
         exercise={{

@@ -128,31 +128,24 @@ import SelectCoachOrNot from "./pages/SelectCoachOrNot";
 import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
+import APIProvider from "./Contexts/APIContext";
 import { getQuestionsAPI } from "./services/getQuestionsAPI";
 
 function App() {
-  const [questions, setQuestions] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      console.log("starting fetch")
-      const d = await getQuestionsAPI(8, 1); // Wait for the data
-      console.log(d); // Now log the actual data
-      setQuestions(d);
-    }
-
-    fetchData();
-  }, []);
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/exercise/:exercise_number" element={<ExerciseProvider />}>
-          <Route
-            path="select-with-coach-or-not"
-            element={<SelectCoachOrNot />}
-          />
-          <Route path="explain" element={<Explain />} />
-          <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
+          <Route element={<APIProvider />}>
+            <Route
+              path="select-with-coach-or-not"
+              element={<SelectCoachOrNot />}
+            />
+          
+            <Route path="explain" element={<Explain />} />
+            <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

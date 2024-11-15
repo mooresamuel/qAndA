@@ -19,8 +19,8 @@ export async function getQuestionsAPI(moduleId, exerciseId) {
       return questions;
     }
   } catch (error) {
-    console.log("Fetch messed up");
     console.error("Request failed:", error);
+    return [];
   }
 
 }
