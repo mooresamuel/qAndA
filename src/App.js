@@ -119,7 +119,7 @@
 // // }
 
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 
@@ -128,8 +128,20 @@ import SelectCoachOrNot from "./pages/SelectCoachOrNot";
 import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
+import { getQuestionsAPI } from "./services/getQuestionsAPI";
 
 function App() {
+  const [questions, setQuestions] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      console.log("starting fetch")
+      const d = await getQuestionsAPI(8, 1); // Wait for the data
+      console.log(d); // Now log the actual data
+      setQuestions(d);
+    }
+
+    fetchData();
+  }, []);
   return (
     <Routes>
       <Route element={<Layout />}>
