@@ -16,8 +16,8 @@ function SelectCoachOrNot() {
   }
 
   useEffect(() => {
-    updateModuleId(8);
-    updateExerciseId(1);
+    updateModuleId(8); // change this2whatever is clicked from previous page backend will provide relevant data
+    updateExerciseId(1); // change this2whatever is clicked from previous page backend will provide relevant data
   }, []);
 
   return (
