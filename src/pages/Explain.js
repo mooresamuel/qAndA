@@ -1,6 +1,6 @@
 import { useExerciseData } from "../Contexts/ExerciseContext";
 import SpokenText from "../components/SpokenText/SpokenText";
-import RightArrowSVG from "../components/RightArrowSVG/RightArrowSVG";
+import NextButtonRight from "../components/NextButtonRight/NextButtonRight";
 
 const mockExercise = {
   question_type: "read-sentence",
@@ -21,6 +21,10 @@ const mockExercise = {
 
 function Explain() {
   const { withCoach } = useExerciseData();
+
+  const handleClick = () => {
+    console.log("clicked for now!");
+  }
   
   return (
       <div className="p-4" style={{ backgroundColor: "#8CB036" }}>
@@ -32,10 +36,11 @@ function Explain() {
             )
           })
         }
-          <button className="font-black text-lg mt-5 flex items-center justify-center w-full py-3 bg-hightlight text-white rounded">
-            <RightArrowSVG strokeWidth={4} color="#fff" className="w-5 h-5 mr-2" />
-            Next
-          </button>
+          <NextButtonRight
+            correct={true}
+            className={`mt-5`}
+            onClick={handleClick}
+          />
       </div>
   )
 

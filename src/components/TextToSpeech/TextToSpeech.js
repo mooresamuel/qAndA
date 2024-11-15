@@ -4,7 +4,7 @@ import useTextToSpeech from "../../hooks/useTextToSpeech";
 import SpeakerButton from "../SpeakerButton/SpeakerButton";
 import SpeakerIcon from "../SpeakerIcon/SpeakerIcon";
 
-const TextToSpeech = ({ sentence, label = null }) => {
+const TextToSpeech = ({ sentence, shadow, label = null }) => {
   const { speak, isLoading } = useTextToSpeech();
   const handlePlay = (e) => {
     e.preventDefault();
@@ -14,7 +14,7 @@ const TextToSpeech = ({ sentence, label = null }) => {
 
   return (
     <SpeakerButton
-      className="flex gap-3 items-center p-3 w-fit"
+      className={`flex gap-3 items-center p-3 w-fit ${shadow}`}
       onClick={handlePlay}
       disabled={isLoading}
     >

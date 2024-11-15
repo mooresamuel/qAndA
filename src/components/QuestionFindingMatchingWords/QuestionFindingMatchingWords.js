@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
-import RightArrowSVG from "../RightArrowSVG/RightArrowSVG";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import Word from "../Word/Word";
+import NextButtonRight from "../NextButtonRight/NextButtonRight";
+
+const mockQuestion = {
+  question_type: "find-matching-words",
+  prompts: ["er"],
+  data: ["fitter", "turn", "herb", "first", "fur", "better", "burst", "term", "bird", "Thursday", "shirt", "birthday"],
+  answers: ["fitter", "herb", "better", "term"]
+};
 
 function QuestionFindingMatchingWords({
   question,
@@ -24,8 +31,9 @@ function QuestionFindingMatchingWords({
   };
 
   const handleNext = () => {
-    if (level < totalLevel) {
-      setLevel((prevLevel) => prevLevel + 1);
+    let tempLevel = level + 1;
+    if (tempLevel <= totalLevel) {
+      setLevel(tempLevel);
     } else {
       console.log("Max level reached");
     }
@@ -34,7 +42,7 @@ function QuestionFindingMatchingWords({
   useEffect(() => {
     if (picks.length > 0) {
       if (
-        [...question.answers].sort().toString() === [...picks].sort().toString()
+        question.answers.every(word => picks.includes(word))
       ) {
         setCorrect(true);
       } else {
@@ -68,23 +76,11 @@ function QuestionFindingMatchingWords({
               />
             ))}
         </div>
-        <button
-          type="button"
-          disabled={correct === false ? true : false}
-          style={{
-            cursor: correct === false ? "not-allowed" : "pointer",
-            opacity: correct ? 1 : 0.5,
-          }}
-          className={`mt-28 font-black text-lg flex items-center justify-center w-full py-3 bg-hightlight text-white rounded`}
+        <NextButtonRight 
+          correct={correct}
+          className={"mt-28"}
           onClick={handleNext}
-        >
-          <RightArrowSVG
-            strokeWidth={4}
-            color="#fff"
-            className="w-5 h-5 mr-2"
-          />
-          Next
-        </button>
+        />
       </div>
     </div>
   );

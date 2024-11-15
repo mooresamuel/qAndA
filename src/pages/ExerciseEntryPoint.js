@@ -3,6 +3,7 @@ import QuestionReadSentence from "../components/QuestionReadSentence/QuestionRea
 import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatWord";
 import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepeatWords";
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
+import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
 
 const mockQuestion = {
   question_number: 1,
@@ -36,6 +37,15 @@ function ExerciseEntryPoint() {
   // currentLevel={0} totalLevel={5} should come from the "API question" to work with the ProgressBar component
   // you can name currentLevel totalLevel accordingly to the "API question"
   // Ideally currentLevel should be 0 and totalLevel the max amount stages the level contains
+
+  if (mockQuestion.question_type === "vowel-length")
+    return (
+      <QuestionVowelLength 
+        question={mockQuestion}
+        currentLevel={0}
+        totalLevel={5}
+      />
+    );
 }
 
 export default ExerciseEntryPoint;
