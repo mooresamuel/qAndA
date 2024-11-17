@@ -119,7 +119,6 @@
 // // }
 
 import "./App.css";
-import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 
@@ -129,20 +128,21 @@ import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
 import APIProvider from "./Contexts/APIContext";
-import { getQuestionsAPI } from "./services/getQuestionsAPI";
+
 
 function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/exercise/:exercise_number" element={<ExerciseProvider />}>
-          <Route element={<APIProvider />}>
+        <Route element={<APIProvider />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/exercise/:exercise_number" element={<ExerciseProvider />}>
+
             <Route
               path="select-with-coach-or-not"
               element={<SelectCoachOrNot />}
             />
-          
+
             <Route path="explain" element={<Explain />} />
             <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
           </Route>

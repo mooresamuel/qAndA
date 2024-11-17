@@ -12,7 +12,7 @@ export async function getQuestionsAPI(moduleId, exerciseId) {
       // credentials: "include"
     };
   
-    const response = await fetch(`${API_URL}/get_questions?module_id=${moduleId}&exercise_id=${exerciseId}`, options);
+    const response = await fetch(`${API_URL}/get_questions?module_number=${moduleId}&exercise_number=${exerciseId}`, options);
   
     if (response.ok) {
       const questions = await response.json();

@@ -3,9 +3,11 @@ import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import SpokenText from "../SpokenText/SpokenText";
 
 function QuestionRepeatWord({ question }) {
+  //navigate(`../steps/${questions[currentLevel].question_number}`);
+  console.log("repeat", question.data.length);
   return (
     <div className="h-full flex flex-col justify-between items-center gap-3">
-      <h2 className="text-center">{question.prompts.prompt1}</h2>
+      <h2 className="text-center">{question.prompts[0]}</h2>
 
       <div className="flex flex-col gap-3 w-full items-center">
         {

@@ -17,8 +17,6 @@ import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowel
 function ExerciseEntryPoint() {
   const { questions, currentLevel, maxLevel } = useAPIData();
 
-  console.log("entry piint currentlevle :", currentLevel, " now we look at maxLevel ", maxLevel);
-
   if (questions[currentLevel].question_type === "repeat_words")
     return <QuestionRepeatWords question={questions[currentLevel]} />;
 
@@ -39,9 +37,6 @@ function ExerciseEntryPoint() {
         totalLevel={maxLevel}
       />
     );
-  // currentLevel={currentLevel} totalLevel={maxLevel} should come from the "API question" to work with the ProgressBar component
-  // you can name currentLevel totalLevel accordingly to the "API question"
-  // Ideally currentLevel should be currentLevel and totalLevel the max amount stages the level contains
 
   if (questions[currentLevel].question_type === "vowel_length")
     return (

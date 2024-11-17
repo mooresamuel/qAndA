@@ -4,7 +4,7 @@ import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import Word from "../Word/Word";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
 
-const mockQuestion = {
+const question = {
   question_type: "find-matching-words",
   prompts: ["er"],
   data: ["fitter", "turn", "herb", "first", "fur", "better", "burst", "term", "bird", "Thursday", "shirt", "birthday"],
@@ -12,7 +12,7 @@ const mockQuestion = {
 };
 
 function QuestionFindingMatchingWords({
-  question,
+  // question,
   currentLevel = 0,
   totalLevel = 5,
 }) {
@@ -42,7 +42,8 @@ function QuestionFindingMatchingWords({
   useEffect(() => {
     if (picks.length > 0) {
       if (
-        question.answers.every(word => picks.includes(word))
+        [...question.answers].sort().toString() === [...picks].sort().toString()
+        // question.answers.every(word => picks.includes(word))
       ) {
         setCorrect(true);
       } else {

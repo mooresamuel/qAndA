@@ -10,34 +10,13 @@ function APIProvider({ children }) {
   const [exerciseId, setExerciseId] = useState(null);
   const [currentLevel, setCurrentLevel] = useState(0);
 
-  const [prevModuleId, setPrevModuleId] = useState(null);
-  const [prevExerciseId, setPrevExerciseId] = useState(null);
 
-  const initialiseQuestions = useRef(false);
-
-  const { isLoading, questions, getQuestions, maxLevel } = useFetchQuestions(moduleId, exerciseId);
+  const { isLoading, questions, maxLevel } = useFetchQuestions(moduleId, exerciseId);
 
   const updateModuleId = (newModuleId) => setModuleId(newModuleId);
   const updateExerciseId = (newExerciseId) => setExerciseId(newExerciseId);
   const updateCurrentLevel = (newCurrentLevel) => setCurrentLevel(newCurrentLevel);
 
-  useEffect(() => {
-
-    if (moduleId && exerciseId) {
-      if (initialiseQuestions.current) {
-        if (moduleId !== prevModuleId || exerciseId !== prevExerciseId) {
-          setPrevExerciseId(exerciseId);
-          setPrevModuleId(moduleId);
-          getQuestions(moduleId, exerciseId);
-        }
-      } else {
-        getQuestions(moduleId, exerciseId);
-        initialiseQuestions.current = true;
-      }
-      setPrevModuleId(moduleId);
-      setPrevExerciseId(exerciseId);
-    }
-  }, [moduleId, exerciseId, getQuestions]);
 
   return (
     <APIContext.Provider value={{ isLoading, questions, currentLevel, maxLevel, updateModuleId, updateExerciseId, updateCurrentLevel }}>

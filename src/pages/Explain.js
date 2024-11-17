@@ -38,24 +38,24 @@ function Explain() {
   return (
       <div className="p-4" style={{ backgroundColor: "#8CB036" }}>
 
-        {
+        {/* {
           questions.length > 0 &&
     <SpokenText 
       className={`font-black mb-5 p-3 text-lg flex-col rounded-lg`} 
-      text={questions[currentLevel].description.description} 
+      text={questions[currentLevel].description} 
     />
 
           
-        }
+        } */}
       
-        {/* { // must use this when backend is ready
+        { // must use this when backend is ready
           questions.length > 0 &&
-            questions.description.map((d, i) => {
+            questions[currentLevel].description.map((d, i) => {
               return (
                 <SpokenText className={`font-black mb-5 p-3 text-lg flex-col rounded-lg ${i === 1 && "bg-white"}`} key={i} text={d}  />
               )
             })
-        } */}
+        } 
           <NextButtonRight
             correct={true}
             className={`mt-5`}
