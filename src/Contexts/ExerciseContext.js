@@ -7,6 +7,7 @@ const ExerciseContext = createContext();
 function ExerciseProvider({ children }) {
   const [withCoach, setWithCoach] = useState(false);
   const [exercise, setExercise] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [questionIndex, setQuestionIndex] = useState(0);
   const navigate = useNavigate();
   const { exercise_id } = useParams();
@@ -17,8 +18,15 @@ function ExerciseProvider({ children }) {
   useEffect(
     function () {
       async function fetch() {
-        const data = await getExercise(exercise_id);
-        setExercise(data);
+        try {
+          setIsLoading(true);
+          const data = await getExercise(exercise_id);
+          setExercise(data);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
       }
 
       fetch();
@@ -28,10 +36,15 @@ function ExerciseProvider({ children }) {
 
   const handleNextQuestion = () => {
     if (questionIndex < numQuestions - 1) {
+      navigate(
+        `/exercise/${exercise_id}/steps/${
+          exercise?.questions?.at(questionIndex + 1).question_id
+        }`
+      );
       setQuestionIndex((i) => i + 1);
     }
     if (questionIndex === numQuestions - 1) {
-      navigate("../../complete");
+      navigate(`/exercise/${exercise_id}/complete`);
     }
   };
 
@@ -41,6 +54,7 @@ function ExerciseProvider({ children }) {
         withCoach,
         setWithCoach,
         exercise,
+        isLoading,
         currentQuestion,
         numQuestions,
         handleNextQuestion,

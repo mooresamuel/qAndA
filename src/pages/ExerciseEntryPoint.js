@@ -7,7 +7,9 @@ import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowel
 import { useExerciseData } from "../Contexts/ExerciseContext";
 
 function ExerciseEntryPoint() {
-  const { currentQuestion } = useExerciseData();
+  const { currentQuestion, isLoading } = useExerciseData();
+
+  if (isLoading) return null;
 
   if (currentQuestion.question_type === "repeat_words")
     return <QuestionRepeatWords question={currentQuestion} />;
