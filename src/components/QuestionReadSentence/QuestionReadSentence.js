@@ -1,9 +1,12 @@
-import NextButton from "../NextButton/NextButton";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import SpokenText from "../SpokenText/SpokenText";
 import SpeechToText from "../SpeechToText/SpeechToText";
+import NextButtonRight from "../NextButtonRight/NextButtonRight";
 
 function QuestionReadSentence({ question }) {
+  const { handleNextQuestion } = useExerciseData();
+
   return (
     <div className="h-full flex flex-col justify-between items-center gap-3">
       <div className="flex items-center flex-col gap-3">
@@ -19,7 +22,7 @@ function QuestionReadSentence({ question }) {
           <TextToSpeech sentence={question.data[0]} label={"play sound"} />
           <SpeechToText sentence={question.data[0]} />
         </div>
-        <NextButton />
+        <NextButtonRight onClick={handleNextQuestion} />
       </div>
     </div>
   );

@@ -3,13 +3,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import Word from "../Word/Word";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
-
-const mockQuestion = {
-  question_type: "find-matching-words",
-  prompts: ["er"],
-  data: ["fitter", "turn", "herb", "first", "fur", "better", "burst", "term", "bird", "Thursday", "shirt", "birthday"],
-  answers: ["fitter", "herb", "better", "term"]
-};
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 
 function QuestionFindingMatchingWords({
   question,
@@ -19,6 +13,7 @@ function QuestionFindingMatchingWords({
   const [picks, setPicks] = useState([]);
   const [correct, setCorrect] = useState(false);
   const [level, setLevel] = useState(currentLevel);
+  const { handleNextQuestion } = useExerciseData();
 
   const handleClick = (word) => {
     setPicks((prevPicks) => {
@@ -30,20 +25,9 @@ function QuestionFindingMatchingWords({
     });
   };
 
-  const handleNext = () => {
-    let tempLevel = level + 1;
-    if (tempLevel <= totalLevel) {
-      setLevel(tempLevel);
-    } else {
-      console.log("Max level reached");
-    }
-  };
-
   useEffect(() => {
     if (picks.length > 0) {
-      if (
-        question.answers.every(word => picks.includes(word))
-      ) {
+      if (question.answers.every((word) => picks.includes(word))) {
         setCorrect(true);
       } else {
         setCorrect(false);
@@ -76,10 +60,10 @@ function QuestionFindingMatchingWords({
               />
             ))}
         </div>
-        <NextButtonRight 
+        <NextButtonRight
           correct={correct}
           className={"mt-28"}
-          onClick={handleNext}
+          onClick={handleNextQuestion}
         />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { getExercise } from "../services/getQuestionsAPI";
 
 const ExerciseContext = createContext();
@@ -8,9 +8,10 @@ function ExerciseProvider({ children }) {
   const [withCoach, setWithCoach] = useState(false);
   const [exercise, setExercise] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const navigate = useNavigate();
   const { exercise_id } = useParams();
 
-  const currentQuestion = exercise?.questions[questionIndex];
+  const currentQuestion = exercise?.questions?.at(questionIndex);
   const numQuestions = exercise?.questions?.length;
 
   useEffect(
@@ -26,8 +27,11 @@ function ExerciseProvider({ children }) {
   );
 
   const handleNextQuestion = () => {
-    if (questionIndex < numQuestions) {
+    if (questionIndex < numQuestions - 1) {
       setQuestionIndex((i) => i + 1);
+    }
+    if (questionIndex === numQuestions - 1) {
+      navigate("../../complete");
     }
   };
 
