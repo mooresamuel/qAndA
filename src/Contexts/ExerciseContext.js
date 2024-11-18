@@ -10,8 +10,8 @@ function ExerciseProvider({ children }) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const { exercise_id } = useParams();
 
-  const currentQuestion = exercise.questions[questionIndex];
-  const numQuestions = exercise.questions.length;
+  const currentQuestion = exercise?.questions[questionIndex];
+  const numQuestions = exercise?.questions?.length;
 
   useEffect(
     function () {
@@ -25,7 +25,11 @@ function ExerciseProvider({ children }) {
     [exercise_id]
   );
 
-  console.log(exercise);
+  const handleNextQuestion = () => {
+    if (questionIndex < numQuestions) {
+      setQuestionIndex((i) => i + 1);
+    }
+  };
 
   return (
     <ExerciseContext.Provider
@@ -35,6 +39,7 @@ function ExerciseProvider({ children }) {
         exercise,
         currentQuestion,
         numQuestions,
+        handleNextQuestion,
       }}
     >
       {children}
