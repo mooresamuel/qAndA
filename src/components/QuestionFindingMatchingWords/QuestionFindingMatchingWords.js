@@ -5,14 +5,9 @@ import Word from "../Word/Word";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
 
-function QuestionFindingMatchingWords({
-  question,
-  currentLevel = 0,
-  totalLevel = 5,
-}) {
+function QuestionFindingMatchingWords({ question }) {
   const [picks, setPicks] = useState([]);
   const [correct, setCorrect] = useState(false);
-  const [level, setLevel] = useState(currentLevel);
   const { handleNextQuestion } = useExerciseData();
 
   const handleClick = (word) => {
@@ -41,7 +36,7 @@ function QuestionFindingMatchingWords({
       className="h-full p-5 flex flex-col gap-14 items-center"
     >
       <div className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-4">
-        <ProgressBar currentStep={level} totalSteps={totalLevel} />
+        <ProgressBar />
         <QuestionMarkSVG />
       </div>
 

@@ -24,25 +24,13 @@ function ExerciseEntryPoint() {
     return <QuestionCompleteSentence question={currentQuestion} />;
 
   if (currentQuestion.question_type === "find_matching_words")
-    return (
-      <QuestionFindingMatchingWords
-        question={currentQuestion}
-        currentLevel={0}
-        totalLevel={5}
-      />
-    );
+    return <QuestionFindingMatchingWords question={currentQuestion} />;
   // currentLevel={0} totalLevel={5} should come from the "API question" to work with the ProgressBar component
   // you can name currentLevel totalLevel accordingly to the "API question"
   // Ideally currentLevel should be 0 and totalLevel the max amount stages the level contains
 
   if (currentQuestion.question_type === "vowel_length")
-    return (
-      <QuestionVowelLength
-        question={currentQuestion}
-        currentLevel={0}
-        totalLevel={5}
-      />
-    );
+    return <QuestionVowelLength question={currentQuestion} />;
 }
 
 export default ExerciseEntryPoint;

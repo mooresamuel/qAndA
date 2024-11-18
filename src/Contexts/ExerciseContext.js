@@ -55,6 +55,7 @@ function ExerciseProvider({ children }) {
         setWithCoach,
         exercise,
         isLoading,
+        questionIndex,
         currentQuestion,
         numQuestions,
         handleNextQuestion,
