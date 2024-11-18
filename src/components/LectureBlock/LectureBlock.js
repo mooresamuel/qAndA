@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import SpokenText from "../SpokenText/SpokenText";
 
 function ExerciseBlock({ exercise }) {
-  console.log(exercise);
   return (
     <Link
       to={`/exercise/${exercise.exercise_id}/select-with-coach-or-not`}

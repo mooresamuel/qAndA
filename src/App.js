@@ -135,10 +135,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route
-            path="/exercise/:exercise_number"
-            element={<ExerciseProvider />}
-          >
+          <Route path="/exercise/:exercise_id" element={<ExerciseProvider />}>
             <Route
               path="select-with-coach-or-not"
               element={<SelectCoachOrNot />}

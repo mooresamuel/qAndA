@@ -14,8 +14,8 @@ function HomePage() {
           exercise_name: "Reading sentences with more ul sounds",
         }}
       /> */}
-      {milestones.map((milestone) => (
-        <MilestonesPath key={milestone.module_id} milestone={milestone} />
+      {milestones.map((milestone, i) => (
+        <MilestonesPath key={i} milestone={milestone} />
       ))}
     </div>
   );
