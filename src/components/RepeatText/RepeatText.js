@@ -1,5 +1,5 @@
-import { Mic } from "lucide-react";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
+import SpeechToTextWord from "../SpeechToTextWord/SpeechToTextWord";
 
 function RepeatWord({ text }) {
   return (
@@ -7,7 +7,7 @@ function RepeatWord({ text }) {
       <TextToSpeech sentence={text} />
       <p className=" h-full px-4 py-2 rounded-md shadow-md text-lg font-semibold text-hightlight m-0 w-full flex justify-between">
         {text}
-        <Mic />
+        <SpeechToTextWord word={text} />
       </p>
     </div>
   );
