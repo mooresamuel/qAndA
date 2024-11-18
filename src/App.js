@@ -119,7 +119,6 @@
 // // }
 
 import "./App.css";
-import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 
@@ -128,22 +127,25 @@ import SelectCoachOrNot from "./pages/SelectCoachOrNot";
 import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
+import GlobalProvider from "./Contexts/GlobalContext";
 
 function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/exercise/:exercise_number" element={<ExerciseProvider />}>
-          <Route
-            path="select-with-coach-or-not"
-            element={<SelectCoachOrNot />}
-          />
-          <Route path="explain" element={<Explain />} />
-          <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
+    <GlobalProvider>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/exercise/:exercise_id" element={<ExerciseProvider />}>
+            <Route
+              path="select-with-coach-or-not"
+              element={<SelectCoachOrNot />}
+            />
+            <Route path="explain" element={<Explain />} />
+            <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </GlobalProvider>
   );
 }
 

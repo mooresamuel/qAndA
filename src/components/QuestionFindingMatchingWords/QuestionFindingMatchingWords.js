@@ -3,22 +3,12 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import Word from "../Word/Word";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 
-const mockQuestion = {
-  question_type: "find-matching-words",
-  prompts: ["er"],
-  data: ["fitter", "turn", "herb", "first", "fur", "better", "burst", "term", "bird", "Thursday", "shirt", "birthday"],
-  answers: ["fitter", "herb", "better", "term"]
-};
-
-function QuestionFindingMatchingWords({
-  question,
-  currentLevel = 0,
-  totalLevel = 5,
-}) {
+function QuestionFindingMatchingWords({ question }) {
   const [picks, setPicks] = useState([]);
   const [correct, setCorrect] = useState(false);
-  const [level, setLevel] = useState(currentLevel);
+  const { handleNextQuestion } = useExerciseData();
 
   const handleClick = (word) => {
     setPicks((prevPicks) => {
@@ -30,20 +20,9 @@ function QuestionFindingMatchingWords({
     });
   };
 
-  const handleNext = () => {
-    let tempLevel = level + 1;
-    if (tempLevel <= totalLevel) {
-      setLevel(tempLevel);
-    } else {
-      console.log("Max level reached");
-    }
-  };
-
   useEffect(() => {
     if (picks.length > 0) {
-      if (
-        question.answers.every(word => picks.includes(word))
-      ) {
+      if (question.answers.every((word) => picks.includes(word))) {
         setCorrect(true);
       } else {
         setCorrect(false);
@@ -57,7 +36,7 @@ function QuestionFindingMatchingWords({
       className="h-full p-5 flex flex-col gap-14 items-center"
     >
       <div className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-4">
-        <ProgressBar currentStep={level} totalSteps={totalLevel} />
+        <ProgressBar />
         <QuestionMarkSVG />
       </div>
 
@@ -76,10 +55,10 @@ function QuestionFindingMatchingWords({
               />
             ))}
         </div>
-        <NextButtonRight 
+        <NextButtonRight
           correct={correct}
           className={"mt-28"}
-          onClick={handleNext}
+          onClick={handleNextQuestion}
         />
       </div>
     </div>

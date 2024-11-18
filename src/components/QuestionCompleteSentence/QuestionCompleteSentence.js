@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
-import NextButton from "../NextButton/NextButton";
+import NextButtonRight from "../NextButtonRight/NextButtonRight";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 function QuestionCompleteSentence({ question }) {
+  const { handleNextQuestion } = useExerciseData();
+
   const [answers, setAnswers] = useState(
     Array.from(question.answers, () => false)
   );
@@ -50,6 +54,7 @@ function QuestionCompleteSentence({ question }) {
 
   return (
     <div className="flex flex-col h-full justify-between items-center">
+      <ProgressBar />
       <div className="space-y-16">
         <div className="flex items-center gap-3 text-lg px-3 py-5 bg-gray-100">
           <TextToSpeech sentence={correctSentence} />
@@ -92,7 +97,11 @@ function QuestionCompleteSentence({ question }) {
           ))}
         </div>
       </div>
-      <NextButton onClick={() => console.log("enabled")} disabled={!correct} />
+      <NextButtonRight
+        correct={correct}
+        className={"mt-28"}
+        onClick={handleNextQuestion}
+      />
     </div>
   );
 }

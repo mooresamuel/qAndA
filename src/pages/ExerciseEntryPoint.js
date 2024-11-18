@@ -4,48 +4,33 @@ import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatW
 import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepeatWords";
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
-
-const mockQuestion = {
-  question_number: 1,
-  question_type: "complete-sentence",
-  prompts: ["I had a new %//shirt//% for my %//birthday//%"],
-  data: ["birthday", "shirt"],
-  answers: ["shirt", "birthday"],
-};
+import { useExerciseData } from "../Contexts/ExerciseContext";
 
 function ExerciseEntryPoint() {
-  if (mockQuestion.question_type === "repeat-words")
-    return <QuestionRepeatWords question={mockQuestion} />;
+  const { currentQuestion, isLoading } = useExerciseData();
 
-  if (mockQuestion.question_type === "repeat-word")
-    return <QuestionRepeatWord question={mockQuestion} />;
+  if (isLoading) return null;
 
-  if (mockQuestion.question_type === "read-sentence")
-    return <QuestionReadSentence question={mockQuestion} />;
+  if (currentQuestion.question_type === "repeat_words")
+    return <QuestionRepeatWords question={currentQuestion} />;
 
-  if (mockQuestion.question_type === "complete-sentence")
-    return <QuestionCompleteSentence question={mockQuestion} />;
+  if (currentQuestion.question_type === "repeat_word")
+    return <QuestionRepeatWord question={currentQuestion} />;
 
-  if (mockQuestion.question_type === "find-matching-words")
-    return (
-      <QuestionFindingMatchingWords
-        question={mockQuestion}
-        currentLevel={0}
-        totalLevel={5}
-      />
-    );
+  if (currentQuestion.question_type === "read_sentence")
+    return <QuestionReadSentence question={currentQuestion} />;
+
+  if (currentQuestion.question_type === "complete_sentence")
+    return <QuestionCompleteSentence question={currentQuestion} />;
+
+  if (currentQuestion.question_type === "find_matching_words")
+    return <QuestionFindingMatchingWords question={currentQuestion} />;
   // currentLevel={0} totalLevel={5} should come from the "API question" to work with the ProgressBar component
   // you can name currentLevel totalLevel accordingly to the "API question"
   // Ideally currentLevel should be 0 and totalLevel the max amount stages the level contains
 
-  if (mockQuestion.question_type === "vowel-length")
-    return (
-      <QuestionVowelLength 
-        question={mockQuestion}
-        currentLevel={0}
-        totalLevel={5}
-      />
-    );
+  if (currentQuestion.question_type === "vowel_length")
+    return <QuestionVowelLength question={currentQuestion} />;
 }
 
 export default ExerciseEntryPoint;
