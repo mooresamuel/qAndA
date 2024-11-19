@@ -17,7 +17,7 @@ function ExerciseEntryPoint() {
   if (currentQuestion.question_type === "repeat_word")
     return <QuestionRepeatWord question={currentQuestion} />;
 
-  if (currentQuestion.question_type === "read_sentence")
+  if (currentQuestion.question_type === "repeat_sentence")
     return <QuestionReadSentence question={currentQuestion} />;
 
   if (currentQuestion.question_type === "complete_sentence")
