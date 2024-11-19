@@ -4,7 +4,7 @@ import useTextToSpeech from "../../hooks/useTextToSpeech";
 import SpeakerButton from "../SpeakerButton/SpeakerButton";
 import SpeakerIcon from "../SpeakerIcon/SpeakerIcon";
 
-const TextToSpeech = ({ sentence, shadow, label = null }) => {
+const TextToSpeech = ({ sentence, shadow, label = null, buttonClass }) => {
   const { speak, isLoading } = useTextToSpeech();
   const handlePlay = (e) => {
     e.preventDefault();

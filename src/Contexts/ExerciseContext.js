@@ -9,6 +9,7 @@ function ExerciseProvider({ children }) {
   const [exercise, setExercise] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [currentLevel, setCurrentLevel] = useState(0);
   const navigate = useNavigate();
   const { exercise_id } = useParams();
 
@@ -35,6 +36,7 @@ function ExerciseProvider({ children }) {
   );
 
   const handleNextQuestion = () => {
+    setCurrentLevel((level) => level + 1);
     if (questionIndex < numQuestions - 1) {
       navigate(
         `/exercise/${exercise_id}/steps/${
@@ -44,7 +46,10 @@ function ExerciseProvider({ children }) {
       setQuestionIndex((i) => i + 1);
     }
     if (questionIndex === numQuestions - 1) {
-      navigate(`/exercise/${exercise_id}/complete`);
+      setTimeout(() => {
+        setCurrentLevel(0);
+        navigate(`/exercise/${exercise_id}/complete`);
+      }, 500);
     }
   };
 
@@ -59,6 +64,7 @@ function ExerciseProvider({ children }) {
         currentQuestion,
         numQuestions,
         handleNextQuestion,
+        currentLevel
       }}
     >
       {children}
