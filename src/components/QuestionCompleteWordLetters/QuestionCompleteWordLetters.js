@@ -32,7 +32,8 @@ function QuestionCompleteWordLetters(
   const bottomLettersRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [animatingLetter, setAnimatingLetter] = useState(null);
-  const [spelling, setSpelling] = useState(Array.from(question.data.length -1).map(() => ""));
+  const [spelling, setSpelling] = useState([ ...Array(question.data.length - 1).fill(""),
+                                            question.data[question.data.length - 1] ]);
   const [findEmptyIndex, setFindEmptyIndex] = useState(false);
   const [correct, setCorrect] = useState(false);
 
