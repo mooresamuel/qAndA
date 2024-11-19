@@ -1,24 +1,34 @@
-import { Mic, Octagon, X } from "lucide-react";
-import { useSendAudioChat } from "../../hooks/useSendAudioChat";
-import { Spinner } from "react-bootstrap";
-import NewVoiceRecorder from "../NewVoiceRecorder";
+import { useState } from "react";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
+import { X } from "lucide-react";
 import ChatQuestionRecording from "../ChatQuestionRecording/ChatQuestionRecording";
+import { fetchAIChatAnswer } from "../../services/AIChatAPI";
 
 function ChatWindow({ onClose }) {
-  const { isRecording, startRecording, stopRecording, isLoading } =
-    useSendAudioChat();
+  const [isSending, setIsSending] = useState(false);
+  const { exercise, currentQuestion } = useExerciseData();
+  console.log(exercise);
 
-  function handleMicrophoneClick() {
-    if (isLoading) {
-      return;
-    }
+  async function handleSend(user_input) {
+    setIsSending(true);
+    try {
+      const prompt = {
+        exercise_details: {
+          exercise_name: exercise.exercise_name,
+          data: currentQuestion.data,
+          question_type: currentQuestion.question_type,
+          description: exercise.description,
+        },
+        sight_words: exercise.sight_words,
+        user_request: user_input,
+      };
 
-    if (!isRecording) {
-      startRecording();
-      return;
-    } else {
-      stopRecording();
-      return;
+      const data = await fetchAIChatAnswer(prompt);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsSending(false);
     }
   }
 
@@ -32,7 +42,7 @@ function ChatWindow({ onClose }) {
       </div>
       <div className="flex-grow bg-white"></div>
       <div>
-        <ChatQuestionRecording />
+        <ChatQuestionRecording disabled={isSending} onSend={handleSend} />
       </div>
     </div>
   );

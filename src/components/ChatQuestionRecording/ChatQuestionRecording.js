@@ -5,7 +5,7 @@ import { useState } from "react";
 import ChatStreamingAudioTranscription from "../ChatStreamingAudioTranscription/ChatStreamingAudioTranscription";
 import ChatSendButton from "../ChatSendButton/ChatSendButton";
 
-function ChatQuestionRecording(onSend) {
+function ChatQuestionRecording({ onSend, disabled }) {
   const [message, setMessage] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
 
@@ -17,12 +17,15 @@ function ChatQuestionRecording(onSend) {
 
       <div className="flex gap-3">
         <ChatStreamingAudioTranscription
+          disabled={disabled}
           question={message}
           setQuestion={setMessage}
           isWaiting={isWaiting}
           setIsWaiting={setIsWaiting}
         />
-        {message && <ChatSendButton onClick={() => onSend(message)} />}
+        {message && (
+          <ChatSendButton disabled={disabled} onClick={() => onSend(message)} />
+        )}
       </div>
     </div>
   );
