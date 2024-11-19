@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { API_URL } from "../utils/constants";
 import { io } from "socket.io-client";
-import { Mic, MicOff, Activity } from "lucide-react";
+import { Mic, MicOff, Activity, Import } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons/faMicrophone";
 import "./AudioTranscription.css";
@@ -8,7 +9,6 @@ import "./AudioTranscription.css";
 const NewVoiceRecorder = ({
   isWaiting,
   setIsWaiting,
-  source,
   question,
   setQuestion,
 }) => {
@@ -46,13 +46,20 @@ const NewVoiceRecorder = ({
     transcriptRef.current = transcript;
   }, [transcript]);
 
+  useEffect(
+    function () {
+      setQuestion(transcript);
+    },
+    [transcript]
+  );
+
   useEffect(() => {
     questionRef.current = question;
   }, [question]);
 
   useEffect(() => {
     // Connect to WebSocket server
-    socketRef.current = io(`${source}`);
+    socketRef.current = io(`${API_URL}`);
 
     socketRef.current.on("connect", () => {
       setIsConnected(true);
@@ -117,7 +124,7 @@ const NewVoiceRecorder = ({
   const fetchResponse = useCallback((newChat, finalTranscript) => {
     console.log("final transcript:", finalTranscript);
     console.log("newChat:", newChat);
-    fetch(`${source}answer_question`, {
+    fetch(`${API_URL}/answer_question`, {
       method: "POST",
       headers: {
         Accept: "application/json",

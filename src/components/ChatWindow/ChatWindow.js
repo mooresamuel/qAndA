@@ -1,6 +1,8 @@
 import { Mic, Octagon, X } from "lucide-react";
 import { useSendAudioChat } from "../../hooks/useSendAudioChat";
 import { Spinner } from "react-bootstrap";
+import NewVoiceRecorder from "../NewVoiceRecorder";
+import ChatQuestionRecording from "../ChatQuestionRecording/ChatQuestionRecording";
 
 function ChatWindow({ onClose }) {
   const { isRecording, startRecording, stopRecording, isLoading } =
@@ -29,15 +31,8 @@ function ChatWindow({ onClose }) {
         </button>
       </div>
       <div className="flex-grow bg-white"></div>
-      <div className="h-24 flex justify-center">
-        <button
-          className="h-14 w-14 flex items-center justify-center bg-slate-300 rounded-full"
-          onClick={handleMicrophoneClick}
-        >
-          {isLoading && <Spinner />}
-          {!isLoading && !isRecording && <Mic />}
-          {!isLoading && isRecording && <Octagon />}
-        </button>
+      <div>
+        <ChatQuestionRecording />
       </div>
     </div>
   );

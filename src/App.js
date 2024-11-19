@@ -141,7 +141,7 @@ function App() {
               path="select-with-coach-or-not"
               element={<SelectCoachOrNot />}
             />
-            <Route path="explain" element={<QuestionCompleteWordLetters />} />
+            <Route path="explain" element={<Explain />} />
             <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
           </Route>
         </Route>
