@@ -1,7 +1,9 @@
 import RightArrowSVG from "../RightArrowSVG/RightArrowSVG";
 
 function NextButtonRight({
-  correct = true,
+  label = "Next",
+  removeArrow = false,
+  isEnabled = true,
   onClick,
   className = "",
   strokeWidth = 4,
@@ -11,20 +13,23 @@ function NextButtonRight({
   return (
     <button
       type="button"
-      disabled={correct === false ? true : false}
+      disabled={isEnabled === false ? true : false}
       style={{
-        cursor: correct === false ? "not-allowed" : "pointer",
-        opacity: correct ? 1 : 0.5,
+        cursor: isEnabled === false ? "not-allowed" : "pointer",
+        opacity: isEnabled ? 1 : 0.5,
       }}
       className={`font-black text-lg flex items-center justify-center w-full py-3 bg-hightlight text-white rounded ${className}`}
       onClick={onClick}
     >
-      <RightArrowSVG
-        strokeWidth={strokeWidth}
-        color={arrowColor}
-        className={arrowSize}
-      />
-      Next
+      {
+        removeArrow ? null :
+          <RightArrowSVG
+            strokeWidth={strokeWidth}
+            color={arrowColor}
+            className={arrowSize}
+          />
+      }
+      {label}
     </button>
   );
 }

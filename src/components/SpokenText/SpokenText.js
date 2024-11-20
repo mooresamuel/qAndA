@@ -17,7 +17,7 @@ function SpokenText({ text, displayText, containerClass, className, buttonClass 
           extendText &&
           <span 
             onClick={extendText}
-            className="text-blue-600 cursor-pointer inline"
+            className="text-blue-600 cursor-pointer inline lowercase"
           >
             {extendable ? " [less]" : "...more"}
           </span>
