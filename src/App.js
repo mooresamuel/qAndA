@@ -128,7 +128,6 @@ import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
 import GlobalProvider from "./Contexts/GlobalContext";
-import QuestionBasicComprehension from "./components/QuestionBasicComprehension/QuestionBasicComprehension";
 
 function App() {
   return (
@@ -141,7 +140,7 @@ function App() {
               path="select-with-coach-or-not"
               element={<SelectCoachOrNot />}
             />
-            <Route path="explain" element={<QuestionBasicComprehension />} />
+            <Route path="explain" element={<Explain />} />
             <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
           </Route>
         </Route>

@@ -9,9 +9,7 @@ import QuestionBasicComprehension from "../components/QuestionBasicComprehension
 import QuestionCompleteWordLetters from "../components/QuestionCompleteWordLetters/QuestionCompleteWordLetters";
 
 function ExerciseEntryPoint() {
-  console.log("ENTRYPOINT")
   const { currentQuestion, isLoading } = useExerciseData();
-  console.log("CURRENT QUESTION", currentQuestion);
 
   if (isLoading) return null;
 
