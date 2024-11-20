@@ -2,6 +2,8 @@ import { useState } from "react";
 import Word from "../Word/Word";
 import SpokenText from "../SpokenText/SpokenText";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
+import ProgressBar from "../ProgressBar/ProgressBar";
+import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
 
 function QuestionVowelLength({ question, currentLevel = 0, totalLevel = 5 }) {
@@ -31,10 +33,10 @@ function QuestionVowelLength({ question, currentLevel = 0, totalLevel = 5 }) {
       style={{ backgroundColor: "#8CB036" }}
       className="h-full p-5 flex flex-col gap-14 items-center"
     >
-      {/* <div className="w-full grid grid-cols-[95%_5%] items-center gap-2">
-        <ProgressBar currentStep={level} totalSteps={totalLevel} />
+      <div className="w-full grid grid-cols-[95%_5%] items-center gap-2">
+        <ProgressBar />
         <QuestionMarkSVG />
-      </div> */}
+      </div>
 
       <div className={`flex flex-col gap-3 items-center justify-center px-4`}>
         <SpokenText
@@ -70,7 +72,7 @@ function QuestionVowelLength({ question, currentLevel = 0, totalLevel = 5 }) {
         </div>
 
         <NextButtonRight
-          correct={selection}
+          isEnabled={selection}
           onClick={handleNextQuestion}
           className={`mt-28`}
         />

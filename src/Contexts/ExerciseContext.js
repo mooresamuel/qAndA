@@ -12,9 +12,11 @@ function ExerciseProvider({ children }) {
   const [currentLevel, setCurrentLevel] = useState(0);
   const navigate = useNavigate();
   const { exercise_id } = useParams();
+  const [currentQuestion, setCurrentQuestion] = useState({});
 
-  const currentQuestion = exercise?.questions?.at(questionIndex);
+  // const currentQuestion = exercise?.questions?.at(questionIndex);
   const numQuestions = exercise?.questions?.length;
+  console.log("numQuestions", numQuestions);
 
   console.log("currentQuestion", currentQuestion);
 
@@ -25,6 +27,7 @@ function ExerciseProvider({ children }) {
           setIsLoading(true);
           const data = await getExercise(exercise_id);
           setExercise(data);
+          setCurrentQuestion(data?.questions?.at(0));
         } catch (err) {
           console.log(err);
         } finally {
@@ -40,12 +43,14 @@ function ExerciseProvider({ children }) {
   const handleNextQuestion = () => {
     setCurrentLevel((level) => level + 1);
     if (questionIndex < numQuestions - 1) {
+      const newIndex = questionIndex + 1;
       navigate(
         `/exercise/${exercise_id}/steps/${
-          exercise?.questions?.at(questionIndex + 1).question_id
+          exercise?.questions?.at(newIndex).question_id
         }`
       );
-      setQuestionIndex((i) => i + 1);
+      setQuestionIndex(newIndex);
+      setCurrentQuestion(exercise?.questions?.at(newIndex));
     }
     if (questionIndex === numQuestions - 1) {
       setTimeout(() => {
@@ -67,6 +72,7 @@ function ExerciseProvider({ children }) {
         numQuestions,
         handleNextQuestion,
         currentLevel,
+        setCurrentLevel,
       }}
     >
       {children}

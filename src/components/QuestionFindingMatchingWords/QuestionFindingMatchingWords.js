@@ -56,7 +56,7 @@ function QuestionFindingMatchingWords({ question }) {
             ))}
         </div>
         <NextButtonRight
-          correct={correct}
+          isEnabled={correct}
           className={"mt-28"}
           onClick={handleNextQuestion}
         />

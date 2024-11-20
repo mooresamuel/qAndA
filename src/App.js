@@ -128,7 +128,6 @@ import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
 import GlobalProvider from "./Contexts/GlobalContext";
-import QuestionCompleteWordLetters from "./components/QuestionCompleteWordLetters/QuestionCompleteWordLetters";
 
 function App() {
   return (
