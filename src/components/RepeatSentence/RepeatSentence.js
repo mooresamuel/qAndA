@@ -14,17 +14,7 @@ function RepeatSentence({ sentence, spokenAnswer, highlightable = true }) {
           <IndividualWord
             key={`${word}${i}`}
             word={word}
-            highlightable={highlightable}
-            className={`${
-              !spokenAnswer
-                ? ""
-                : spokenAnswer[i]?.word?.toLowerCase() ===
-                    word
-                      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
-                      .toLowerCase() && spokenAnswer[i]?.confidence > 0.7
-                ? "text-green-600"
-                : "text-red-500"
-            }`}
+            spokenAnswer={spokenAnswer?.at(i)}
           />
         ))}
       </h3>
