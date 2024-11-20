@@ -1,33 +1,42 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
-import { useExerciseData } from "../../Contexts/ExerciseContext";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import AnimatedTag from "../AnimatedTag/AnimatedTag";
+import ModalElement from "../ModalElement/ModalElement";
 
-const data = {
-  description: ['Remember that vowel sounds can be long or short. The long vowel sounds are ā, ē, ō, ĩ and ũ', 'the short ones are a, e, i, o, and u. In this acti…here. Read each word as it appears on the screen.'],
-  other_topics: ['level 8 other topics'],
-  phonics: ['level 8 phonics'],
-  questions: [{
-    answers: ["tube"],
-    data: ["t", "u", "b", "e"]
-  }],
-  sight_words: ['level 8 sight words']
-}
+// const data = {
+//   description: ['Remember that vowel sounds can be long or short. The long vowel sounds are ā, ē, ō, ĩ and ũ', 'the short ones are a, e, i, o, and u. In this acti…here. Read each word as it appears on the screen.'],
+//   other_topics: ['level 8 other topics'],
+//   phonics: ['level 8 phonics'],
+//   questions: [{
+//     question_type: "complete_spelling",
+//     answers: ["tube"],
+//     data: ["t", "u", "b", "e"],
+//     prompts: ["t", "b"]
+//   }],
+//   sight_words: ['level 8 sight words']
+// }
 
-const questions = [{
-  answers: ["tube"],
-  data: ["t", "u", "b", "e"],
-  given: ["t", "b"]
-}];
+// const questions = [
+//   {
+//     answers: ["tube"],
+//     data: ["t", "u", "b", "e"],
+//     prompts: ["t", "b"]
+//   }
+// ];
 
 function QuestionCompleteWordLetters(
-  // questions
+  questions
 ) {
-  const { exercise } = useExerciseData();
-  const [ question ] = questions;
+  console.log("COMPONENT HIT!")
+  const navigate = useNavigate();
+  const { handleNextQuestion } = useExerciseData();
+  const { question } = questions;
+  console.log("ALL Question", questions);
 
   const topLettersRefs = useRef([]);
   const bottomLettersRefs = useRef([]);
@@ -39,10 +48,9 @@ function QuestionCompleteWordLetters(
 
   const [findEmptyIndex, setFindEmptyIndex] = useState(false);
   const [correct, setCorrect] = useState(false);
-
-  console.log("letterSlots", letterSlots);
-
-
+  const [restart, setRestart] = useState(false);
+  const [enableNextStage, setEnableNextStage] = useState(false);
+  const [tryAgain, setTryAgain] = useState(false);
 
   const handleTopClick = (e, i, array) => {
     if (correct) {
@@ -78,10 +86,19 @@ function QuestionCompleteWordLetters(
     }
   }
 
+  const initalSetUp = () => {
+    if (letterSlots.length === 0) {
+      console.log("QUESTION DATA!", question.data);
+      const createLetterSlots = question.data.map((char) => 
+        question.prompts.includes(char) ? char : "");
+      console.log("CreateLetterSlots", createLetterSlots);
+      setLetterSlots(createLetterSlots);
+      setSpelling(createLetterSlots);
+      setActiveIndex(createLetterSlots.findIndex(char => char === ""));
+    }
+  }
 
 
-
-  
   const handleLetterClick = (letter, index) => {
 
     const bottomRect = bottomLettersRefs.current[index]?.getBoundingClientRect();
@@ -107,15 +124,33 @@ function QuestionCompleteWordLetters(
     }, 400);
   };
 
+  // TODO: Handle Next Page Click event
+  const handleNext = () => {
+    if (spelling.join("") === question.answers[0]) {
+      setCorrect(true);
+      setTimeout(() => {
+        handleNextQuestion();
+      }, 10);
+      setLetterSlots([]);
+      setRestart(true);
+    } else {
+      setTryAgain(true);
+    }
+  }
 
   useEffect(() => {
-    if (letterSlots.length === 0) {
-      const createLetterSlots = question.data.map((char) => 
-        question.given.includes(char) ? char : "");
-      setLetterSlots(createLetterSlots);
-      setSpelling(createLetterSlots);
-      setActiveIndex(createLetterSlots.findIndex(char => char === ""));
+    if (restart) {
+      console.log("Correct!!")
+      setTimeout(() => {
+        initalSetUp();
+        setCorrect(false);
+        setRestart(false);
+      }, 300);
     }
+  }, [restart]);
+
+  useEffect(() => {
+    initalSetUp();
   }, []);
 
   useEffect(() => {
@@ -128,9 +163,19 @@ function QuestionCompleteWordLetters(
     }
   }, [findEmptyIndex]);
 
-  console.log(correct);
+  useEffect(() => {
+    if (spelling.length > 0) {
+      if (spelling.every((char) => char !== "")) {
+        setEnableNextStage(true);
+      } else {
+        setEnableNextStage(false);
+      }
+    }
+  }, [animatingLetter]);
 
-  console.log("spelling", spelling)
+  console.log("LEEEngth", letterSlots.length);
+  console.log("INSIDEEER", letterSlots);
+
 
   return (
     <div
@@ -153,7 +198,7 @@ function QuestionCompleteWordLetters(
         
         
       >
-        { // TODO: TOP HALF
+        {
           letterSlots.length > 0 &&
           letterSlots.map((letter, i, array) => (
             <div 
@@ -163,14 +208,14 @@ function QuestionCompleteWordLetters(
             >
               <div 
                 ref={(el) => topLettersRefs.current[i] = el}
-                role={correct ? "" : "button"}
+                role={letter !== "" ? "" : correct ? "" : "button"}
                 aria-pressed={activeIndex === i}
-                disabled={correct ? true : false}
-                aria-disabled={correct ? "true" : "false"}
+                disabled={letter !== "" ? true : correct ? true : false}
+                aria-disabled={letter !== "" ? "true" : correct ? "true" : "false"}
                 onClick={(e) => handleTopClick(e, i, array)}
                 className={`
                   ${activeIndex === i ? "border-black border-2" : ""} 
-                  ${letter === "" ? "cursor-default" : correct ? "cursor-not-allowed" : "cursor-pointer"} 
+                  ${letter !== "" ? "cursor-default" : correct ? "cursor-not-allowed" : "cursor-pointer"} 
                   rounded-lg font-bold text-2xl w-[95%] h-[95%] 
                   flex items-center justify-center bg-white
                 `}
@@ -184,8 +229,11 @@ function QuestionCompleteWordLetters(
     </div>
 
     <div className="w-full h-24 flex justify-evenly items-start">
-      { // TODO: BOTTOM HALF
-        letterSlots.length > 0 && !correct ?
+      {
+        correct ?
+        <h1 className="mt-10 text-6xl font-bold">{"= " + question.answers[0]}</h1>
+        :
+        letterSlots.length > 0 &&
         question.data.map((letter, i) => (
           letterSlots[i] === "" &&
           <>
@@ -216,12 +264,27 @@ function QuestionCompleteWordLetters(
                 />
             }
           </>
-        )) :
-        <h1 className="mt-10 text-6xl font-bold">{"= " + question.answers[0]}</h1>
+        ))
+        
       }
     </div>
     
-    <NextButtonRight className="shadow-md mt-20" />
+    <NextButtonRight 
+      isEnabled={enableNextStage}
+      className="shadow-md mt-20" 
+      onClick={handleNext}
+    />
+
+
+    {
+      tryAgain && 
+        <ModalElement 
+          className={"h-[44%]"}
+          text={"Try Again..."}
+          onClose={() => setTryAgain(false)}
+          closeLabel={"Close"}
+        />
+    }
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { useExerciseData } from "../Contexts/ExerciseContext";
 import QuestionCompleteSentence from "../components/QuestionCompleteSentence/QuestionCompleteSentence";
 import QuestionReadSentence from "../components/QuestionReadSentence/QuestionReadSentence";
 import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatWord";
@@ -5,10 +6,12 @@ import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepea
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
 import QuestionBasicComprehension from "../components/QuestionBasicComprehension/QuestionBasicComprehension";
-import { useExerciseData } from "../Contexts/ExerciseContext";
+import QuestionCompleteWordLetters from "../components/QuestionCompleteWordLetters/QuestionCompleteWordLetters";
 
 function ExerciseEntryPoint() {
+  console.log("ENTRYPOINT")
   const { currentQuestion, isLoading } = useExerciseData();
+  console.log("CURRENT QUESTION", currentQuestion);
 
   if (isLoading) return null;
 
@@ -26,15 +29,15 @@ function ExerciseEntryPoint() {
 
   if (currentQuestion.question_type === "find_matching_words")
     return <QuestionFindingMatchingWords question={currentQuestion} />;
-  // currentLevel={0} totalLevel={5} should come from the "API question" to work with the ProgressBar component
-  // you can name currentLevel totalLevel accordingly to the "API question"
-  // Ideally currentLevel should be 0 and totalLevel the max amount stages the level contains
 
   if (currentQuestion.question_type === "vowel_length")
     return <QuestionVowelLength question={currentQuestion} />;
 
   if (currentQuestion.question_type === "basic_comprehension")
     return <QuestionBasicComprehension question={currentQuestion} />;
+
+  if (currentQuestion.question_type === "complete_spelling") 
+    return <QuestionCompleteWordLetters question={currentQuestion} />;
 }
 
 export default ExerciseEntryPoint;
