@@ -9,13 +9,12 @@ import "./ChatStreamingAudioTranscription.css";
 const ChatStreamingAudioTranscription = ({
   isWaiting,
   setIsWaiting,
-  question,
-  setQuestion,
+  transcript,
+  setTranscript,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
-  const [transcript, setTranscript] = useState("");
   const [error, setError] = useState("");
   const [chat, setChat] = useState([]);
   const socketRef = useRef(null);
@@ -24,9 +23,6 @@ const ChatStreamingAudioTranscription = ({
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const transcriptRef = useRef(transcript);
-  const questionRef = useRef(question);
-
-  const [word, setWord] = useState("");
 
   const updateTranscript = useCallback((data) => {
     setTranscript((prev) => {
@@ -45,17 +41,6 @@ const ChatStreamingAudioTranscription = ({
   useEffect(() => {
     transcriptRef.current = transcript;
   }, [transcript]);
-
-  useEffect(
-    function () {
-      setQuestion(transcript);
-    },
-    [transcript]
-  );
-
-  useEffect(() => {
-    questionRef.current = question;
-  }, [question]);
 
   useEffect(() => {
     // Connect to WebSocket server
@@ -99,7 +84,6 @@ const ChatStreamingAudioTranscription = ({
       const newChat = [...prevChat];
       // setChat(chat => {
       //   const newChat = [...chat];
-      newChat.push({ user: "assistant", message: questionRef.current });
       //   return newChat;
       // });
       newChat.push({ user: "user", message: transcriptRef.current });
@@ -138,7 +122,6 @@ const ChatStreamingAudioTranscription = ({
       .then((response) => response.json())
       .then((data) => {
         // Get the text fields
-        setQuestion(data.message);
         // console.log('Response data:', data);
         // Display the text fields (e.g., add them to the DOM)
         // document.getElementById('text1').innerText = textField1;

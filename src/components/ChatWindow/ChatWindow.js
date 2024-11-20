@@ -1,19 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
 import { X } from "lucide-react";
 import ChatQuestionRecording from "../ChatQuestionRecording/ChatQuestionRecording";
-import { fetchAIChatAnswer } from "../../services/AIChatAPI";
+import { fetchAIChatAnswer, createChatContext } from "../../services/AIChatAPI";
+import ChatBubble from "../ChatBubble/ChatBubble";
 
 function ChatWindow({ onClose }) {
+  const [chat, setChat] = useState([]);
   const [isSending, setIsSending] = useState(false);
   const { exercise, currentQuestion } = useExerciseData();
-  console.log(exercise);
+
+  useEffect(function () {
+    async function createChat() {
+      const data = await createChatContext();
+      console.log(data);
+    }
+    createChat();
+  }, []);
 
   async function handleSend(user_input) {
     setIsSending(true);
+    setChat((chat) => [...chat, { sent: "user", message: user_input }]);
     try {
       const prompt = {
         exercise_details: {
+          prompts: currentQuestion.prompts,
           exercise_name: exercise.exercise_name,
           data: currentQuestion.data,
           question_type: currentQuestion.question_type,
@@ -24,7 +35,7 @@ function ChatWindow({ onClose }) {
       };
 
       const data = await fetchAIChatAnswer(prompt);
-      console.log(data);
+      setChat((chat) => [...chat, { sent: "bot", message: data.response }]);
     } catch (err) {
       console.log(err);
     } finally {
@@ -33,14 +44,20 @@ function ChatWindow({ onClose }) {
   }
 
   return (
-    <div className="fixed bottom-0 w-full h-full bg-slate-200 px-8 py-4 flex flex-col justify-between">
-      <div className="flex justify-between items-center">
-        <p className="m-0 text-2xl text-highlight font-semibold">Chat</p>
-        <button onClick={onClose}>
+    <div className="fixed inset-0 md: bg-slate-200 px-4 py-4 flex flex-col justify-between">
+      <div className="flex justify-between items-center py-4 px-2">
+        <p className="m-0 text-hightlight text-lg font-semibold">
+          {exercise.exercise_name}
+        </p>
+        <button className="" onClick={onClose}>
           <X />
         </button>
       </div>
-      <div className="flex-grow bg-white"></div>
+      <div className="flex-grow bg-white flex flex-col gap-3 py-4 px-3 overflow-y-scroll">
+        {chat.map((message, i) => (
+          <ChatBubble message={message} key={i} />
+        ))}
+      </div>
       <div>
         <ChatQuestionRecording disabled={isSending} onSend={handleSend} />
       </div>

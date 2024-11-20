@@ -1,30 +1,45 @@
-import { Spinner } from "react-bootstrap";
-import { useSendAudioChat } from "../../hooks/useSendAudioChat";
-import { Mic, Octagon } from "lucide-react";
+import { SendHorizontal, X } from "lucide-react";
 import { useState } from "react";
 import ChatStreamingAudioTranscription from "../ChatStreamingAudioTranscription/ChatStreamingAudioTranscription";
-import ChatSendButton from "../ChatSendButton/ChatSendButton";
+import ChatControlButton from "../ChatControlButton/ChatControlButton";
 
 function ChatQuestionRecording({ onSend, disabled }) {
-  const [message, setMessage] = useState("");
+  const [transcript, setTranscript] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
 
-  return (
-    <div className="min-h-24 py-4 flex flex-col items-center justify-center">
-      <p className="indent-5 m-0 w-full text-start font-semibold px-2">
-        {message}
-      </p>
+  function handleSend() {
+    onSend(transcript);
+    setTranscript("");
+  }
 
+  return (
+    <div className="min-h-40 py-4 flex flex-col gap-3 items-center justify-center">
+      {transcript && (
+        <p className="indent-5 m-0 w-full text-start font-semibold px-2 bg-white py-2">
+          {transcript}
+        </p>
+      )}
       <div className="flex gap-3">
+        {transcript && !isWaiting && (
+          <ChatControlButton
+            disabled={disabled}
+            onClick={() => setTranscript("")}
+          >
+            <X />
+          </ChatControlButton>
+        )}
         <ChatStreamingAudioTranscription
           disabled={disabled}
-          question={message}
-          setQuestion={setMessage}
+          transcript={transcript}
+          setTranscript={setTranscript}
           isWaiting={isWaiting}
           setIsWaiting={setIsWaiting}
         />
-        {message && (
-          <ChatSendButton disabled={disabled} onClick={() => onSend(message)} />
+        {transcript && !isWaiting && (
+          <ChatControlButton disabled={disabled} onClick={handleSend}>
+            {" "}
+            <SendHorizontal />
+          </ChatControlButton>
         )}
       </div>
     </div>
