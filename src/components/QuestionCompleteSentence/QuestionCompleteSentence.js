@@ -98,7 +98,7 @@ function QuestionCompleteSentence({ question }) {
         </div>
       </div>
       <NextButtonRight
-        correct={correct}
+        isEnabled={correct}
         className={"mt-28"}
         onClick={handleNextQuestion}
       />

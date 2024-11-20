@@ -4,6 +4,7 @@ import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatW
 import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepeatWords";
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
+import QuestionBasicComprehension from "../components/QuestionBasicComprehension/QuestionBasicComprehension";
 import { useExerciseData } from "../Contexts/ExerciseContext";
 
 function ExerciseEntryPoint() {
@@ -31,6 +32,9 @@ function ExerciseEntryPoint() {
 
   if (currentQuestion.question_type === "vowel_length")
     return <QuestionVowelLength question={currentQuestion} />;
+
+  if (currentQuestion.question_type === "basic_comprehension")
+    return <QuestionBasicComprehension question={currentQuestion} />;
 }
 
 export default ExerciseEntryPoint;
