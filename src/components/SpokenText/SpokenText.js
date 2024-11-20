@@ -1,28 +1,15 @@
 /* eslint-disable react/prop-types */
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 
-function SpokenText({ text, displayText, containerClass, className, buttonClass = "",
-  extendText = null, extendable = null }) {
+function SpokenText({ text, containerClass, className, buttonClass = "" }) {
 
   return (
     <div className={`flex gap-3 ${containerClass}`}>
       <TextToSpeech sentence={text} buttonClass={buttonClass} />
       <p
-        className={`capitalize text-slate-700 font-semibold mb-0 flex ${className}`}
+        className={`capitalize text-slate-700 font-semibold mb-0 ${className}`}
       >
-        { extendable  === null ?
-          displayText : extendable ? displayText : displayText.slice(0, 100) 
-        
-        } {
-          extendText &&
-          <span 
-            onClick={extendText}
-            className="text-blue-600 cursor-pointer inline lowercase"
-          >
-            {extendable ? " [less]" : "...more"}
-          </span>
-          
-        }
+        {text}
       </p>
     </div>
   );

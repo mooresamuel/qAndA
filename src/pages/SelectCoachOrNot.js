@@ -17,7 +17,9 @@ function SelectCoachOrNot() {
         className={"text-lg font-semibold"}
         text="Are you learning alone or with your coach?"
       />
-      <SpokenText text="click the option below to tell us if you are learning on your own today or with your coach" />
+      <SpokenText 
+        text="click the option below to tell us if you are learning on your own today or with your coach"
+      />
       <div
         onClick={() => handleClick(false)}
         className="w-full flex flex-col gap-3 justify-center items-center text-hightlight rounded-lg py-4 shadow-md"

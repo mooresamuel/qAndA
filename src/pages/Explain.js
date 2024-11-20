@@ -5,6 +5,7 @@ import NextButtonRight from "../components/NextButtonRight/NextButtonRight";
 
 function Explain() {
   const { exercise, currentQuestion } = useExerciseData();
+  console.log("exercise", exercise)
   const navigate = useNavigate();
 
   const handleClick = () => {

@@ -35,7 +35,7 @@ import ModalElement from "../ModalElement/ModalElement";
 //   questions: [
 //     {
 //       'question_id': '1',
-//       'question_type': 'Main idea identification',
+//       'question_type': 'basic_comprehension',
 //       'question_text': 'What is the central theme of the poem?',
 //       'options': {
 //         'a': 'The beauty of nature',
@@ -49,7 +49,7 @@ import ModalElement from "../ModalElement/ModalElement";
 //     },
 //     {
 //       'question_id': '2',
-//       'question_type': 'Vocabulary understanding',
+//       'question_type': 'basic_comprehension',
 //       'question_text': 'What does the word "queer" mean in the context of the line "My little horse must think it queer"?',
 //       'options': {
 //         'a': 'Homosexual',
@@ -57,7 +57,7 @@ import ModalElement from "../ModalElement/ModalElement";
 //         'c': 'Exciting',
 //         'd': 'Colorful'
 //       },
-//       'correct_answer': 'b',
+//       'answers': 'b',
 //       'hint': 'Consider how the horse might perceive the unexpected stop.',
 //       'explanation': 'The correct answer is (b) Strange or odd. In this context, "queer" is used in its older sense, meaning unusual or strange. The speaker suggests that the horse finds it odd to stop in an isolated place without any apparent reason, especially on such a dark evening. This usage of "queer" emphasizes the unconventional nature of the speaker\'s actions from the horse\'s perspective.'
 //     }
@@ -80,15 +80,6 @@ function QuestionBasicComprehension({
   const [currentStage, setCurrentStage] = useState(0); // Place this in context when real data arrives
   const [victoryModal, setVictoryModal] = useState(false);
 
-  const updateText = () => {
-    setIsExpanded(!isExpanded);
-  }
-
-  const handleHint = () => {
-    setShowHint(!showHint);
-    scrollModalIntoView();
-  }
-
   const handleNext = () => {
     if (pick !== question.questions[0].answers) {
       setTryAgain(true);
@@ -106,10 +97,6 @@ function QuestionBasicComprehension({
         scrollModalIntoView();
       }
     }
-  }
-
-  const closeTryAgain = () => {
-    setTryAgain(false);
   }
 
   const handleVictory = () => {
@@ -132,7 +119,12 @@ function QuestionBasicComprehension({
     >
       <div className="w-full grid grid-cols-[95%_5%] items-center gap-2">
         <ProgressBar />
-        <QuestionMarkSVG handleClick={handleHint} />
+        <QuestionMarkSVG 
+          handleClick={() => {
+            setShowHint(!showHint);
+            scrollModalIntoView();
+          }} 
+        />
       </div>
 
         <TextToSpeech 
@@ -141,16 +133,25 @@ function QuestionBasicComprehension({
           buttonClass="text-3xl" 
         />
 
-        <SpokenText 
+        <TextToSpeech
+          removeIcon={true}
+          sentence={question.text} 
+          label={question.text}
+          labelClass={"text-lg w-screen text-left px-4 leading-8 normal-case"}
+          // labelClass="text-sm bg-transparent text-hightlight font-semibold"
+          // buttonClass="shadow-none text-hightlight bg-transparent mb-3 p-0 gap-0"
+        />
+
+        {/* <SpokenText 
           text={question.text}
           displayText={question.text}
-          extendText={updateText}
+          extendText={() => setIsExpanded(!isExpanded)}
           extendable={isExpanded}
           containerClass={"items-start"}
           className={"font-black mb-5 p-3 text-base flex-col rounded-lg bg-white text-black shadow-md"}
-        />
+        /> */}
         
-        <div className={`w-full`}>
+        <div className={`w-full bg-white px-4 rounded-lg text-left`}>
           {
             question.questions.map((question, index) => (
               currentStage === index &&
@@ -162,8 +163,8 @@ function QuestionBasicComprehension({
                   <TextToSpeech 
                     sentence={question.question_text} 
                     label={question.question_text}
-                    labelClass="text-base"
-                    buttonClass="shadow-none"
+                    labelClass="text-base text-left"
+                    buttonClass="shadow-md"
                   />
                 </div>
 
@@ -192,7 +193,7 @@ function QuestionBasicComprehension({
                             <TextToSpeech 
                               sentence={v} 
                               label={v}
-                              labelClass="text-sm bg-transparent text-hightlight font-semibold"
+                              labelClass="text-sm bg-transparent text-hightlight font-semibold text-left"
                               buttonClass="shadow-none text-hightlight bg-transparent mb-3 p-0 gap-0"
                               removeIcon={true}
                             />
@@ -215,9 +216,12 @@ function QuestionBasicComprehension({
         {
           showHint && 
             <ModalElement 
-              className={"h-[44%]"}
+              className={"h-1/4"}
               text={question.questions[0].hint}
-              onClose={handleHint}
+              onClose={() => {
+                setShowHint(!showHint);
+                scrollModalIntoView();
+              }}
               closeLabel={"Close"}
             />
         }
@@ -226,9 +230,9 @@ function QuestionBasicComprehension({
         {
           tryAgain && 
             <ModalElement 
-              className={"h-[44%]"}
+              className={"h-1/4"}
               text={"Try Again..."}
-              onClose={closeTryAgain}
+              onClose={() => setTryAgain(false)}
               closeLabel={"Close"}
             />
         }
@@ -237,7 +241,7 @@ function QuestionBasicComprehension({
         {
           victoryModal && 
             <ModalElement 
-              className={"h-[44%]"}
+              className={"h-1/4"}
               text={"Congratulations!"}
               onClose={handleVictory}
               closeLabel={"Close"}
