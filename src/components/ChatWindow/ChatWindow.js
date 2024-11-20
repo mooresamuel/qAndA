@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import ChatQuestionRecording from "../ChatQuestionRecording/ChatQuestionRecording";
 import { fetchAIChatAnswer, createChatContext } from "../../services/AIChatAPI";
 import ChatBubble from "../ChatBubble/ChatBubble";
+import ChatWaitingIndicator from "../ChatWaitingIndicator/ChatWaitingIndicator";
 
 function ChatWindow({ onClose }) {
   const [chat, setChat] = useState([]);
@@ -57,6 +58,7 @@ function ChatWindow({ onClose }) {
         {chat.map((message, i) => (
           <ChatBubble message={message} key={i} />
         ))}
+        {isSending && <ChatWaitingIndicator />}
       </div>
       <div>
         <ChatQuestionRecording disabled={isSending} onSend={handleSend} />
