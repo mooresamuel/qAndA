@@ -64,7 +64,8 @@ function ExerciseProvider({ children }) {
         currentQuestion,
         numQuestions,
         handleNextQuestion,
-        currentLevel
+        currentLevel,
+        setCurrentLevel
       }}
     >
       {children}
