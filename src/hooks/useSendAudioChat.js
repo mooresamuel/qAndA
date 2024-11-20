@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import { wordScoresAPI } from "../services/wordScoresApi";
+import { useEffect, useState } from "react";
 import { useRecordAudio } from "./useRecordAudio";
 
-export function useSpeechToText(text) {
+export function useSendAudioChat() {
   const { isRecording, audioUrl, startRecording, stopRecording } =
     useRecordAudio();
-  const [result, setResult] = useState("");
+  const [responses, setResponses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(
     function () {
       async function action() {
+        //call function that sends audio
         await sendRecording();
       }
 
@@ -31,15 +31,12 @@ export function useSpeechToText(text) {
     try {
       const response = await fetch(audioUrl);
       const audioBlob = await response.blob();
-      console.log("Sending blob of size:", audioBlob.size, "bytes");
 
       const formData = new FormData();
       formData.append("audio", audioBlob, "recording.webm");
-      formData.append("phrase", text);
-      console.log("recording being sent");
-      const data = await wordScoresAPI(formData);
-      setResult(data);
-      console.log("Result:", data);
+
+      //   const data = await AIChatApi(formData);
+      //   setResponses(data);
       setError(null);
     } catch (error) {
       console.error("Error sending recording:", error);
@@ -51,12 +48,10 @@ export function useSpeechToText(text) {
 
   return {
     isRecording,
-    isLoading,
-    audioUrl,
-    result,
-    error,
     startRecording,
     stopRecording,
-    sendRecording,
+    responses,
+    error,
+    isLoading,
   };
 }
