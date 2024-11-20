@@ -19,7 +19,8 @@ const data = {
 
 const questions = [{
   answers: ["tube"],
-  data: ["t", "u", "b", "e"]
+  data: ["t", "u", "b", "e"],
+  given: ["t", "b"]
 }];
 
 function QuestionCompleteWordLetters(
@@ -30,12 +31,18 @@ function QuestionCompleteWordLetters(
 
   const topLettersRefs = useRef([]);
   const bottomLettersRefs = useRef([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
   const [animatingLetter, setAnimatingLetter] = useState(null);
-  const [spelling, setSpelling] = useState([ ...Array(question.data.length - 1).fill(""),
-                                            question.data[question.data.length - 1] ]);
+  const [spelling, setSpelling] = useState([]);
+
+  const [letterSlots, setLetterSlots] = useState([]);
+
   const [findEmptyIndex, setFindEmptyIndex] = useState(false);
   const [correct, setCorrect] = useState(false);
+
+  console.log("letterSlots", letterSlots);
+
+
 
   const handleTopClick = (e, i, array) => {
     if (correct) {
@@ -45,7 +52,7 @@ function QuestionCompleteWordLetters(
     const currentLetter = e.target.innerText;
     const bottomRefIndex = question.data.indexOf(currentLetter);
 
-    if (i !== array.length - 1) {
+    if (array[i] === "") {
       if (bottomRefIndex !== -1) {
         const topRect = topLettersRefs.current[i]?.getBoundingClientRect();
         const bottomRect = bottomLettersRefs.current[bottomRefIndex]?.getBoundingClientRect();
@@ -70,6 +77,8 @@ function QuestionCompleteWordLetters(
       return "";
     }
   }
+
+
 
 
   
@@ -98,6 +107,17 @@ function QuestionCompleteWordLetters(
     }, 400);
   };
 
+
+  useEffect(() => {
+    if (letterSlots.length === 0) {
+      const createLetterSlots = question.data.map((char) => 
+        question.given.includes(char) ? char : "");
+      setLetterSlots(createLetterSlots);
+      setSpelling(createLetterSlots);
+      setActiveIndex(createLetterSlots.findIndex(char => char === ""));
+    }
+  }, []);
+
   useEffect(() => {
     if (findEmptyIndex) {
       const nextEmptyIndex = topLettersRefs.current.findIndex((ref) => ref.innerText === "");
@@ -110,6 +130,8 @@ function QuestionCompleteWordLetters(
 
   console.log(correct);
 
+  console.log("spelling", spelling)
+
   return (
     <div
       style={{ backgroundColor: "#8CB036" }}
@@ -121,7 +143,7 @@ function QuestionCompleteWordLetters(
       </div>
 
     <div className="w-max flex gap-4 justify-center shadow-md items-center bg-white py-2 px-5 rounded-lg">
-      <TextToSpeech shadow={"shadow-none"} sentence={question.answers[0]} label={"Play sound"} />
+      <TextToSpeech buttonClass={"shadow-none"} sentence={question.answers[0]} label={"Play sound"} />
     </div>
 
     <div className="w-full h-32">
@@ -131,12 +153,13 @@ function QuestionCompleteWordLetters(
         
         
       >
-        {
-          question.data.map((letter, i, array) => (
+        { // TODO: TOP HALF
+          letterSlots.length > 0 &&
+          letterSlots.map((letter, i, array) => (
             <div 
               key={i + letter}
-              className={`rounded-lg $cursor-pointer w-full h-3/5 
-                ${i !== array.length -1 && "bg-blue-700"} grid place-items-center`} 
+              className={`rounded-lg ${letter === "" ? "cursor-default" : "cursor-pointer"} w-full h-3/5 
+                ${letter === "" && "bg-blue-700"} grid place-items-center`} 
             >
               <div 
                 ref={(el) => topLettersRefs.current[i] = el}
@@ -147,12 +170,12 @@ function QuestionCompleteWordLetters(
                 onClick={(e) => handleTopClick(e, i, array)}
                 className={`
                   ${activeIndex === i ? "border-black border-2" : ""} 
-                  rounded-lg ${correct ? "cursor-not-allowed" : "cursor-pointer"} 
-                  font-bold text-2xl w-[95%] h-[95%] 
+                  ${letter === "" ? "cursor-default" : correct ? "cursor-not-allowed" : "cursor-pointer"} 
+                  rounded-lg font-bold text-2xl w-[95%] h-[95%] 
                   flex items-center justify-center bg-white
                 `}
               >
-                { i === array.length - 1 ? letter : spelling[i] }
+                { letter !== "" ? letter : spelling[i] }
               </div>
             </div>
           ))
@@ -161,10 +184,10 @@ function QuestionCompleteWordLetters(
     </div>
 
     <div className="w-full h-24 flex justify-evenly items-start">
-      {
-        !correct ?
-        question.data.map((letter, i, array) => (
-          i !== array.length - 1 &&
+      { // TODO: BOTTOM HALF
+        letterSlots.length > 0 && !correct ?
+        question.data.map((letter, i) => (
+          letterSlots[i] === "" &&
           <>
             <div
               ref={(el) => bottomLettersRefs.current[i] = el}
