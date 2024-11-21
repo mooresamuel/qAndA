@@ -71,12 +71,12 @@ function ExerciseProvider({ children }) {
     [exercise]
   );
 
-  const handleAddMistake = ({ question_id, mistake }) => {
+  const handleAddMistake = ({ mistake }) => {
     console.log(handleAddMistake);
     const newMistakesArray = {
       ...mistakes,
       questions: mistakes.questions.map((question) => {
-        if (mistake && question.question_id === question_id) {
+        if (mistake && currentQuestion.question_id === question.question_id) {
           const currentMistakes = question.mistakes
             ? [...question.mistakes]
             : [];
