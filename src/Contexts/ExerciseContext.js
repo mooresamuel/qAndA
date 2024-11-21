@@ -74,7 +74,7 @@ function ExerciseProvider({ children }) {
   const handleUseGeneratedQuestions = (generatedQuestions) => {
     setMistakes([]);
     setExercise((exercise) => {
-      return { ...exercise, questions: generatedQuestions };
+      return { ...exercise, questions: [generatedQuestions] };
     });
     setQuestionIndex(0);
     setCurrentQuestion(generatedQuestions);
