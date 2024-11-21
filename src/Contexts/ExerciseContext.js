@@ -82,7 +82,6 @@ function ExerciseProvider({ children }) {
   };
 
   const handleAddMistake = ({ mistake }) => {
-    console.log("mistakes", mistakes);
     const newMistakesArray = {
       ...mistakes,
       questions: mistakes.questions.map((question) => {
