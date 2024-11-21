@@ -54,7 +54,7 @@ function ExerciseProvider({ children }) {
       setTimeout(() => {
         setCurrentLevel(0);
         navigate(`/exercise/${exercise_id}/complete`);
-      }, 500);
+      }, 330);
     }
   };
 

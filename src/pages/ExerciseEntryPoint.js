@@ -7,6 +7,7 @@ import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingW
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
 import QuestionBasicComprehension from "../components/QuestionBasicComprehension/QuestionBasicComprehension";
 import QuestionCompleteWordLetters from "../components/QuestionCompleteWordLetters/QuestionCompleteWordLetters";
+import QuestionFindWord from "../components/QuestionFindWord/QuestionFindWord";
 
 function ExerciseEntryPoint() {
   const { currentQuestion, isLoading } = useExerciseData();
@@ -36,6 +37,9 @@ function ExerciseEntryPoint() {
 
   if (currentQuestion.question_type === "complete_spelling") 
     return <QuestionCompleteWordLetters question={currentQuestion} />;
+
+  if (currentQuestion.question_type === "find_word")
+    return <QuestionFindWord question={currentQuestion} />;
 }
 
 export default ExerciseEntryPoint;
