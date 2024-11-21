@@ -7,7 +7,19 @@ import AnimatedTag from "../AnimatedTag/AnimatedTag";
 import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import ModalElement from "../ModalElement/ModalElement";
 
-function QuestionCompleteSentence({ question }) {
+// const question = {
+//   answers: ['had', 'shirt', 'birthday'],
+//   data: ['had', 'birthday', 'shirt'],
+//   prompts: ['I %//gap//% a new %//gap//% for my %//gap//%'],
+//   question_id: 12,
+//   question_number: 1,
+//   question_type: "complete_sentence"
+
+// }
+
+function QuestionCompleteSentence({ 
+  question 
+}) {
   const { handleNextQuestion, handleAddMistake } = useExerciseData();
   const topGapRefs = useRef([]);
   const bottomWordRefs = useRef([]);
@@ -34,10 +46,18 @@ function QuestionCompleteSentence({ question }) {
     }
 
     let tempIndex = currentIndex;
+    const arrAnswers = answers.map((el, i) => {
+      if (i === tempIndex) {
+        return answer
+      } else {
+        return el;
+      }
+    });
+
+    const findEmptyIndex = arrAnswers.findIndex(word => word === false);
     const gapIndex = _allGapsIndex[tempIndex];
     const topRect = topGapRefs.current[gapIndex]?.getBoundingClientRect();
     const bottomRect = bottomWordRefs.current[index]?.getBoundingClientRect();
-    
 
     if (!bottomRect || !topRect) return;
 
@@ -47,29 +67,20 @@ function QuestionCompleteSentence({ question }) {
       end: topRect,
     });
     
-    if (tempIndex === 0) {
-      setCurrentIndex(1)
-    } else {
-      setCurrentIndex(0);
-    }
 
-    const arrAnswers = answers.map((el, i) => {
-      if (i === tempIndex) {
-        return answer
-      } else {
-        return el;
-      }
-    });
-
+    setCurrentIndex(findEmptyIndex);
     setTimeout(() => {
       setAnimatingWord(null);
       setAnswers(arrAnswers);
     }, 400);
 
     if (question.answers[+tempIndex] !== answer) {
-      handleAddMistake({
-        mistake: `word ${answer} placed in gap ${+tempIndex + 1}`,
-      });
+      // no idea what this is, but will move to handleNext function 
+      // handleNext happens when they press Next button and checks first if they are correct or not
+      // therefore it is best to keep this function over there
+      // handleAddMistake({
+      //   mistake: `word ${answer} placed in gap ${+tempIndex + 1}`,
+      // });
     }
   }
 
@@ -85,6 +96,7 @@ function QuestionCompleteSentence({ question }) {
     });
 
     if (!findWord) {
+      setCurrentIndex(index);
       return
     }
   
@@ -94,22 +106,6 @@ function QuestionCompleteSentence({ question }) {
 
     if (findEmptyIndex !== -1) {
       setCurrentIndex(findEmptyIndex);
-    } else {
-      let tempIndex, seeAnswer;
-
-      if (index === 0) {
-        tempIndex = index + 1;
-        seeAnswer = answers[tempIndex];
-        if (seeAnswer === false) {
-          setCurrentIndex(tempIndex)
-        }
-      } else {
-        tempIndex = index - 1;
-        seeAnswer = answers[tempIndex];
-        if (seeAnswer === false) {
-          setCurrentIndex(tempIndex)
-        }
-      }
     }
 
 
@@ -142,6 +138,11 @@ function QuestionCompleteSentence({ question }) {
     } else {
       setTryAgain(true);
       setEnabled(false);
+      answers.forEach((answer, index) => {
+        handleAddMistake({
+          mistake: `word ${answer} placed in gap ${index}`,
+        });
+      })
     }
   }
 
@@ -165,10 +166,10 @@ function QuestionCompleteSentence({ question }) {
         <ProgressBar />
         <QuestionMarkSVG />
       </div>
-      <div className="space-y-16">
-        <div className="flex items-center gap-3 text-lg px-3 py-5 bg-gray-100">
+      <div className="space-y-16 px-2">
+        <div className="flex items-center gap-3 text-base px-3 py-5 bg-gray-100">
           <TextToSpeech sentence={correctSentence} />
-          <p className="m-0 align-middle text-hightlight">
+          <div className="m-0 items-center flex flex-row flex-wrap gap-y-3 gap-x-2 text-hightlight">
             {splitSentence.map((chunk, traceIndex, array) => {
               if (chunk.startsWith("//") && chunk.endsWith("//")) {
                 let index = upperIndex;
@@ -176,7 +177,7 @@ function QuestionCompleteSentence({ question }) {
                 return (
                   <button
                     ref={(el) => topGapRefs.current[traceIndex] = el}
-                    key={traceIndex}
+                    key={traceIndex + chunk}
                     className={`${traceIndex === _allGapsIndex[currentIndex] && "border-hightlight"}
                         w-20 border-2 h-16 shadow-md rounded-md align-middle
                     `}
@@ -187,28 +188,32 @@ function QuestionCompleteSentence({ question }) {
                 );
               } else {
                 return (
-                  <span key={traceIndex} className="align-middle">
-                    {chunk}
-                  </span>
+                  <div>
+                    <span key={traceIndex} className="w-fit">
+                      {chunk}
+                    </span>
+                  </div>
+
                 );
               }
             })}
-          </p>
+          </div>
         </div>
 
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-3 justify-center flex-wrap">
           {question.data.map((option, i) => (
             <button
+              key={i + option + Math.floor(Math.random() * 5)}
               onClick={() => handleAnswerPicked(option, i)}
               className="flex items-center gap-3"
             >
               <TextToSpeech key={i} sentence={option} />
-              <p 
+              <span 
                 ref={(el) => bottomWordRefs.current[i] = el}
                 className="text-hightlight font-semibold m-0 px-2 py-3 rounded-md shadow-md h-full"
               >
                 {option}
-              </p>
+              </span>
             </button>
           ))}
             {
