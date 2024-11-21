@@ -13,7 +13,7 @@ function ChatBubble({ message }) {
         {message.message}
         {message.sent === "bot" && (
           <div className="justify-items-end mt-3">
-            <TextToSpeech sentence={message.message} />
+            <TextToSpeech sentence={message.message.replace(/<[^>]*>/g, "")} />
           </div>
         )}
       </p>
