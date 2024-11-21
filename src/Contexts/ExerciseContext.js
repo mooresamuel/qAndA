@@ -7,6 +7,7 @@ const ExerciseContext = createContext();
 function ExerciseProvider({ children }) {
   const [withCoach, setWithCoach] = useState(false);
   const [exercise, setExercise] = useState([]);
+  const [mistakes, setMistakes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(0);
@@ -16,9 +17,6 @@ function ExerciseProvider({ children }) {
 
   // const currentQuestion = exercise?.questions?.at(questionIndex);
   const numQuestions = exercise?.questions?.length;
-  console.log("numQuestions", numQuestions);
-
-  console.log("currentQuestion", currentQuestion);
 
   useEffect(
     function () {
@@ -60,6 +58,22 @@ function ExerciseProvider({ children }) {
     }
   };
 
+  const handleAddMistake = ({ question_id, mistake }) => {
+    const newMistakesArray = {
+      ...exercise,
+      questions: exercise.questions.map((question) => {
+        if (question.question_id === question_id) {
+          return { ...question, mistakes: [...question.mistakes, mistake] };
+        } else {
+          return { ...question };
+        }
+      }),
+    };
+    setMistakes(newMistakesArray);
+  };
+
+  console.log(mistakes);
+
   return (
     <ExerciseContext.Provider
       value={{
@@ -73,6 +87,8 @@ function ExerciseProvider({ children }) {
         handleNextQuestion,
         currentLevel,
         setCurrentLevel,
+        mistakes,
+        handleAddMistake,
       }}
     >
       {children}

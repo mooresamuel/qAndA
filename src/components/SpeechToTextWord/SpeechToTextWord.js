@@ -2,7 +2,7 @@
 import { Spinner } from "react-bootstrap";
 import { useSpeechToText } from "../../hooks/useSpeechToText";
 import SpeakerButton from "../SpeakerButton/SpeakerButton";
-import { Check, Mic, Octagon, Speaker, X } from "lucide-react";
+import { Check, Mic, Octagon, RotateCw, Speaker, X } from "lucide-react";
 
 const SpeechToTextWord = ({ word, label = null }) => {
   const { startRecording, stopRecording, result, isRecording, isLoading } =
@@ -16,8 +16,8 @@ const SpeechToTextWord = ({ word, label = null }) => {
     );
   } else if (result && result[0].word.toLowerCase() !== word.toLowerCase()) {
     return (
-      <SpeakerButton>
-        <X />
+      <SpeakerButton onClick={startRecording}>
+        <RotateCw />
       </SpeakerButton>
     );
   }
