@@ -15,7 +15,7 @@ function EndExerciseChat() {
   const [chat, setChat] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
-  const [displayAcceptQuestions, setDisplayAcceptQuestions] = useState(true);
+  const [displayAcceptQuestions, setDisplayAcceptQuestions] = useState(false);
 
   useEffect(function () {
     async function fetch() {
@@ -53,7 +53,7 @@ function EndExerciseChat() {
       </div>
       <div className="pb-4">
         {displayAcceptQuestions ? (
-          <AcceptGeneratedExercises />
+          <AcceptGeneratedExercises onAccept={handleUseNewExercises} />
         ) : (
           <ChatQuestionRecording />
         )}
