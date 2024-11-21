@@ -5,7 +5,7 @@ import NextButtonRight from "../NextButtonRight/NextButtonRight";
 import ProgressBar from "../ProgressBar/ProgressBar";
 
 function QuestionCompleteSentence({ question }) {
-  const { handleNextQuestion } = useExerciseData();
+  const { handleNextQuestion, handleAddMistake } = useExerciseData();
 
   const [answers, setAnswers] = useState(
     Array.from(question.answers, () => false)
@@ -19,18 +19,23 @@ function QuestionCompleteSentence({ question }) {
   let currentIndex = 0;
 
   function handleAnswerPicked(answer) {
-    let end = false;
+    let indexPlaced = false;
     setAnswers((current) =>
-      [...current].map((el) => {
-        if (end) return el;
+      [...current].map((el, i) => {
+        if (indexPlaced) return el;
         if (el === false) {
-          end = true;
+          indexPlaced = `${i}`;
           return answer;
         } else {
           return el;
         }
       })
     );
+    if (question.answers[+indexPlaced] !== answer) {
+      handleAddMistake({
+        mistake: `word ${answer} placed in gap ${+indexPlaced + 1}`,
+      });
+    }
   }
 
   function removeAnswer(index) {

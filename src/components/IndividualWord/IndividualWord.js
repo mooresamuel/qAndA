@@ -1,24 +1,38 @@
 /* eslint-disable react/prop-types */
 import { Button, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { wordHelperFetch } from "../../services/wordHelperAPI";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import SpokenText from "../SpokenText/SpokenText";
 import FullPageSpinner from "../FullPageSpinner/FullPageSpinner";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 
 /* eslint-disable react/prop-types */
 function IndividualWord({ word, spokenAnswer, className = "" }) {
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [coachData, setCoachData] = useState({});
+  const { handleAddMistake, currentQuestion } = useExerciseData();
 
   const correctlyPronounced =
     spokenAnswer &&
-    spokenAnswer?.word?.toLowerCase() ===
+    spokenAnswer?.word
+      ?.toLowerCase()
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "") ===
       word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase() &&
     spokenAnswer?.confidence > 0.7;
 
-  console.log(correctlyPronounced, spokenAnswer);
+  useEffect(
+    function () {
+      if (spokenAnswer && !correctlyPronounced) {
+        handleAddMistake({
+          question_id: currentQuestion.question_id,
+          mistake: word,
+        });
+      }
+    },
+    [spokenAnswer]
+  );
 
   function handleClose() {
     setShow(false);

@@ -3,8 +3,12 @@ import { wordScoresAPI } from "../services/wordScoresApi";
 import { useRecordAudio } from "./useRecordAudio";
 
 export function useSpeechToText(text) {
-  const { isRecording, audioUrl, startRecording, stopRecording } =
-    useRecordAudio();
+  const {
+    isRecording,
+    audioUrl,
+    startRecording: startRec,
+    stopRecording,
+  } = useRecordAudio();
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -47,6 +51,11 @@ export function useSpeechToText(text) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const startRecording = async () => {
+    setResult("");
+    await startRec();
   };
 
   return {
