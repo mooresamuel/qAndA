@@ -5,11 +5,12 @@ import NextButtonRight from "../NextButtonRight/NextButtonRight";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import SpeechToTextSentence from "../SpeechToTextSentence/SpeechToTextSentence";
 import RepeatSentence from "../RepeatSentence/RepeatSentence";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function QuestionReadSentence({ question }) {
   const [spokenAnswer, setSpokenAnswer] = useState(null);
-  const { handleNextQuestion } = useExerciseData();
+  const { handleNextQuestion, handleAddMistake, currentQuestion } =
+    useExerciseData();
 
   return (
     <div className="h-full flex flex-col justify-between items-center gap-3">

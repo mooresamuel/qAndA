@@ -1,19 +1,21 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { getExercise } from "../services/getQuestionsAPI";
 
 const ExerciseContext = createContext();
 
 function ExerciseProvider({ children }) {
+  const navigate = useNavigate();
+  const { exercise_id } = useParams();
   const [withCoach, setWithCoach] = useState(false);
   const [exercise, setExercise] = useState([]);
   const [mistakes, setMistakes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(0);
-  const navigate = useNavigate();
-  const { exercise_id } = useParams();
   const [currentQuestion, setCurrentQuestion] = useState({});
+
+  const usedAiInExercise = useRef(false);
 
   // const currentQuestion = exercise?.questions?.at(questionIndex);
   const numQuestions = exercise?.questions?.length;
@@ -39,6 +41,8 @@ function ExerciseProvider({ children }) {
   );
 
   const handleNextQuestion = () => {
+    handleAddMistake({ question_id: currentQuestion.question_id });
+    usedAiInExercise.current = false;
     setCurrentLevel((level) => level + 1);
     if (questionIndex < numQuestions - 1) {
       const newIndex = questionIndex + 1;
@@ -68,24 +72,29 @@ function ExerciseProvider({ children }) {
   );
 
   const handleAddMistake = ({ question_id, mistake }) => {
+    console.log(handleAddMistake);
     const newMistakesArray = {
       ...mistakes,
       questions: mistakes.questions.map((question) => {
-        if (question.question_id === question_id) {
-          console.log("previousMistakes", question.mistakes);
+        if (mistake && question.question_id === question_id) {
           const currentMistakes = question.mistakes
             ? [...question.mistakes]
             : [];
 
-          console.log("currentMistakes", currentMistakes);
-          return { ...question, mistakes: [...currentMistakes, mistake] };
+          return {
+            ...question,
+            mistakes: [...currentMistakes, mistake],
+            used_Ai: usedAiInExercise.current,
+          };
         } else {
-          return { ...question };
+          return { ...question, usedAi: usedAiInExercise.current };
         }
       }),
     };
     setMistakes(newMistakesArray);
   };
+
+  console.log("mistakes", mistakes);
 
   return (
     <ExerciseContext.Provider
@@ -102,6 +111,7 @@ function ExerciseProvider({ children }) {
         setCurrentLevel,
         mistakes,
         handleAddMistake,
+        usedAiInExercise,
       }}
     >
       {children}

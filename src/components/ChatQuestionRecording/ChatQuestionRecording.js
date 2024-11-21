@@ -2,12 +2,15 @@ import { SendHorizontal, X } from "lucide-react";
 import { useState } from "react";
 import ChatStreamingAudioTranscription from "../ChatStreamingAudioTranscription/ChatStreamingAudioTranscription";
 import ChatControlButton from "../ChatControlButton/ChatControlButton";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
 
 function ChatQuestionRecording({ onSend, disabled }) {
   const [transcript, setTranscript] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
+  const { usedAiInExercise } = useExerciseData();
 
   function handleSend() {
+    usedAiInExercise.current = true;
     onSend(transcript);
     setTranscript("");
   }
