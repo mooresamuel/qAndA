@@ -5,7 +5,6 @@ export async function createChatContext() {
     const response = await fetch(`${API_URL}/new_chat`);
 
     const data = await response.json();
-    console.log(data);
 
     return data;
   } catch (err) {
@@ -42,7 +41,7 @@ export async function fetchAIEndExerciseAnswers(prompt) {
       },
     };
 
-    const response = await fetch(`${API_URL}/chatbot`, options);
+    const response = await fetch(`${API_URL}/evaluate`, options);
 
     const data = response.json();
     return data;

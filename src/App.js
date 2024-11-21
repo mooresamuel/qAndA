@@ -143,7 +143,7 @@ function App() {
             />
             <Route path="explain" element={<Explain />} />
             <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
-            <Route path="completed" element={<EndExerciseChat />} />
+            <Route path="complete" element={<EndExerciseChat />} />
           </Route>
         </Route>
       </Routes>

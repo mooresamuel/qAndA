@@ -9,6 +9,7 @@ import ChatQuestionRecording from "../components/ChatQuestionRecording/ChatQuest
 import ChatBubble from "../components/ChatBubble/ChatBubble";
 import ChatWaitingIndicator from "../components/ChatWaitingIndicator/ChatWaitingIndicator";
 import AcceptGeneratedExercises from "../components/AcceptGeneratedExercises/AcceptGeneratedExercises";
+import SpokenText from "../components/SpokenText/SpokenText";
 
 function EndExerciseChat() {
   const { mistakes } = useExerciseData();
@@ -17,20 +18,26 @@ function EndExerciseChat() {
   const [isSending, setIsSending] = useState(false);
   const [displayAcceptQuestions, setDisplayAcceptQuestions] = useState(false);
 
+  console.log(mistakes);
+
   useEffect(function () {
     async function fetch() {
-      //   await createChatContext();
-      //   const data = await fetchAIEndExerciseAnswers(mistakes);
-      //   setChat((current) => [
-      //     ...current,
-      //     { sent: "bot", message: data.response },
-      //   ]);
-      // Change to real name
-      //   if (data.has_questions) {
-      //     setDisplayAcceptQuestions(true);
-      //   } else {
-      //     setDisplayAcceptQuestions(false);
-      //   }
+      await createChatContext();
+      const data = await fetchAIEndExerciseAnswers({
+        execise_details: mistakes,
+        message: "Please evaluate this exercise",
+      });
+
+      console.log(data);
+      setChat((current) => [
+        ...current,
+        { sent: "bot", message: data.response },
+      ]);
+      if (data.includes_questions) {
+        setDisplayAcceptQuestions(true);
+      } else {
+        setDisplayAcceptQuestions(false);
+      }
       setIsLoading(false);
     }
     fetch();
@@ -40,17 +47,24 @@ function EndExerciseChat() {
     console.log("handleUseNewExercises");
   }
 
+  console.log(chat);
+
   if (isLoading) return <FullPageSpinner />;
 
   return (
-    <div className="flex flex-col justify-between h-full">
-      <div></div>
-      <div className="flex-grow bg-white flex flex-col gap-3 py-4 px-3 overflow-y-auto">
+    <div className="flex flex-col justify-between h-full py-4">
+      <div>
+        <SpokenText
+          containerClass={"items-center text-3xl"}
+          text={"Review your performance"}
+        />
+      </div>
+      {/* <div className="flex-grow bg-white flex flex-col gap-3 py-4 px-3 overflow-y-auto">
         {chat.map((message, i) => (
           <ChatBubble message={message} key={i} />
         ))}
         {isSending && <ChatWaitingIndicator />}
-      </div>
+      </div> */}
       <div className="pb-4">
         {displayAcceptQuestions ? (
           <AcceptGeneratedExercises onAccept={handleUseNewExercises} />
