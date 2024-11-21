@@ -54,7 +54,7 @@ function ChatWindow({ onClose }) {
           <X />
         </button>
       </div>
-      <div className="flex-grow bg-white flex flex-col gap-3 py-4 px-3 overflow-y-scroll">
+      <div className="flex-grow bg-white flex flex-col gap-3 py-4 px-3 overflow-y-auto">
         {chat.map((message, i) => (
           <ChatBubble message={message} key={i} />
         ))}

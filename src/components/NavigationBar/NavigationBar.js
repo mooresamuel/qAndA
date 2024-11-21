@@ -4,7 +4,7 @@ import LogoSVG from "../LogoSVG/LogoSVG";
 
 function NavigationBar() {
   return (
-    <div className="bg-hightlight h-16 flex justify-between items-center px-4">
+    <div className="flex-shrink-0 bg-hightlight h-16 flex justify-between items-center px-4">
       <Link to={""}>
         <LogoSVG />
       </Link>

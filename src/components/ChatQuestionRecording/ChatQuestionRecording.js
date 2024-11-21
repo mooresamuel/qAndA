@@ -3,6 +3,7 @@ import { useState } from "react";
 import ChatStreamingAudioTranscription from "../ChatStreamingAudioTranscription/ChatStreamingAudioTranscription";
 import ChatControlButton from "../ChatControlButton/ChatControlButton";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
+import SpokenText from "../SpokenText/SpokenText";
 
 function ChatQuestionRecording({ onSend, disabled }) {
   const [transcript, setTranscript] = useState("");
@@ -17,10 +18,15 @@ function ChatQuestionRecording({ onSend, disabled }) {
 
   return (
     <div className="min-h-40 py-4 flex flex-col gap-3 items-center justify-center">
-      {transcript && (
+      {transcript ? (
         <p className="indent-5 m-0 w-full text-start font-semibold px-2 bg-white py-2">
           {transcript}
         </p>
+      ) : (
+        <SpokenText
+          containerClass={"items-center text-lg"}
+          text={"record a message for help"}
+        />
       )}
       <div className="flex gap-3">
         {transcript && !isWaiting && (

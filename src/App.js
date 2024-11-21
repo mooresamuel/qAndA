@@ -128,6 +128,7 @@ import Explain from "./pages/Explain";
 import ExerciseEntryPoint from "./pages/ExerciseEntryPoint";
 import ExerciseProvider from "./Contexts/ExerciseContext";
 import GlobalProvider from "./Contexts/GlobalContext";
+import EndExerciseChat from "./pages/EndExerciseChat";
 
 function App() {
   return (
@@ -142,6 +143,7 @@ function App() {
             />
             <Route path="explain" element={<Explain />} />
             <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
+            <Route path="complete" element={<EndExerciseChat />} />
           </Route>
         </Route>
       </Routes>
