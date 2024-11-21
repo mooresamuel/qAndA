@@ -35,15 +35,15 @@ export function useSpeechToText(text) {
     try {
       const response = await fetch(audioUrl);
       const audioBlob = await response.blob();
-      console.log("Sending blob of size:", audioBlob.size, "bytes");
+      // console.log("Sending blob of size:", audioBlob.size, "bytes");
 
       const formData = new FormData();
       formData.append("audio", audioBlob, "recording.webm");
       formData.append("phrase", text);
-      console.log("recording being sent");
+      // console.log("recording being sent");
       const data = await wordScoresAPI(formData);
       setResult(data);
-      console.log("Result:", data);
+      // console.log("Result:", data);
       setError(null);
     } catch (error) {
       console.error("Error sending recording:", error);

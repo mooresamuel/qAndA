@@ -23,14 +23,14 @@ export function useRecordAudio() {
 
   const initAudioStream = async () => {
     try {
-      console.log("Requesting microphone access...");
+      // console.log("Requesting microphone access...");
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
           sampleRate: 16000,
         },
       });
-      console.log("Microphone access granted");
+      // console.log("Microphone access granted");
 
       mediaStreamRef.current = stream;
 
@@ -41,28 +41,28 @@ export function useRecordAudio() {
         ? "audio/mp4"
         : "audio/ogg";
 
-      console.log("Using MIME type:", mimeType);
+      // console.log("Using MIME type:", mimeType);
 
       mediaRecorderRef.current = new MediaRecorder(stream, {
         mimeType: mimeType,
       });
 
       mediaRecorderRef.current.ondataavailable = (event) => {
-        console.log("Data available:", event.data.size, "bytes");
+        // console.log("Data available:", event.data.size, "bytes");
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data);
         }
       };
 
       mediaRecorderRef.current.onstart = () => {
-        console.log("Recording started");
+        // console.log("Recording started");
         audioChunksRef.current = [];
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        console.log("Recording stopped, processing chunks...");
+        // console.log("Recording stopped, processing chunks...");
         const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-        console.log("Created blob of size:", audioBlob.size, "bytes");
+        // console.log("Created blob of size:", audioBlob.size, "bytes");
 
         if (audioUrl) {
           URL.revokeObjectURL(audioUrl);
@@ -91,14 +91,14 @@ export function useRecordAudio() {
   };
 
   const cleanupAudioStream = () => {
-    console.log("Cleaning up audio stream...");
+    // console.log("Cleaning up audio stream...");
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
     }
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => {
         track.stop();
-        console.log("Track stopped:", track.kind);
+        // console.log("Track stopped:", track.kind);
       });
     }
     if (audioUrl) {
@@ -107,7 +107,7 @@ export function useRecordAudio() {
     setIsStreamReady(false);
     setAudioUrl(null);
     setIsRecording(false);
-    console.log("Cleanup complete");
+    // console.log("Cleanup complete");
   };
 
   const startRecording = async () => {
@@ -120,7 +120,7 @@ export function useRecordAudio() {
         !mediaRecorderRef.current ||
         mediaRecorderRef.current.state === "inactive"
       ) {
-        console.log("Starting recording...");
+        // console.log("Starting recording...");
         audioChunksRef.current = [];
         mediaRecorderRef.current.start(1000); // Collect data every second
         setIsRecording(true);
@@ -138,7 +138,7 @@ export function useRecordAudio() {
         mediaRecorderRef.current &&
         mediaRecorderRef.current.state !== "inactive"
       ) {
-        console.log("Stopping recording...");
+        // console.log("Stopping recording...");
         mediaRecorderRef.current.stop();
         setIsRecording(false);
       }

@@ -13,7 +13,12 @@ const SpeechToTextWord = ({ word, label = null }) => {
 
   useEffect(
     function () {
-      if (result && result[0].word.toLowerCase() !== word.toLowerCase()) {
+      if (
+        result &&
+        result[0].word
+          .toLowerCase()
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "") !== word.toLowerCase()
+      ) {
         handleAddMistake({
           question_id: currentQuestion.question_id,
           mistake: word,
@@ -23,13 +28,21 @@ const SpeechToTextWord = ({ word, label = null }) => {
     [result]
   );
 
-  if (result && result[0].word.toLowerCase() === word.toLowerCase()) {
+  if (
+    result &&
+    result[0].word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "") ===
+      word.toLowerCase()
+  ) {
     return (
       <SpeakerButton>
         <Check />
       </SpeakerButton>
     );
-  } else if (result && result[0].word.toLowerCase() !== word.toLowerCase()) {
+  } else if (
+    result &&
+    result[0].word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "") !==
+      word.toLowerCase()
+  ) {
     return (
       <SpeakerButton onClick={startRecording}>
         <RotateCw />

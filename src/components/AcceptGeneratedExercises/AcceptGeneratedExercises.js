@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import SpokenText from "../SpokenText/SpokenText";
 
-function AcceptGeneratedExercises({ onAccept }) {
+function AcceptGeneratedExercises({ onAccept, onChatbot }) {
   const navigate = useNavigate();
 
   return (
@@ -18,8 +18,14 @@ function AcceptGeneratedExercises({ onAccept }) {
           No
         </button>
         <button
+          onClick={onChatbot}
+          className=" flex-grow border-1 border-hightlight text-hightlight rounded-md py-2"
+        >
+          Ask question
+        </button>
+        <button
           onClick={onAccept}
-          className="w- flex-grow bg-hightlight text-white rounded-md  py-2"
+          className="flex-grow bg-hightlight text-white rounded-md  py-2"
         >
           Yes
         </button>

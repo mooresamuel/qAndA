@@ -22,6 +22,15 @@ function ExerciseProvider({ children }) {
 
   useEffect(
     function () {
+      if (exercise) {
+        setMistakes(exercise);
+      }
+    },
+    [exercise]
+  );
+
+  useEffect(
+    function () {
       async function fetch() {
         try {
           setIsLoading(true);
@@ -41,7 +50,7 @@ function ExerciseProvider({ children }) {
   );
 
   const handleNextQuestion = () => {
-    handleAddMistake({ question_id: currentQuestion.question_id });
+    // handleAddMistake({ question_id: currentQuestion.question_id });
     usedAiInExercise.current = false;
     setCurrentLevel((level) => level + 1);
     if (questionIndex < numQuestions - 1) {
@@ -62,17 +71,18 @@ function ExerciseProvider({ children }) {
     }
   };
 
-  useEffect(
-    function () {
-      if (exercise) {
-        setMistakes(exercise);
-      }
-    },
-    [exercise]
-  );
+  const handleUseGeneratedQuestions = (generatedQuestions) => {
+    setMistakes([]);
+    setExercise((exercise) => {
+      return { ...exercise, questions: generatedQuestions };
+    });
+    setQuestionIndex(0);
+    setCurrentQuestion(generatedQuestions);
+    navigate(`/exercise/${exercise_id}/steps/ai_generated`);
+  };
 
   const handleAddMistake = ({ mistake }) => {
-    console.log(handleAddMistake);
+    console.log("mistakes", mistakes);
     const newMistakesArray = {
       ...mistakes,
       questions: mistakes.questions.map((question) => {
@@ -110,6 +120,7 @@ function ExerciseProvider({ children }) {
         mistakes,
         handleAddMistake,
         usedAiInExercise,
+        handleUseGeneratedQuestions,
       }}
     >
       {children}
