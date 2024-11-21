@@ -7,7 +7,10 @@ module.exports = {
         "3xl": "0 0 50px 50px rgba(0, 0, 0, 0.9)",
         "very-large": "0px 0px 0px 1000px #3C3C3B"
       },
-      colors: { hightlight: "#050d30" },
+      colors: { 
+        hightlight: "#050d30",
+        "ball-color": "#F0F1F5"
+      },
       animation: { 
         "move": "move 0.4s ease-in-out forwards",
       },

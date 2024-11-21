@@ -5,10 +5,10 @@ import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatW
 import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepeatWords";
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
-import { useExerciseData } from "../Contexts/ExerciseContext";
-import Chat from "../components/Chat/Chat";
 import QuestionBasicComprehension from "../components/QuestionBasicComprehension/QuestionBasicComprehension";
 import QuestionCompleteWordLetters from "../components/QuestionCompleteWordLetters/QuestionCompleteWordLetters";
+import QuestionFindWord from "../components/QuestionFindWord/QuestionFindWord";
+import Chat from "../components/Chat/Chat";
 
 function ExerciseEntryPoint() {
   const { currentQuestion, isLoading } = useExerciseData();
@@ -17,6 +17,9 @@ function ExerciseEntryPoint() {
 
   return (
     <>
+      {currentQuestion.question_type === "find_word" && (
+        <QuestionFindWord question={currentQuestion} />
+      )}
       {currentQuestion.question_type === "repeat_words" && (
         <QuestionRepeatWords question={currentQuestion} />
       )}
