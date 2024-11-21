@@ -32,7 +32,6 @@ function QuestionCompleteSentence({ question }) {
       })
     );
     if (question.answers[+indexPlaced] !== answer) {
-      console.log("insideFlow");
       handleAddMistake({
         mistake: `word ${answer} placed in gap ${+indexPlaced + 1}`,
       });
