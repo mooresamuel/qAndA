@@ -65,7 +65,7 @@ function QuestionCompleteWordLetters(
         const topRect = topLettersRefs.current[i]?.getBoundingClientRect();
         const bottomRect = bottomLettersRefs.current[bottomRefIndex]?.getBoundingClientRect();
         setAnimatingLetter({
-          letter: currentLetter,
+          content: currentLetter,
           start: topRect,
           end: bottomRect,
         });
@@ -107,7 +107,7 @@ function QuestionCompleteWordLetters(
     if (!bottomRect || !topRect) return;
 
     setAnimatingLetter({
-      letter,
+      content: letter,
       start: bottomRect,
       end: topRect,
     });
@@ -253,14 +253,14 @@ function QuestionCompleteWordLetters(
             {
               !correct && animatingLetter &&
                 <AnimatedTag 
-                  letterPosition={animatingLetter}
+                  position={animatingLetter}
                 />
             }
 
             { 
               !correct && animatingLetter &&
                 <AnimatedTag 
-                  letterPosition={animatingLetter}
+                  position={animatingLetter}
                 />
             }
           </>
