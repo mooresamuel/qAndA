@@ -51,6 +51,24 @@ function EndExerciseChat() {
     [chat]
   );
 
+  async function handleSend(user_input) {
+    setIsSending(true);
+    setChat((chat) => [...chat, { sent: "user", message: user_input }]);
+    try {
+      const prompt = {
+        exercise_details: mistakes,
+        message: user_input,
+      };
+
+      const data = await fetchAIEndExerciseAnswers(prompt);
+      setChat((chat) => [...chat, { sent: "bot", message: data.response }]);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsSending(false);
+    }
+  }
+
   if (isLoading) return <FullPageSpinner />;
 
   return (
@@ -76,7 +94,7 @@ function EndExerciseChat() {
           />
         ) : (
           <div className="flex flex-col gap-2">
-            <ChatQuestionRecording />
+            <ChatQuestionRecording onSend={handleSend} />
             <div className=" flex gap-3 justify-center">
               <button
                 onClick={() => navigate("/")}
