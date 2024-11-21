@@ -24,7 +24,7 @@ function EndExerciseChat() {
     async function fetch() {
       await createChatContext();
       const data = await fetchAIEndExerciseAnswers({
-        execise_details: mistakes,
+        exercise_details: mistakes,
         message: "Please evaluate this exercise",
       });
 
