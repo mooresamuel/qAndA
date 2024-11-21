@@ -2,23 +2,38 @@
 import { Button, Modal } from "react-bootstrap";
 import { useState } from "react";
 import { wordHelperFetch } from "../../services/wordHelperAPI";
-// import SpokenWord from "./SpokenWord";
-// import Sentence from "./Sentence";
+import TextToSpeech from "../TextToSpeech/TextToSpeech";
+import SpokenText from "../SpokenText/SpokenText";
+import FullPageSpinner from "../FullPageSpinner/FullPageSpinner";
 
 /* eslint-disable react/prop-types */
-function IndividualWord({ word, highlightable, className = "" }) {
+function IndividualWord({ word, spokenAnswer, className = "" }) {
   const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [coachData, setCoachData] = useState({});
+
+  const correctlyPronounced =
+    spokenAnswer &&
+    spokenAnswer?.word?.toLowerCase() ===
+      word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase() &&
+    spokenAnswer?.confidence > 0.7;
+
+  console.log(correctlyPronounced, spokenAnswer);
 
   function handleClose() {
     setShow(false);
   }
 
   async function handleShow() {
-    if (highlightable) {
-      const helpData = await wordHelperFetch(word);
-      setCoachData(helpData);
-      setShow(true);
+    if (!correctlyPronounced) {
+      try {
+        setIsLoading(true);
+        const helpData = await wordHelperFetch(word);
+        setCoachData(helpData);
+        setShow(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
   }
 
@@ -27,31 +42,35 @@ function IndividualWord({ word, highlightable, className = "" }) {
       <span
         onClick={handleShow}
         className={`inline-block pr-1 ${className} ${
-          highlightable &&
-          "hover:text-red-500 hover:scale-105 transition-transform duration-200 transform"
+          !spokenAnswer
+            ? "text-black"
+            : correctlyPronounced
+            ? "text-green-600"
+            : " text-red-500 hover:text-red-500 hover:scale-105 transition-transform duration-200 transform"
         }`}
       >
         {`${word} `}
       </span>
-      {/* <Modal centered show={show} onHide={handleClose}>
+      {isLoading && <FullPageSpinner />}
+      <Modal centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title className="capitalize">
-            <SpokenWord size="xl" word={word} />
+            <SpokenText size="xl" text={word} />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="space-y-5 w-full">
           <div>
-            <Sentence highlightable={false} sentence={coachData?.description} />
+            <SpokenText highlightable={false} text={coachData?.description} />
           </div>
           <div>
-            <Sentence
+            <SpokenText
               highlightable={false}
-              sentence={coachData?.example_sentence}
+              text={coachData?.example_sentence}
             />
           </div>
           <div className="flex flex-wrap gap-4">
             {coachData?.similar_sounds?.split(",").map((word, id) => (
-              <SpokenWord key={id} word={word} />
+              <SpokenText key={id} text={word} />
             ))}
           </div>
         </Modal.Body>
@@ -60,7 +79,7 @@ function IndividualWord({ word, highlightable, className = "" }) {
             Continue
           </Button>
         </Modal.Footer>
-      </Modal> */}
+      </Modal>
     </>
   );
 }

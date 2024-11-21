@@ -1,7 +1,5 @@
-import MilestonesPath from "../components/MilestonesPath/MilestonesPath";
-import SpeechToTextWord from "../components/SpeechToTextWord/SpeechToTextWord";
 import { useGlobalContext } from "../Contexts/GlobalContext";
-import SentenceHint from "../test/SentenceHint";
+import MilestonesPath from "../components/MilestonesPath/MilestonesPath";
 
 function HomePage() {
   const { milestones } = useGlobalContext();

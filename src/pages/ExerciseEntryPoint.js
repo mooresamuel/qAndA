@@ -5,6 +5,8 @@ import QuestionRepeatWord from "../components/QuestionRepeatWord/QuestionRepeatW
 import QuestionRepeatWords from "../components/QuestionRepeatWords/QuestionRepeatWords";
 import QuestionFindingMatchingWords from "../components/QuestionFindingMatchingWords/QuestionFindingMatchingWords";
 import QuestionVowelLength from "../components/QuestionVowelLength/QuestionVowelLength";
+import { useExerciseData } from "../Contexts/ExerciseContext";
+import Chat from "../components/Chat/Chat";
 import QuestionBasicComprehension from "../components/QuestionBasicComprehension/QuestionBasicComprehension";
 import QuestionCompleteWordLetters from "../components/QuestionCompleteWordLetters/QuestionCompleteWordLetters";
 
@@ -13,29 +15,47 @@ function ExerciseEntryPoint() {
 
   if (isLoading) return null;
 
-  if (currentQuestion.question_type === "repeat_words")
-    return <QuestionRepeatWords question={currentQuestion} />;
+  return (
+    <>
+      {currentQuestion.question_type === "repeat_words" && (
+        <QuestionRepeatWords question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "repeat_word" && (
+        <QuestionRepeatWord question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "repeat_sentence" && (
+        <QuestionReadSentence question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "complete_sentence" && (
+        <QuestionCompleteSentence question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "find_matching_words" && (
+        <QuestionFindingMatchingWords question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "vowel_length" && (
+        <QuestionVowelLength question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "complete_spelling" && (
+        <QuestionCompleteWordLetters question={currentQuestion} />
+      )}
+      {currentQuestion.question_type === "basic_comprehension" && (
+        <QuestionBasicComprehension question={currentQuestion} />
+      )}
+      <Chat />
+    </>
+  );
 
-  if (currentQuestion.question_type === "repeat_word")
-    return <QuestionRepeatWord question={currentQuestion} />;
+  // if (currentQuestion.question_type === "find_matching_words")
+  //   return <QuestionFindingMatchingWords question={currentQuestion} />;
 
-  if (currentQuestion.question_type === "repeat_sentence")
-    return <QuestionReadSentence question={currentQuestion} />;
+  // if (currentQuestion.question_type === "vowel_length")
+  //   return <QuestionVowelLength question={currentQuestion} />;
 
-  if (currentQuestion.question_type === "complete_sentence")
-    return <QuestionCompleteSentence question={currentQuestion} />;
+  // if (currentQuestion.question_type === "basic_comprehension")
+  //   return <QuestionBasicComprehension question={currentQuestion} />;
 
-  if (currentQuestion.question_type === "find_matching_words")
-    return <QuestionFindingMatchingWords question={currentQuestion} />;
-
-  if (currentQuestion.question_type === "vowel_length")
-    return <QuestionVowelLength question={currentQuestion} />;
-
-  if (currentQuestion.question_type === "basic_comprehension")
-    return <QuestionBasicComprehension question={currentQuestion} />;
-
-  if (currentQuestion.question_type === "complete_spelling") 
-    return <QuestionCompleteWordLetters question={currentQuestion} />;
+  // if (currentQuestion.question_type === "complete_spelling")
+  //   return <QuestionCompleteWordLetters question={currentQuestion} />;
 }
 
 export default ExerciseEntryPoint;

@@ -18,6 +18,8 @@ function ExerciseProvider({ children }) {
   const numQuestions = exercise?.questions?.length;
   console.log("numQuestions", numQuestions);
 
+  console.log("currentQuestion", currentQuestion);
+
   useEffect(
     function () {
       async function fetch() {
@@ -70,7 +72,7 @@ function ExerciseProvider({ children }) {
         numQuestions,
         handleNextQuestion,
         currentLevel,
-        setCurrentLevel
+        setCurrentLevel,
       }}
     >
       {children}
