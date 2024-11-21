@@ -86,13 +86,7 @@ function QuestionCompleteSentence({
 
   function removeAnswer(index, trackIndex, word) {
     const findWord = answers.find((word, i) => {
-      if (i === index) {
-        if (typeof word === "string") {
-          return word;
-        }
-      } else {
-        return false;
-      }
+      return i === index && typeof word === "string";
     });
 
     if (!findWord) {
@@ -132,9 +126,12 @@ function QuestionCompleteSentence({
 
   const handleNext = () => {
     if (answers.join("").trim() === question.answers.join("").trim()) {
-      setEnabled(false);
-      setAnswers([false, false]);
       handleNextQuestion();
+      setTimeout(() => {
+        setEnabled(false);
+        setAnswers([false, false]);
+        setCurrentIndex(0);
+      }, 0);
     } else {
       setTryAgain(true);
       setEnabled(false);
@@ -156,7 +153,7 @@ function QuestionCompleteSentence({
     }
   }, [answers]);
 
-  let upperIndex = 0;
+  let fakeIndex = 0;
 
   return (
     <div className="flex flex-col h-full justify-between items-center ">
@@ -172,8 +169,8 @@ function QuestionCompleteSentence({
           <div className="m-0 items-center flex flex-row flex-wrap gap-y-3 gap-x-2 text-hightlight">
             {splitSentence.map((chunk, traceIndex, array) => {
               if (chunk.startsWith("//") && chunk.endsWith("//")) {
-                let index = upperIndex;
-                upperIndex++;
+                let index = fakeIndex;
+                fakeIndex++;
                 return (
                   <button
                     ref={(el) => topGapRefs.current[traceIndex] = el}
