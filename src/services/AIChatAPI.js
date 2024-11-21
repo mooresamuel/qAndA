@@ -31,3 +31,22 @@ export async function fetchAIChatAnswer(prompt) {
     console.log(err);
   }
 }
+
+export async function fetchAIEndExerciseAnswers(prompt) {
+  try {
+    const options = {
+      method: "POST",
+      body: JSON.stringify(prompt),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await fetch(`${API_URL}/chatbot`, options);
+
+    const data = response.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
