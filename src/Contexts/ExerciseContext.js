@@ -58,12 +58,27 @@ function ExerciseProvider({ children }) {
     }
   };
 
+  useEffect(
+    function () {
+      if (exercise) {
+        setMistakes(exercise);
+      }
+    },
+    [exercise]
+  );
+
   const handleAddMistake = ({ question_id, mistake }) => {
     const newMistakesArray = {
-      ...exercise,
-      questions: exercise.questions.map((question) => {
+      ...mistakes,
+      questions: mistakes.questions.map((question) => {
         if (question.question_id === question_id) {
-          return { ...question, mistakes: [...question.mistakes, mistake] };
+          console.log("previousMistakes", question.mistakes);
+          const currentMistakes = question.mistakes
+            ? [...question.mistakes]
+            : [];
+
+          console.log("currentMistakes", currentMistakes);
+          return { ...question, mistakes: [...currentMistakes, mistake] };
         } else {
           return { ...question };
         }
@@ -71,8 +86,6 @@ function ExerciseProvider({ children }) {
     };
     setMistakes(newMistakesArray);
   };
-
-  console.log(mistakes);
 
   return (
     <ExerciseContext.Provider

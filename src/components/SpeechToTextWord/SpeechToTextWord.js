@@ -3,10 +3,25 @@ import { Spinner } from "react-bootstrap";
 import { useSpeechToText } from "../../hooks/useSpeechToText";
 import SpeakerButton from "../SpeakerButton/SpeakerButton";
 import { Check, Mic, Octagon, RotateCw, Speaker, X } from "lucide-react";
+import { useExerciseData } from "../../Contexts/ExerciseContext";
+import { useEffect } from "react";
 
 const SpeechToTextWord = ({ word, label = null }) => {
+  const { handleAddMistake, currentQuestion } = useExerciseData();
   const { startRecording, stopRecording, result, isRecording, isLoading } =
     useSpeechToText(word);
+
+  useEffect(
+    function () {
+      if (result && result[0].word.toLowerCase() !== word.toLowerCase()) {
+        handleAddMistake({
+          question_id: currentQuestion.question_id,
+          mistake: word,
+        });
+      }
+    },
+    [result]
+  );
 
   if (result && result[0].word.toLowerCase() === word.toLowerCase()) {
     return (
