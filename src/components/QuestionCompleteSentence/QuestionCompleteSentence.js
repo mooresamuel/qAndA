@@ -8,17 +8,16 @@ import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import ModalElement from "../ModalElement/ModalElement";
 
 // const question = {
-//   answers: ['had', 'shirt', 'birthday'],
-//   data: ['had', 'birthday', 'shirt'],
-//   prompts: ['I %//gap//% a new %//gap//% for my %//gap//%'],
+//   answers: ['because', "done", "tasks", "the"],
+//   data: ['tasks', "the", 'because', "done"],
+//   prompts: ['She felt happy %//gap//% she had %//gap//% all her %//gap//% before the end of %//gap//% day.'],
 //   question_id: 12,
 //   question_number: 1,
 //   question_type: "complete_sentence"
-
 // }
 
 function QuestionCompleteSentence({ 
-  question 
+  question
 }) {
   const { handleNextQuestion, handleAddMistake } = useExerciseData();
   const topGapRefs = useRef([]);
@@ -35,9 +34,9 @@ function QuestionCompleteSentence({
   const _allGapsIndex = splitSentence.map((w, i) => w === "//gap//" ? i : null)
                                     .filter(i => i !== null);
 
-  const correctSentence = question.prompts[0]
-    .replaceAll("%//", "")
-    .replaceAll("//%", "");
+  const [speechArray, setSpeechArray] = useState(question.prompts[0].split("%"));
+  const [speech, setSpeech] = useState("");
+  const [reset, setReset] = useState(false);
 
 
   function handleAnswerPicked(answer, index) {
@@ -53,6 +52,18 @@ function QuestionCompleteSentence({
         return el;
       }
     });
+
+    const tempGapIndex = _allGapsIndex[tempIndex];
+
+    const tempSpeechArray = speechArray.map((word, i, arr) => {
+      if (i === tempGapIndex) {
+        return answer;
+      } else {
+        return word;
+      }
+    })
+
+    setSpeechArray(tempSpeechArray);
 
     const findEmptyIndex = arrAnswers.findIndex(word => word === false);
     const gapIndex = _allGapsIndex[tempIndex];
@@ -93,6 +104,16 @@ function QuestionCompleteSentence({
       setCurrentIndex(index);
       return
     }
+
+    const tempSpeechArray = speechArray.map((word, i, arr) => {
+      if (i === trackIndex) {
+        return "%//gap//%";
+      } else {
+        return word;
+      }
+    })
+
+    setSpeechArray(tempSpeechArray);
   
     const tempAnswers = [...answers].map((el, i) => (i === index ? false : el))
 
@@ -127,11 +148,7 @@ function QuestionCompleteSentence({
   const handleNext = () => {
     if (answers.join("").trim() === question.answers.join("").trim()) {
       handleNextQuestion();
-      setTimeout(() => {
-        setEnabled(false);
-        setAnswers([false, false]);
-        setCurrentIndex(0);
-      }, 0);
+      setReset(true);
     } else {
       setTryAgain(true);
       setEnabled(false);
@@ -142,6 +159,27 @@ function QuestionCompleteSentence({
       })
     }
   }
+
+  useEffect(() => {
+    if (reset) {
+      setTimeout(() => {
+        setEnabled(false);
+        setAnswers([false, false]);
+        const newSpeechArray = question.prompts[0].split("%");
+        const newSpeech = newSpeechArray.join("").replace(/%\/\/|\/\/%/g, "");
+        setSpeechArray(newSpeechArray);
+        setSpeech(newSpeech);
+        setCurrentIndex(0);
+        setReset(false);
+      }, 0);
+    }
+  }, [reset]);
+
+  useEffect(() => {
+    const updatedSpeech = speechArray.join("").replace(/%\/\/|\/\/%/g, "");
+    console.log("updatedSpeech", updatedSpeech);
+    setSpeech(updatedSpeech);
+  }, [speechArray]);
 
   useEffect(() => {
     if (answers.length > 0) {
@@ -165,7 +203,7 @@ function QuestionCompleteSentence({
       </div>
       <div className="space-y-16 px-2">
         <div className="flex items-center gap-3 text-base px-3 py-5 bg-gray-100">
-          <TextToSpeech sentence={correctSentence} />
+          <TextToSpeech sentence={speech} />
           <div className="m-0 items-center flex flex-row flex-wrap gap-y-3 gap-x-2 text-hightlight">
             {splitSentence.map((chunk, traceIndex, array) => {
               if (chunk.startsWith("//") && chunk.endsWith("//")) {
