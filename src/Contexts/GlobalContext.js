@@ -1,11 +1,18 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { getMilestones } from "../services/milestonesAPI";
+import useQuerySelector from "../hooks/useQuerySelector";
 
 const GlobalContext = createContext();
 
 function GlobalProvider({ children }) {
   const [milestones, setMilestones] = useState([]);
+  const [selector, setSelector] = useState("body");
+  const [disableText, setDisableText] = useState({});
+
+  console.log("selector Global", selector);
+
+  const { element, href } = useQuerySelector(selector);
 
   useEffect(function () {
     async function fetch() {
@@ -16,7 +23,7 @@ function GlobalProvider({ children }) {
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ milestones, setMilestones }}>
+    <GlobalContext.Provider value={{ milestones, setMilestones, element, href, setSelector, setDisableText, disableText }}>
       {children}
       <Outlet />
     </GlobalContext.Provider>

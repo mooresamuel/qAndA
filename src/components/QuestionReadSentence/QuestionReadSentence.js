@@ -1,4 +1,5 @@
 import { useExerciseData } from "../../Contexts/ExerciseContext";
+import { useGlobalContext } from "../../Contexts/GlobalContext";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import SpokenText from "../SpokenText/SpokenText";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
@@ -11,6 +12,10 @@ function QuestionReadSentence({ question }) {
   const [spokenAnswer, setSpokenAnswer] = useState(null);
   const { handleNextQuestion, handleAddMistake, currentQuestion } =
     useExerciseData();
+  
+  const { setSelector, element } = useGlobalContext();
+
+  console.log('setSelect ss', element)
 
   return (
     <div className="h-full flex flex-col justify-between items-center gap-3">
