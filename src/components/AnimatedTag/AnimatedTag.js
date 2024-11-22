@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react'
 
-function AnimatedTag({ letterPosition }) {
+function AnimatedTag({ position, className }) {
 
   return (
     <div
-      className="bg-white absolute grid place-items-center text-3xl font-bold rounded-lg z-10 animate-move"
+      className={`bg-white absolute grid place-items-center font-bold rounded-lg z-10 animate-move ${className}`}
       style={{
-        left: letterPosition.start.left,
-        top: letterPosition.start.top,
-        bottom: letterPosition.start.bottom,
-        right: letterPosition.start.right,
-        width: letterPosition.start.width,
-        height: letterPosition.start.height,
-        "--move-x": `${letterPosition?.end.x - letterPosition?.start.x}px`,
-        "--move-y": `${letterPosition?.end.y - letterPosition?.start.y}px`,
+        left: position.start.left,
+        top: position.start.top,
+        bottom: position.start.bottom,
+        right: position.start.right,
+        width: position.start.width,
+        height: position.start.height,
+        "--move-x": `${position?.end.x - position?.start.x}px`,
+        "--move-y": `${position?.end.y - position?.start.y}px`,
       }}
       >
-        { letterPosition.letter }
+        { position.content }
     </div>
   )
 }
