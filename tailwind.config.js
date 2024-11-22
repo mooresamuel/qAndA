@@ -1,76 +1,27 @@
-const { fontFamily } = require("tailwindcss/defaultTheme")
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
-  content: ["app/**/*.{js, jsx}", "components/**/*.{js, jsx}, test/**/*.{js, jsx}"],
+  content: ["./src/**/*.{html,js}"],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
+    extend: { 
+      boxShadow: { 
+        "3xl": "0 0 50px 50px rgba(0, 0, 0, 0.9)",
+        "very-large": "0px 0px 0px 1000px #3C3C3B"
       },
-    },
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+      colors: { 
+        hightlight: "#050d30",
+        "ball-color": "#F0F1F5"
       },
-      borderRadius: {
-        lg: `var(--radius)`,
-        md: `calc(var(--radius) - 2px)`,
-        sm: "calc(var(--radius) - 4px)",
+      animation: { 
+        "move": "move 0.4s ease-in-out forwards",
       },
-      fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
+      keyframes: { 
+        "move": {
+          "0%": { transform: "translate(0px, 0px)" },
+          "100%": {
+            transform: "translate(var(--move-x), var(--move-y))",
+          },
+      }}
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [],
+};
