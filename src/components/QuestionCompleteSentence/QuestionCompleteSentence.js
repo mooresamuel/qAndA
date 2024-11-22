@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useGlobalContext } from "../../Contexts/GlobalContext";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
 import TextToSpeech from "../TextToSpeech/TextToSpeech";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
@@ -16,9 +17,33 @@ import ModalElement from "../ModalElement/ModalElement";
 //   question_type: "complete_sentence"
 // }
 
+// const question = {
+//   "question_id": "1",
+//   "question_type": "complete-sentence",
+//   "prompts": [
+//       "The %//gap//% was walking to the %//gap//% when she saw a %//gap//% standing near her %//gap//%, so she decided to %//gap//% back."
+//   ],
+//   "gaps": 5,
+//   "data": [
+//       "girl",
+//       "store",
+//       "bird",
+//       "home",
+//       "turn"
+//   ],
+//   "answers": [
+//       "girl",
+//       "store",
+//       "bird",
+//       "home",
+//       "turn"
+//   ]
+// }
+
 function QuestionCompleteSentence({ 
   question
 }) {
+  const { setSelector, element } = useGlobalContext();
   const { handleNextQuestion, handleAddMistake } = useExerciseData();
   const topGapRefs = useRef([]);
   const bottomWordRefs = useRef([]);
@@ -193,8 +218,14 @@ function QuestionCompleteSentence({
 
   let fakeIndex = 0;
 
+  console.log("Wath", element, " Ok")
+
   return (
-    <div className="flex flex-col h-full justify-between items-center ">
+    <div 
+      id="complete_sentence"
+      className="flex flex-col h-full justify-between items-center"
+      onClick={() => setSelector("#complete_sentence")}
+    >
       <div 
         style={{ backgroundColor: "#8CB036" }}
         className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-3 py-4">

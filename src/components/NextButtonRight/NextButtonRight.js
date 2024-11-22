@@ -12,6 +12,7 @@ function NextButtonRight({
 }) {
   return (
     <button
+      id="buttonNext"
       type="button"
       disabled={isEnabled === false ? true : false}
       style={{

@@ -8,6 +8,8 @@ export async function getExercise(exerciseId) {
 
     const data = await response.json();
 
+    console.log("GETQUESTION", data);
+
     return data;
   } catch (err) {
     console.log(err);

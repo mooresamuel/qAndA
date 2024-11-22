@@ -216,7 +216,7 @@ function QuestionBasicComprehension({
         {
           showHint && 
             <ModalElement 
-              className={"h-1/4"}
+              className={"h-1/3"}
               text={question.questions[0].hint}
               onClose={() => {
                 setShowHint(!showHint);
