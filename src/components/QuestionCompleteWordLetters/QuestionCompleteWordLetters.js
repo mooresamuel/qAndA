@@ -34,9 +34,10 @@ function QuestionCompleteWordLetters(
 ) {
   console.log("COMPONENT HIT!")
   const navigate = useNavigate();
-  const { handleNextQuestion } = useExerciseData();
+  const { handleNextQuestion, handleAddMistake } = useExerciseData();
   const { question } = questions;
   console.log("ALL Question", questions);
+  const [nextClicked, setNextClicked] = useState(false);
 
   const topLettersRefs = useRef([]);
   const bottomLettersRefs = useRef([]);
@@ -128,24 +129,36 @@ function QuestionCompleteWordLetters(
   const handleNext = () => {
     if (spelling.join("") === question.answers[0]) {
       setCorrect(true);
-      setTimeout(() => {
-        handleNextQuestion();
-      }, 10);
-      setLetterSlots([]);
-      setRestart(true);
+      // setTimeout(() => {
+      setNextClicked(true);
+        // handleNextQuestion();
+        // setLetterSlots([]);
+        // setRestart(true);
+      // }, 10);
     } else {
       setTryAgain(true);
     }
   }
 
   useEffect(() => {
-    if (restart) {
-      console.log("Correct!!")
+    if (nextClicked) {
       setTimeout(() => {
-        initalSetUp();
+        setNextClicked(false);
         setCorrect(false);
-        setRestart(false);
+        setRestart(true);
+        setLetterSlots([]);
+        handleNextQuestion();
+
       }, 300);
+    }
+  }, [nextClicked])
+
+  useEffect(() => {
+    if (restart) {
+      console.log("Correct! restart!")
+      setCorrect(false);
+      initalSetUp();
+      setRestart(false);
     }
   }, [restart]);
 
