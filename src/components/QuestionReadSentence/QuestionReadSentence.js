@@ -12,15 +12,15 @@ function QuestionReadSentence({ question }) {
   const [spokenAnswer, setSpokenAnswer] = useState(null);
   const { handleNextQuestion, handleAddMistake, currentQuestion } =
     useExerciseData();
-  
+
   const { setSelector, element } = useGlobalContext();
 
-  console.log('setSelect ss', element)
+  console.log("setSelect ss", element);
 
   return (
     <div className="h-full flex flex-col justify-between items-center gap-3">
       <div className="mt-4 space-y-5">
-        <ProgressBar />
+        {/* <ProgressBar /> */}
 
         <div className="flex items-center flex-col gap-3">
           <SpokenText

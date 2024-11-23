@@ -1,7 +1,7 @@
 .dots {
   width: 54px;
   aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side, #fff 90%, #0000);
+  --_g: no-repeat radial-gradient(circle closest-side, #050d30 90%, #0000);
   background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
   background-size: calc(100% / 3) 50%;
   animation: d3 1s infinite linear;

@@ -13,11 +13,13 @@ function ExerciseProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState({});
+  // const [currentQuestion, setCurrentQuestion] = useState({});
 
   const usedAiInExercise = useRef(false);
 
-  // const currentQuestion = exercise?.questions?.at(questionIndex);
+  const wordsMistaken = useRef(new Set());
+
+  const currentQuestion = exercise?.questions?.at(questionIndex);
   const numQuestions = exercise?.questions?.length;
 
   useEffect(
@@ -36,7 +38,7 @@ function ExerciseProvider({ children }) {
           setIsLoading(true);
           const data = await getExercise(exercise_id);
           setExercise(data);
-          setCurrentQuestion(data?.questions?.at(0));
+          // setCurrentQuestion(data?.questions?.at(0));
         } catch (err) {
           console.log(err);
         } finally {
@@ -49,39 +51,50 @@ function ExerciseProvider({ children }) {
     [exercise_id]
   );
 
-  const handleNextQuestion = () => {
-    // handleAddMistake({ question_id: currentQuestion.question_id });
-    usedAiInExercise.current = false;
-    setCurrentLevel((level) => level + 1);
-    if (questionIndex < numQuestions - 1) {
-      const newIndex = questionIndex + 1;
-      navigate(
-        `/exercise/${exercise_id}/steps/${
-          exercise?.questions?.at(newIndex).question_id
-        }`
-      );
-      setQuestionIndex(newIndex);
-      setCurrentQuestion(exercise?.questions?.at(newIndex));
-    }
-    if (questionIndex === numQuestions - 1) {
-      setTimeout(() => {
-        setCurrentLevel(0);
-        navigate(`/exercise/${exercise_id}/complete`);
-      }, 330);
-    }
+  const resetMistakes = () => {
+    setMistakes(exercise);
   };
 
-  const handleUseGeneratedQuestions = (generatedQuestions) => {
-    setMistakes([]);
-    setExercise((exercise) => {
-      return { ...exercise, questions: [generatedQuestions] };
-    });
-    setQuestionIndex(0);
-    setCurrentQuestion(generatedQuestions);
-    navigate(`/exercise/${exercise_id}/steps/ai_generated`);
+  const getMistakesCurrentQuestion = () => {
+    return {
+      ...mistakes,
+      questions: mistakes.questions.filter(
+        (el) => el.question_id === currentQuestion.question_id
+      ),
+    };
   };
+
+  const handleMoveToNextQuestion = () => {
+    // console.log("HANDLENextquestion");
+    setQuestionIndex((i) => i + 1);
+    // setCurrentQuestion(exercise.questions.at(questionIndex));
+    return exercise.questions.at(questionIndex + 1);
+  };
+
+  // const handleNextQuestion = () => {
+  //   // handleAddMistake({ question_id: currentQuestion.question_id });
+  //   usedAiInExercise.current = false;
+  //   setCurrentLevel((level) => level + 1);
+  //   if (questionIndex < numQuestions - 1) {
+  //     const newIndex = questionIndex + 1;
+
+  //     setQuestionIndex(newIndex);
+  //     // setCurrentQuestion(exercise?.questions?.at(newIndex));
+  //   }
+  // };
+
+  // const handleUseGeneratedQuestions = (generatedQuestions) => {
+  //   setMistakes([]);
+  //   setExercise((exercise) => {
+  //     return { ...exercise, questions: [generatedQuestions] };
+  //   });
+  //   setQuestionIndex(0);
+  //   // setCurrentQuestion(generatedQuestions);
+  //   navigate(`/exercise/${exercise_id}/steps/ai_generated`);
+  // };
 
   const handleAddMistake = ({ mistake }) => {
+    wordsMistaken.current.add(mistake);
     const newMistakesArray = {
       ...mistakes,
       questions: mistakes.questions.map((question) => {
@@ -113,13 +126,17 @@ function ExerciseProvider({ children }) {
         questionIndex,
         currentQuestion,
         numQuestions,
-        handleNextQuestion,
+        // handleNextQuestion,
         currentLevel,
         setCurrentLevel,
         mistakes,
         handleAddMistake,
         usedAiInExercise,
-        handleUseGeneratedQuestions,
+        // handleUseGeneratedQuestions,
+        handleMoveToNextQuestion,
+        resetMistakes,
+        wordsMistaken,
+        getMistakesCurrentQuestion,
       }}
     >
       {children}

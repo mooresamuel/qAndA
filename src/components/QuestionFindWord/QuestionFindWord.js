@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
-import ProgressBar from "../ProgressBar/ProgressBar"
-import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG"
-import NextButtonRight from "../NextButtonRight/NextButtonRight"
+import ProgressBar from "../ProgressBar/ProgressBar";
+import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
+import NextButtonRight from "../NextButtonRight/NextButtonRight";
 
-function QuestionFindWord({
-  question
-}) {
+function QuestionFindWord({ question }) {
   const { handleNextQuestion } = useExerciseData();
   const [shuffledData, setShuffledData] = useState([]);
   const [restart, setRestart] = useState(false);
@@ -36,14 +34,14 @@ function QuestionFindWord({
 
   useEffect(() => {
     if (shuffledData.length === 0) {
-      setShuffledData([...question.data].sort(() => Math.random() - 0.5))
+      setShuffledData([...question.data].sort(() => Math.random() - 0.5));
     }
   }, [restart]);
 
   useEffect(() => {
     if (pickIndex.length > 0) {
-      const allWords = shuffledData.filter(f => f === question.answers[0]);
-      const pickedWords = pickIndex.map(index => shuffledData[index]);
+      const allWords = shuffledData.filter((f) => f === question.answers[0]);
+      const pickedWords = pickIndex.map((index) => shuffledData[index]);
       if (pickedWords.length === allWords.length) {
         if (allWords.every((word, i) => word === pickedWords[i])) {
           setEnableNextStage(true);
@@ -56,20 +54,17 @@ function QuestionFindWord({
 
   return (
     <div
-      style={{ backgroundColor: "#8CB036" }}
+      // style={{ backgroundColor: "#8CB036" }}
       className="h-full items-center"
     >
-      <div className="w-full h-16 px-3 grid grid-cols-[95%_5%] items-center gap-2">
+      {/* <div className="w-full h-16 px-3 grid grid-cols-[95%_5%] items-center gap-2">
         <ProgressBar />
         <QuestionMarkSVG />
-      </div>
+      </div> */}
 
-      <div
-        className="w-full bg-white h-full p-4"
-      >
-
-        <div 
-          style={{ 
+      <div className="w-full bg-white h-full p-4">
+        <div
+          style={{
             gridTemplateAreas: `
               "ball0 . ball1 . ball2"
               "ball3 img img img ball4"
@@ -78,40 +73,28 @@ function QuestionFindWord({
             `,
             gridTemplateColumns: "repeat(5, 1fr)",
           }}
-          className="w-full h-[60%] relative px-3 grid place-items-center gap-2">
+          className="w-full h-[60%] relative px-3 grid place-items-center gap-2"
+        >
+          <div style={{ gridArea: "img" }} className="absolute w-full h-full">
+            <img
+              className="w-full h-full object-contain"
+              src={`${process.env.PUBLIC_URL}/assets/img/download.png`}
+              alt={"alt-img"}
+            />
 
-            <div
-              style={{ gridArea: "img" }}
-              className="absolute w-full h-full"
-            >
-              <img 
-                className="w-full h-full object-contain"
-                src={`${process.env.PUBLIC_URL}/assets/img/download.png`} 
-                alt= {"alt-img"} 
-              />
-
-            <div
-              className="absolute w-full h-full flex items-center bottom-[0%] justify-center z-30"
-            >
-              <h1 
-                className="text-4xl font-extrabold"
-              >
-                {question.answers[0]}
-              </h1>
+            <div className="absolute w-full h-full flex items-center bottom-[0%] justify-center z-30">
+              <h1 className="text-4xl font-extrabold">{question.answers[0]}</h1>
             </div>
+          </div>
 
-            </div>
-
-          {
-            shuffledData.length > 0 &&
+          {shuffledData.length > 0 &&
             shuffledData.map((word, i) => {
-
               const slightShift = {
                 down: [1],
                 right: [0, 4, 6, 7],
                 left: [2, 3, 5, 9],
-                up: [8]
-              }
+                up: [8],
+              };
               const translateRight = "translateX(15px)";
               const translateDown = "translateY(15px)";
               const translateLeft = "translateX(-15px)";
@@ -130,13 +113,17 @@ function QuestionFindWord({
               }
 
               return (
-                <div 
-                  style={{ 
+                <div
+                  style={{
                     gridArea: "ball" + i,
                     transform: translate,
                   }}
-                  key={word + " " + Math.floor(Math.random() * i) + i} 
-                  className={`${pickIndex.includes(i) ? "border-blue-600 border-1" : "border-transparent border-0 text-black"}
+                  key={word + " " + Math.floor(Math.random() * i) + i}
+                  className={`${
+                    pickIndex.includes(i)
+                      ? "border-blue-600 border-1"
+                      : "border-transparent border-0 text-black"
+                  }
                             w-20 h-20 flex items-center justify-center 
                             rounded-full text-base font-bold shadow-md`}
                   onClick={() => handleClick(i)}
@@ -145,30 +132,29 @@ function QuestionFindWord({
                     className={`
                     w-[76px] h-[76px] flex items-center justify-center
                     rounded-full font-bold 
-                    ${pickIndex.includes(i) ? "bg-hightlight text-white" : "bg-ball-color text-black"} `}
+                    ${
+                      pickIndex.includes(i)
+                        ? "bg-hightlight text-white"
+                        : "bg-ball-color text-black"
+                    } `}
                   >
                     {word}
                   </div>
                 </div>
               );
-            })
-          }
-
+            })}
         </div>
-        
+
         <div className="px-3">
           <NextButtonRight
             isEnabled={enableNextStage}
-            className="shadow-md mt-20" 
+            className="shadow-md mt-20"
             onClick={handleNext}
           />
         </div>
-
       </div>
-
-
     </div>
-  )
+  );
 }
 
 export default QuestionFindWord;
