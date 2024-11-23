@@ -130,6 +130,7 @@ import ExerciseProvider from "./Contexts/ExerciseContext";
 import GlobalProvider from "./Contexts/GlobalContext";
 import EndExerciseChat from "./pages/EndExerciseChat";
 import NewExerciseFlow from "./pages/NewExerciseFlow";
+import QuestionBasicComprehension from "./components/QuestionBasicComprehension/QuestionBasicComprehension";
 
 function App() {
   return (
@@ -144,7 +145,7 @@ function App() {
             />
             <Route path="explain" element={<NewExerciseFlow />} />
             <Route path="steps/:step_number" element={<ExerciseEntryPoint />} />
-            <Route path="complete" element={<EndExerciseChat />} />
+            <Route path="complete" element={<QuestionBasicComprehension />} />
           </Route>
         </Route>
       </Routes>

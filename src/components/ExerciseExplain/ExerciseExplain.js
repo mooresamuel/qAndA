@@ -4,13 +4,17 @@ import NextButtonRight from "../NextButtonRight/NextButtonRight";
 import { useEffect, useState } from "react";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 
-function ExerciseExplain({ setStage }) {
-  const { exercise } = useExerciseData();
+function ExerciseExplain({ setData }) {
+  const { exercise, currentQuestion } = useExerciseData();
   const { speak } = useTextToSpeech();
   const [buttonVisible, setButtonVisible] = useState(true);
 
   const handleClick = () => {
-    setStage((s) => s + 1);
+    setData((data) => [
+      ...data,
+      { type: "question", question: currentQuestion },
+    ]);
+    console.log("move to first exercise");
     setButtonVisible(false);
   };
 
@@ -19,13 +23,13 @@ function ExerciseExplain({ setStage }) {
   }, []);
 
   return (
-    <div className="p-4" style={{ backgroundColor: "#8CB036" }}>
+    <div className="p-4">
       {exercise?.description?.map((d, i) => {
         return (
           <SpokenText
             containerClass={"items-start"}
             className={`font-black mb-5 p-3 text-lg flex-col rounded-lg ${
-              i === 1 && "bg-white"
+              i === 1 && "bg-white shadow-md"
             }`}
             key={i}
             text={d}

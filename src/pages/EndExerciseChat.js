@@ -57,7 +57,7 @@ function EndExerciseChat() {
     try {
       const prompt = {
         exercise_details: mistakes,
-        message: user_input,
+        message: "user_input",
       };
 
       const data = await fetchAIEndExerciseAnswers(prompt);

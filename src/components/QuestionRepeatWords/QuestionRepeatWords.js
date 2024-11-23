@@ -1,22 +1,27 @@
+import { useEffect, useState } from "react";
 import { useExerciseData } from "../../Contexts/ExerciseContext";
+import useTextToSpeech from "../../hooks/useTextToSpeech";
 import NextButtonRight from "../NextButtonRight/NextButtonRight";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import QuestionMarkSVG from "../QuestionMarkSVG/QuestionMarkSVG";
 import RepeatText from "../RepeatText/RepeatText";
 
-function QuestionRepeatWords({ question }) {
+function QuestionRepeatWords({ question, onComplete }) {
+  const { speak } = useTextToSpeech();
   const { handleNextQuestion } = useExerciseData();
+  const [showButton, setShowButton] = useState(true);
+
+  function handleNext() {
+    setShowButton(false);
+    onComplete();
+  }
+
+  useEffect(function () {
+    speak("Please try reading the following words");
+  }, []);
 
   return (
-    <div 
-      style={{ backgroundColor: "#8CB036" }} 
-      className="pt-4 pb-1 space-y-8 px-8 h-full"
-    >
-      <div className="w-full grid grid-cols-[95%_5%] items-center gap-2">
-        <ProgressBar />
-        <QuestionMarkSVG />
-      </div>
-
+    <div className="pt-4 pb-1 space-y-8 px-8 h-full">
       <h2 className="text-center text-4xl font-semibold">
         {question.prompts[0]}
       </h2>
@@ -25,7 +30,7 @@ function QuestionRepeatWords({ question }) {
           <RepeatText key={el} text={el} />
         ))}
       </div>
-      <NextButtonRight onClick={handleNextQuestion} />
+      {showButton && <NextButtonRight onClick={handleNext} />}
     </div>
   );
 }

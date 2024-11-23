@@ -5,6 +5,9 @@ import TextToSpeech from "../TextToSpeech/TextToSpeech";
 
 function QuestionRepeatWord({ question }) {
   const { handleNextQuestion } = useExerciseData();
+
+  
+
   return (
     <div className="h-full flex flex-col justify-between items-center gap-3">
       <div className="w-full py-3 space-y-5">

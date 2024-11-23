@@ -5,7 +5,7 @@ function Layout() {
   return (
     <div className="overflow-y-auto flex flex-col h-screen">
       <NavigationBar />
-      <div className="max-w-screen-md m-auto flex-grow w-full">
+      <div className="max-w-screen-sm m-auto flex-grow w-full">
         <Outlet />
       </div>
     </div>
