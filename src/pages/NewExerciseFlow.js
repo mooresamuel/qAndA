@@ -26,11 +26,9 @@ function NewExerciseFlow() {
     questionIndex,
     exercise,
     isLoading,
-    mistakes,
     handleMoveToNextQuestion,
     resetMistakes,
     getMistakesCurrentQuestion,
-    currentQuestion,
   } = useExerciseData();
 
   //   useEffect(

@@ -64,7 +64,7 @@ const question = {
   ],
 };
 
-function QuestionBasicComprehension() {
+function QuestionBasicComprehension({ question }) {
   const ref = useRef(null);
   const navigate = useNavigate();
   const { setCurrentLevel } = useExerciseData();
@@ -77,30 +77,21 @@ function QuestionBasicComprehension() {
   const [victoryModal, setVictoryModal] = useState(false);
 
   const handleNext = () => {
-    if (pick !== question.questions[0].answers) {
+    if (pick !== question.questions[0].correct_answer) {
       setTryAgain(true);
       scrollModalIntoView();
     } else {
-      const level = currentStage + 1;
-      if (level < question.questions.length) {
-        setCurrentStage(level);
-        setCurrentLevel(level);
-        ref.current.scrollIntoView({ behavior: "instant", block: "start" });
-        navigate(`../steps/${question.questions[level].question_id}`);
-      } else {
-        setCurrentLevel(level);
-        setVictoryModal(true);
-        scrollModalIntoView();
-      }
+      navigate("/");
     }
   };
 
   const handleVictory = () => {
     setVictoryModal(false);
+    navigate("/");
     setTimeout(() => {
       setCurrentLevel(0);
       // TODO: handle it properly when backend data is available
-      navigate(`../../../`);
+      navigate(`/`);
       // navigate(`/exercise/${exercise_id}/complete`);
     }, 400);
   };
@@ -108,10 +99,9 @@ function QuestionBasicComprehension() {
   return (
     <div
       ref={ref}
-      style={{ backgroundColor: "#8CB036" }}
       className="h-full p-5 flex flex-col gap-14 items-center relative"
     >
-      <div className="w-full grid grid-cols-[95%_5%] items-center gap-2">
+      {/* <div className="w-full grid grid-cols-[95%_5%] items-center gap-2">
         <ProgressBar />
         <QuestionMarkSVG
           handleClick={() => {
@@ -119,7 +109,7 @@ function QuestionBasicComprehension() {
             scrollModalIntoView();
           }}
         />
-      </div>
+      </div> */}
 
       <TextToSpeech
         sentence={question.title}

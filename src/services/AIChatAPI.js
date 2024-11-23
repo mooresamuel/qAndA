@@ -49,3 +49,24 @@ export async function fetchAIEndExerciseAnswers(prompt) {
     console.log(err);
   }
 }
+
+export async function fetchAIEndQuestion(body) {
+  try {
+    const options = {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log(options);
+
+    const response = await fetch(`${API_URL}/final`, options);
+
+    const data = response.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}

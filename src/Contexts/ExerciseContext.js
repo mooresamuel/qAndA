@@ -116,8 +116,6 @@ function ExerciseProvider({ children }) {
     setMistakes(newMistakesArray);
   };
 
-  console.log("questionIndex", questionIndex);
-
   return (
     <ExerciseContext.Provider
       value={{
