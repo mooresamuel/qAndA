@@ -31,14 +31,11 @@ function QuestionFindingMatchingWords({ question }) {
   }, [picks]);
 
   return (
-    <div
-      style={{ backgroundColor: "#8CB036" }}
-      className="h-full p-5 flex flex-col gap-14 items-center"
-    >
-      <div className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-4">
+    <div className="h-full p-5 flex flex-col gap-14 items-center">
+      {/* <div className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-4">
         <ProgressBar />
         <QuestionMarkSVG />
-      </div>
+      </div> */}
 
       <h2 className="font-bold text-center">{question.prompts[0]}</h2>
 

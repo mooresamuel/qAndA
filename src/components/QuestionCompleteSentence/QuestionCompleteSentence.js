@@ -40,9 +40,7 @@ import ModalElement from "../ModalElement/ModalElement";
 //   ]
 // }
 
-function QuestionCompleteSentence({ 
-  question
-}) {
+function QuestionCompleteSentence({ question }) {
   const { setSelector, element } = useGlobalContext();
   const { handleNextQuestion, handleAddMistake } = useExerciseData();
   const topGapRefs = useRef([]);
@@ -56,23 +54,25 @@ function QuestionCompleteSentence({
   const [enable, setEnabled] = useState(false);
   const splitSentence = question.prompts[0].split("%");
   const [tryAgain, setTryAgain] = useState(false);
-  const _allGapsIndex = splitSentence.map((w, i) => w === "//gap//" ? i : null)
-                                    .filter(i => i !== null);
+  const _allGapsIndex = splitSentence
+    .map((w, i) => (w === "//gap//" ? i : null))
+    .filter((i) => i !== null);
 
-  const [speechArray, setSpeechArray] = useState(question.prompts[0].split("%"));
+  const [speechArray, setSpeechArray] = useState(
+    question.prompts[0].split("%")
+  );
   const [speech, setSpeech] = useState("");
   const [reset, setReset] = useState(false);
 
-
   function handleAnswerPicked(answer, index) {
-    if (answers.every(word => typeof word === "string")) {
+    if (answers.every((word) => typeof word === "string")) {
       return;
     }
 
     let tempIndex = currentIndex;
     const arrAnswers = answers.map((el, i) => {
       if (i === tempIndex) {
-        return answer
+        return answer;
       } else {
         return el;
       }
@@ -86,11 +86,11 @@ function QuestionCompleteSentence({
       } else {
         return word;
       }
-    })
+    });
 
     setSpeechArray(tempSpeechArray);
 
-    const findEmptyIndex = arrAnswers.findIndex(word => word === false);
+    const findEmptyIndex = arrAnswers.findIndex((word) => word === false);
     const gapIndex = _allGapsIndex[tempIndex];
     const topRect = topGapRefs.current[gapIndex]?.getBoundingClientRect();
     const bottomRect = bottomWordRefs.current[index]?.getBoundingClientRect();
@@ -102,7 +102,6 @@ function QuestionCompleteSentence({
       start: bottomRect,
       end: topRect,
     });
-    
 
     setCurrentIndex(findEmptyIndex);
     setTimeout(() => {
@@ -111,7 +110,7 @@ function QuestionCompleteSentence({
     }, 400);
 
     if (question.answers[+tempIndex] !== answer) {
-      // no idea what this is, but will move to handleNext function 
+      // no idea what this is, but will move to handleNext function
       // handleNext happens when they press Next button and checks first if they are correct or not
       // therefore it is best to keep this function over there
       // handleAddMistake({
@@ -127,7 +126,7 @@ function QuestionCompleteSentence({
 
     if (!findWord) {
       setCurrentIndex(index);
-      return
+      return;
     }
 
     const tempSpeechArray = speechArray.map((word, i, arr) => {
@@ -136,24 +135,26 @@ function QuestionCompleteSentence({
       } else {
         return word;
       }
-    })
+    });
 
     setSpeechArray(tempSpeechArray);
-  
-    const tempAnswers = [...answers].map((el, i) => (i === index ? false : el))
 
-    const findEmptyIndex = tempAnswers.findIndex(word => word === false);
+    const tempAnswers = [...answers].map((el, i) => (i === index ? false : el));
+
+    const findEmptyIndex = tempAnswers.findIndex((word) => word === false);
 
     if (findEmptyIndex !== -1) {
       setCurrentIndex(findEmptyIndex);
     }
 
-
     const topRect = topGapRefs.current[trackIndex]?.getBoundingClientRect();
     let bottomRect = null;
     if (findWord) {
-      const findIndexBottomSide = question.data.findIndex(w => w === findWord.trim());
-      bottomRect = bottomWordRefs.current[findIndexBottomSide]?.getBoundingClientRect();
+      const findIndexBottomSide = question.data.findIndex(
+        (w) => w === findWord.trim()
+      );
+      bottomRect =
+        bottomWordRefs.current[findIndexBottomSide]?.getBoundingClientRect();
     }
 
     if (!bottomRect || !topRect) return;
@@ -181,9 +182,9 @@ function QuestionCompleteSentence({
         handleAddMistake({
           mistake: `word ${answer} placed in gap ${index}`,
         });
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
     if (reset) {
@@ -209,7 +210,7 @@ function QuestionCompleteSentence({
   useEffect(() => {
     if (answers.length > 0) {
       if (answers.every((item) => typeof item === "string" && item !== false)) {
-        setEnabled(true)
+        setEnabled(true);
       } else {
         setEnabled(false);
       }
@@ -218,20 +219,20 @@ function QuestionCompleteSentence({
 
   let fakeIndex = 0;
 
-  console.log("Wath", element, " Ok")
+  console.log("Wath", element, " Ok");
 
   return (
-    <div 
+    <div
       id="complete_sentence"
       className="flex flex-col h-full justify-between items-center"
       onClick={() => setSelector("#complete_sentence")}
     >
-      <div 
+      {/* <div 
         style={{ backgroundColor: "#8CB036" }}
         className="w-full grid grid-cols-[95%_5%] items-center gap-2 px-3 py-4">
         <ProgressBar />
         <QuestionMarkSVG />
-      </div>
+      </div> */}
       <div className="space-y-16 px-2">
         <div className="flex items-center gap-3 text-base px-3 py-5 bg-gray-100">
           <TextToSpeech sentence={speech} />
@@ -242,9 +243,12 @@ function QuestionCompleteSentence({
                 fakeIndex++;
                 return (
                   <button
-                    ref={(el) => topGapRefs.current[traceIndex] = el}
+                    ref={(el) => (topGapRefs.current[traceIndex] = el)}
                     key={traceIndex + chunk}
-                    className={`${traceIndex === _allGapsIndex[currentIndex] && "border-hightlight"}
+                    className={`${
+                      traceIndex === _allGapsIndex[currentIndex] &&
+                      "border-hightlight"
+                    }
                         w-20 border-2 h-16 shadow-md rounded-md align-middle
                     `}
                     onClick={() => removeAnswer(index, traceIndex, chunk)}
@@ -259,7 +263,6 @@ function QuestionCompleteSentence({
                       {chunk}
                     </span>
                   </div>
-
                 );
               }
             })}
@@ -274,32 +277,20 @@ function QuestionCompleteSentence({
               className="flex items-center gap-3"
             >
               <TextToSpeech key={i} sentence={option} />
-              <span 
-                ref={(el) => bottomWordRefs.current[i] = el}
+              <span
+                ref={(el) => (bottomWordRefs.current[i] = el)}
                 className="text-hightlight font-semibold m-0 px-2 py-3 rounded-md shadow-md h-full"
               >
                 {option}
               </span>
             </button>
           ))}
-            {
-              !enable && animatingWord &&
-                <AnimatedTag 
-                  position={animatingWord}
-                />
-            }
+          {!enable && animatingWord && <AnimatedTag position={animatingWord} />}
 
-            { 
-              !enable && animatingWord &&
-                <AnimatedTag 
-                  position={animatingWord}
-                />
-            }
+          {!enable && animatingWord && <AnimatedTag position={animatingWord} />}
         </div>
       </div>
-      <div
-        className="w-full h-1/3 px-5"
-      >
+      <div className="w-full h-1/3 px-5">
         <NextButtonRight
           isEnabled={enable}
           className={"mt-28"}
@@ -307,18 +298,16 @@ function QuestionCompleteSentence({
         />
       </div>
 
-      {
-        tryAgain && 
-          <ModalElement 
-            className={"h-[44%]"}
-            text={"Try Again..."}
-            onClose={() => setTryAgain(false)}
-            closeLabel={"Close"}
-          />
-      }
-
+      {tryAgain && (
+        <ModalElement
+          className={"h-[44%]"}
+          text={"Try Again..."}
+          onClose={() => setTryAgain(false)}
+          closeLabel={"Close"}
+        />
+      )}
     </div>
   );
 }
 
-export default QuestionCompleteSentence
+export default QuestionCompleteSentence;
