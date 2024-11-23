@@ -45,7 +45,7 @@ function ChatWindow({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 md: bg-slate-200 px-4 py-4 flex flex-col justify-between">
+    <div className="fixed inset-0 md: bg-slate-200 px-4 py-4 flex flex-col justify-between z-50">
       <div className="flex justify-between items-center py-4 px-2">
         <p className="m-0 text-hightlight text-lg font-semibold">
           {exercise.exercise_name}
