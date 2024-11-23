@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tpd/static/css/main.81340479.css",
+    "main.js": "/tpd/static/js/main.0f3ac040.js",
+    "index.html": "/tpd/index.html",
+    "main.81340479.css.map": "/tpd/static/css/main.81340479.css.map",
+    "main.0f3ac040.js.map": "/tpd/static/js/main.0f3ac040.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.81340479.css",
+    "static/js/main.0f3ac040.js"
+  ]
+}
